@@ -1,4 +1,5 @@
 import DogCard from "../components/DogCard";
+import MoveBtn from "../components/MoveBtn";
 
 const CustomerInfo = () => {
   return (
@@ -91,6 +92,8 @@ const CustomerInfo = () => {
         </div>
       </div>
       <div className="flex flex-row justify-end mt-10 text-base">
+        {/* <MoveBtn name="VOLVER" direction="Back"/>
+        <MoveBtn name="EDITAR" direction="Next"/> */}
         <button
           type="submit"
           class="text-sm items-center text-black text-center w-36 h-11 bottom-2.5 font-['Poppins'] bg-[#FFFFFF] rounded-md px-5  border-2 border-[#155263]"

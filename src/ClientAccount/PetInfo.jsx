@@ -1,6 +1,7 @@
 import React from "react";
 import petImage from "../assets/images/avatars/Rectangle 4290.png"; // Import the image file
 import ClientCard from "../components/ClientCard.jsx" 
+import MoveBtn from "../components/MoveBtn.jsx";
 
 const PetInfo = () => {
   return (
@@ -69,6 +70,9 @@ const PetInfo = () => {
         </div>
       </div>
       <div className="flex flex-row justify-end mt-10 text-base">
+        {/* <MoveBtn name="VOLVER" direction="Back"/>
+        <MoveBtn name="EDITAR" direction="Next"/> */}
+
         <button
           type="submit"
           className="text-sm items-center text-black text-center w-36 h-11 bottom-2.5 font-['Poppins'] bg-[#FFFFFF] rounded-md px-5 border-2 border-[#155263]"

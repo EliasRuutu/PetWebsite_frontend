@@ -6,8 +6,8 @@ import SignInForm from "./SignIn/SignInForm";
 import SignUpForm from "./SignUp/SignUpForm";
 import Management from "./Management/Management";
 import UpdateProfile from './ProfileUpdate/UpdateProfile';
-import ClientAccount from './ClientAccount/ClientAccount';
-import PetInfo from './ClientAccount/PetInfo'
+import ClientAccount from './ClientAccount';
+import CreateAccount from './CreateAccount' 
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -24,7 +24,8 @@ function App() {
           <Route path="management" element={<Management />} />
           <Route path="updateprofile" element={<UpdateProfile />} />
           <Route path="updateprofile" element={<UpdateProfile />} />
-          <Route path="clientaccount" element={<ClientAccount />} />
+          <Route path="accountinfo" element={<ClientAccount />} />
+          <Route path="createaccount" element={<CreateAccount />} />
         </Routes>
       </Router>
       <Footer />
