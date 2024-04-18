@@ -1,4 +1,6 @@
 import CustomerInfo  from "./CustomerInfo";
+import PetInfo from "./PetInfo";
+
 import '../assets/css/component.css'
 // import profileBackground from "../assests/images/backgrounds/profile_background.png"
 
@@ -62,8 +64,9 @@ const ClientAccount = () => {
             </h1>
           </span>
         </div>
-        <div className="flex w-5/6 h-screen mt-[130px] bg-[#EBFCFF] flex-col border-t-2 px-10 mb-3 pt-28 pb-52 px-24">
-          <CustomerInfo/>
+        <div className="flex w-5/6 h-screen mt-[130px] bg-[#EBFCFF] flex-col border-t-2 px-32 mb-3 pt-28 pb-52 px-10">
+          {/* <CustomerInfo/> */}
+          <PetInfo/>
         </div>
       </div>
     </>

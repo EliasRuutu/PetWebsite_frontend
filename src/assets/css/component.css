@@ -20,3 +20,12 @@
     width: 100%;
     height: 100%;
 }
+
+.panel-QR {
+    width: 100%;
+    height: 200px;
+    background-color: white;
+    border-radius: 20px;
+
+    text-align: center;
+}
