@@ -1,15 +1,12 @@
-import { Avatar } from "flowbite-react";
-import { Input } from "@material-tailwind/react";
-import PasswordInput from "../../components/passwordInput";
 import { useState } from "react";
-import User from "../../assets/images/user.svg";
-import { CheckboxHorizontalListGroup } from "../../components/checkBoxPanel";
-import FormGroup from "@mui/material/FormGroup";
+
+import { Input } from "@material-tailwind/react";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 
+import User from "../../assets/images/user.svg";
+
 const PanelForClient = () => {
-  const [updatePassword, setUpdatePassword] = useState("");
   const [file, setFile] = useState(User);
   function handleChange(e) {
     console.log(e.target.files);
@@ -75,7 +72,7 @@ const PanelForClient = () => {
               </div>
               <div className="flex flex-col text-[#155263] gap-2">
                 <h1 className="text-[16px] text-[#155263] font-['Poppins']">
-                Correo electronico
+                  Correo electronico
                 </h1>
                 <Input
                   className="p-2 rounded-md bg-[#F8F8F8] indent-1.5"
@@ -84,7 +81,7 @@ const PanelForClient = () => {
               </div>
               <div className="flex flex-col text-[#155263] gap-2">
                 <h1 className="text-[16px] text-[#155263] font-['Poppins']">
-                Dirección
+                  Dirección
                 </h1>
                 <Input
                   className="p-2 rounded-md bg-[#F8F8F8] indent-1.5"
@@ -104,7 +101,7 @@ const PanelForClient = () => {
               </div>
               <div className="flex flex-col text-[#155263] gap-2">
                 <h1 className="text-[16px] text-[#155263] font-['Poppins']">
-                País
+                  País
                 </h1>
                 <Input
                   className="p-2 rounded-md bg-[#F8F8F8] indent-1.5"
@@ -113,7 +110,7 @@ const PanelForClient = () => {
               </div>
               <div className="flex flex-col text-[#155263] gap-2">
                 <h1 className="text-[16px] text-[#155263] font-['Poppins']">
-                Numero de Teléfono  
+                  Numero de Teléfono
                 </h1>
                 <Input
                   className="p-2 rounded-md bg-[#F8F8F8] indent-1.5"
@@ -124,26 +121,26 @@ const PanelForClient = () => {
           </div>
           <div className="grid grid-cols-4 flex-wrap pt-2">
             {/* <CheckboxHorizontalListGroup /> */}
-              <FormControlLabel
-                control={<Checkbox defaultChecked />}
-                label="Dirección"
-              />
-              <FormControlLabel
-                control={<Checkbox defaultChecked />}
-                label="Nombre"
-              />
-              <FormControlLabel
-                control={<Checkbox defaultChecked />}
-                label="Numero de telefono"
-              />
-              <FormControlLabel
-                control={<Checkbox defaultChecked />}
-                label="Pais"
-              />
-              <FormControlLabel
-                control={<Checkbox defaultChecked />}
-                label="Correo"
-              />
+            <FormControlLabel
+              control={<Checkbox defaultChecked />}
+              label="Dirección"
+            />
+            <FormControlLabel
+              control={<Checkbox defaultChecked />}
+              label="Nombre"
+            />
+            <FormControlLabel
+              control={<Checkbox defaultChecked />}
+              label="Numero de telefono"
+            />
+            <FormControlLabel
+              control={<Checkbox defaultChecked />}
+              label="Pais"
+            />
+            <FormControlLabel
+              control={<Checkbox defaultChecked />}
+              label="Correo"
+            />
           </div>
           <div className="flex justify-end pt-2">
             <button

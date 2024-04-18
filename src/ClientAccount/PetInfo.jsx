@@ -1,23 +1,76 @@
 import React from "react";
-import petImage from "../assets/images/avatars/Rectangle 4290.png"; // Import the image file
+import { useState } from "react";
+
 import ClientCard from "../components/ClientCard.jsx";
-import MoveBtn from "../components/MoveBtn.jsx";
+
+import petImage from "../assets/images/avatars/Rectangle 4290.png"; // Import the image file
+import uploadQR from "../assets/images/backgrounds/uploadQR.png";
 
 const PetInfo = () => {
+  const [updatePassword, setUpdatePassword] = useState("");
+  const [file, setFile] = useState(uploadQR);
+  const [isUploaded, setNotifyUpload] = useState(false);
+  function handleChange(e) {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function (event) {
+        setFile(event.target.result);
+      };
+      reader.readAsDataURL(file);
+      setNotifyUpload(true);
+    }
+  }
+  const handleUpload = (e) => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.onchange = (e) => handleChange(e);
+    input.click();
+  };
   return (
     <>
       <div className="mb-7 font-bold text-[#155263] text-3xl">
         Información de Mascota
       </div>
       <div className="flex flex-row h-full mb-18">
-        <div className="info-client flex flex-col w-1/3 bg-cover px-32 pt-40 pb-12">
-          <div className="flex flex-col justify-center items-left h-5/6 align-middle">
-            <div className="panel-QR flex flex-col justify-center items-center py-5">
-              <div className="title-info">
+        <div className="info-client flex flex-col w-1/3 bg-cover px-28 pt-40 pb-12">
+          <div className="flex flex-col justify-center items-left h-5/6 gap-2 align-middle">
+            <div
+              className="panel-QR flex flex-col justify-center items-center  hover: cursor-pointer px-2"
+              onClick={handleUpload}
+            >
+              <img src={file} height={128} alt="" className="" />
+              {/* <div className="title-info">
                 Plaquita no <br /> asignada aun
-              </div>
+              </div> */}
             </div>
-            <div className="flex flex-row items-left text-3xl mt-20 font-bold text-white">
+            {isUploaded && (
+              <div className="flex flex-row justify-center items-center mt-10 gap-2 hover: cursor-pointer hover:text-[#3D9FAD]">
+                <svg
+                  className=""
+                  width="16"
+                  height="18"
+                  viewBox="0 0 16 18"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M1.27439 5.96627C1.64024 5.60042 2.23341 5.60042 2.59926 5.96627L6.69179 10.0588L6.69179 0.936915C6.69179 0.419522 7.11122 9.18199e-05 7.62862 9.18425e-05C8.14601 9.18651e-05 8.56544 0.419522 8.56544 0.936915L8.56544 10.0588L12.658 5.96627C13.0238 5.60042 13.617 5.60042 13.9828 5.96627C14.3487 6.33213 14.3487 6.92529 13.9828 7.29114L8.29105 12.9829C7.9252 13.3488 7.33203 13.3488 6.96618 12.9829L1.27439 7.29114C0.908537 6.92529 0.908537 6.33213 1.27439 5.96627Z"
+                    fill="white"
+                  />
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M0 17.0632C0 17.5806 0.41943 18 0.936823 18H14.2177C14.7351 18 15.1545 17.5806 15.1545 17.0632C15.1545 16.5458 14.7351 16.1264 14.2177 16.1264H0.936823C0.41943 16.1264 0 16.5458 0 17.0632Z"
+                    fill="white"
+                  />
+                </svg>
+                <span className="text-white font-bold">Descargar Codigo QR</span>
+              </div>
+            )}
+            <div className="flex flex-row items-left text-3xl mt-5 font-bold text-white">
               <span className="ml-0">Bella</span>
             </div>
             <hr />

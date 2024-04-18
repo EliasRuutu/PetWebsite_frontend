@@ -1,3 +1,4 @@
+import dogAvatar from "../assets/images/avatars//Group 385.png";
 
 const DogCard = (props) => {
 
@@ -8,11 +9,10 @@ const DogCard = (props) => {
   return (
     <>
       <div className="flex flex-col justify-center rounded-lg items-center h-52 w-48 bg-[#EBFCFF] mx-5 p-5">
-        <div className="avatar-dog">            
-        </div>
-        <div className="flex flex-row justify-between items-center text-left">
+        <img className="object-cover" src={dogAvatar}></img>
+        <div className="flex flex-row justify-around items-center gap-2 text-left">
           <div class="name-dog">
-            <span className="title-info"> {props.dogName} </span> <br />
+            <span className="text-xl font-bold text-[#155263]"> {props.dogName} </span> <br />
             <span className="text-[#3D9FAD]"> {props.gender} </span>
           </div>
           <div className="" style= {customStyle}>

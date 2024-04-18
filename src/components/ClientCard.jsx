@@ -4,7 +4,7 @@ import clientAvatar from "../assets/images/avatars/avatar2.png";
 const ClientCard = () => {
   return (
     <>
-      <div className="flex flex-row w-full h-24 px-4 py-3">
+      <div className="flex flex-row w-full h-24 px-4 py-3 ">
         <div className="w-20 bg-cover h-20 bg-cover">
           <img src={clientAvatar} alt="" />
         </div>

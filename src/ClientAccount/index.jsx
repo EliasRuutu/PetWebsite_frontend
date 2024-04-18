@@ -65,8 +65,8 @@ const ClientAccount = () => {
           </span>
         </div>
         <div className="flex flex-col w-5/6 h-screen mt-[130px] bg-[#EBFCFF] rounded-lg border-t-2 px-32 mb-3 pt-28 pb-52 px-10">
-          <CustomerInfo/>
-          {/* <PetInfo/> */}
+          {/* <CustomerInfo/> */}
+          <PetInfo/>
         </div>
       </div>
     </>
