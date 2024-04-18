@@ -62,7 +62,7 @@ const CreateAccount = () => {
             </h1>
           </span>
         </div>
-        <div className="flex w-5/6 h-screen mt-[130px] bg-[#EBFCFF] flex-col border-t-2 px-32 mb-3 pt-28 pb-52 px-10">
+        <div className="flex w-full items-center justify-between h-1/2 mt-[130px] bg-[#EBFCFF] flex-col border-t-2 px-24 mb-3 pt-28 pb-52 px-9">
           <CreateTapPanel/>
         </div>
       </div>

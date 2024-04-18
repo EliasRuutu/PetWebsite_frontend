@@ -1,5 +1,8 @@
 .info-client {
     background-image: url("../images/backgrounds/profile_background.png");
+    /* border: 1px solid black; */
+    background-size: cover;
+    
 }
 
 .avatar-client {

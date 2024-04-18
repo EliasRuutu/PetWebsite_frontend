@@ -7,10 +7,12 @@ const CustomerInfo = () => {
       <div className="mb-7 font-bold text-[#155263] text-3xl">
         Información del Cliente
       </div>
-      <div className="flex flex-row h-full mb-18">
+      <div className="flex flex-row h-full mb-18 border rounded-[20px]">
         <div className="info-client flex flex-col w-2/5 bg-cover px-16 pt-14 pb-12 ">
           <div className="flex flex-col justify-around items-center h-3/4 align-middle">
-            <div className="avatar-client"></div>
+            <div className="avatar-client">
+              
+            </div>
             <div className="text-3xl font-bold text-white">
               <span>Sebastian Torres</span>
             </div>
@@ -60,8 +62,8 @@ const CustomerInfo = () => {
             </div>
           </div>
         </div>
-        <div className="w-3/5 px-10 bg-[#FFFFFF]">
-          <div className="h-1/2">
+        <div className="w-3/5 px-10 pt-10 bg-[#FFFFFF]">
+          <div className="h-1/3">
             <div className="flex h-1/4 title-info items-center justify-start">
               Detalles Personales
             </div>
@@ -80,7 +82,7 @@ const CustomerInfo = () => {
             </div>
           </div>
           <hr />
-          <div className="h-1/2">
+          <div className="h-2/3">
             <div className="flex h-1/4 title-info title-info items-center justify-start">
               Detalles Personales
             </div>

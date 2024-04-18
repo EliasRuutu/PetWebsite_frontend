@@ -7,13 +7,13 @@ const DogCard = (props) => {
 
   return (
     <>
-      <div className="flex flex-col justify-center items-center h-52 w-48 bg-green-100 mx-5 p-5">
+      <div className="flex flex-col justify-center rounded-lg items-center h-52 w-48 bg-[#EBFCFF] mx-5 p-5">
         <div className="avatar-dog">            
         </div>
         <div className="flex flex-row justify-between items-center text-left">
-          <div class="name-dog ">
+          <div class="name-dog">
             <span className="title-info"> {props.dogName} </span> <br />
-            <span> {props.gender} </span>
+            <span className="text-[#3D9FAD]"> {props.gender} </span>
           </div>
           <div className="" style= {customStyle}>
             {props.gender === "Macho" ? (

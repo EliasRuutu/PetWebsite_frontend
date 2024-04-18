@@ -11,7 +11,7 @@ import {
 export function CheckboxHorizontalListGroup() {
   return (
     <Card className="w-full">
-      <List className="flex-row">
+      <List className="flex flex-row w-full">
         <ListItem className="p-0">
           <label
             htmlFor="horizontal-list-Dirección"

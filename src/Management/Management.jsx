@@ -44,7 +44,7 @@ const Management = () => {
                         </div>
                     </div>
                 </div>
-                <div className="flex flex-col w-full border-none rounded-xl bg-[#EBFCFF] p-3">
+                <div className="flex flex-col w-full border-none rounded-xl bg-[#FFFFFF] hover:bg-[#EBFCFF] hover: cursor-pointer p-3">
                     <div className="flex flex-row w-full justify-between px-4 ">
                         <div className="flex gap-6">
                             {/* <span>
@@ -94,7 +94,7 @@ const Management = () => {
                         </div>
                     </div>
                 </div>
-                <div className="flex flex-col w-full border-none rounded-xl bg-[#EBFCFF] p-3 mt-3">
+                <div className="flex flex-col w-full border-none rounded-xl bg-[#FFFFFF] hover:bg-[#EBFCFF] hover: cursor-pointer p-3 mt-3">
                     <div className="flex flex-row w-full justify-between px-4 ">
                         <div className="flex gap-6">
                             <span>
@@ -109,8 +109,8 @@ const Management = () => {
                                 </span>
                             </div>
                         </div>
-                        <div className="flex py-2 items-center">
-                            <span className="bg-[#E7E7E7] font-['Poppins'] text-[#155263] rounded-[50px] px-10 py-2">Sin asignar</span>
+                        <div className="flex py-2 items-center ">
+                            <span className="bg-[#E7E7E7] font-['Poppins'] bg-[#FDFFA1] text-[#155263] rounded-[50px] px-10 py-2">En envió</span>
                         </div>
                         <div className="flex flex-row items-center justify-between gap-10">
                             <span className="flex flex-row">
@@ -137,7 +137,7 @@ const Management = () => {
                         </div>
                     </div>
                 </div>
-                <div className="flex flex-col w-full border-none rounded-xl bg-[#EBFCFF] p-3 mt-3">
+                <div className="flex flex-col w-full border-none rounded-xl bg-[#FFFFFF] hover:bg-[#EBFCFF] hover: cursor-pointer p-3 mt-3">
                     <div className="flex flex-row w-full justify-between px-4 ">
                         <div className="flex gap-6">
                             <span>

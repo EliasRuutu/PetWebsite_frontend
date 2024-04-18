@@ -7,8 +7,8 @@ import '../assets/css/component.css'
 const ClientAccount = () => {
   return (
     <>
-      <div className="w-full flex top-10">
-        <div className="flex w-1/6 border-r-2 h-screen flex-col mt-[130px]">
+      <div className="w-full flex mt-10">
+        <div className="flex flex-col w-1/6 border-r-2 h-screen mt-[130px]">
           <span className="w-full pt-8 text-xl border-t-2 flex justify-center">
             <svg
               className="mr-4"
@@ -64,7 +64,7 @@ const ClientAccount = () => {
             </h1>
           </span>
         </div>
-        <div className="flex w-5/6 h-screen mt-[130px] bg-[#EBFCFF] flex-col border-t-2 px-32 mb-3 pt-28 pb-52 px-10">
+        <div className="flex flex-col w-5/6 h-screen mt-[130px] bg-[#EBFCFF] rounded-lg border-t-2 px-32 mb-3 pt-28 pb-52 px-10">
           <CustomerInfo/>
           {/* <PetInfo/> */}
         </div>

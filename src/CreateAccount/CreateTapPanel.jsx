@@ -5,8 +5,8 @@ import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 
-import PanelForClient from "./Panels/PanelForClient"
-import PanelForPet from "./Panels/PanelForPet"
+import PanelForClient from "./Panels/PanelForClient";
+import PanelForPet from "./Panels/PanelForPet";
 
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -18,6 +18,7 @@ function CustomTabPanel(props) {
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
       {...other}
+      className="pt-2.5"
     >
       {value === index && (
         <Box sx={{ p: 2 }}>
@@ -51,12 +52,13 @@ export default function CreateTapPanel() {
   return (
     <Box
       sx={{
-        width: "100%",
+        width: "80%",
         backgroundColor: "#FFFFFF",
         paddingX: "48px",
         paddingY: "24px",
         height: "100%",
       }}
+      className="rounded-lg"
     >
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs
@@ -70,7 +72,6 @@ export default function CreateTapPanel() {
       </Box>
       <CustomTabPanel value={value} index={0}>
         <PanelForClient></PanelForClient>
-
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
         <PanelForPet></PanelForPet>
