@@ -37,14 +37,14 @@ const Management = () => {
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
                                 </svg>
                             </div>
-                            <input type="search" id="default-search" className="block w-full px-4 py-2 ps-10 text-sm text-gray-900 rounded-lg bg-gray-50 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 " placeholder="Buscar..." required />
+                            <input type="search" id="default-search" className="block w-full px-4 py-2 ps-10 text-sm text-gray-900 rounded-l-lg bg-gray-50 focus:ring-blue-500 dark:bg-[#F8F8F8] dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 " placeholder="Buscar..." required />
                         </div>
                         <div className="flex flex-row py-7 w-1/6 justify-end">
                             <button type="submit" class="flex text-sm items-center text-white bottom-2.5 font-['Poppins'] bg-[#F1B21B] rounded-md px-5 hover:bg-white hover:text-[#F1B21B] hover:border hover:border-[#F1B21B]">AGREGAR</button>
                         </div>
                     </div>
                 </div>
-                <div className="flex flex-col w-full border-none rounded-xl bg-[#EBFCFF] p-3">
+                <div className="flex flex-col w-full border-none rounded-xl bg-[#FFFFFF] hover:bg-[#EBFCFF] hover: cursor-pointer p-3">
                     <div className="flex flex-row w-full justify-between px-4 ">
                         <div className="flex gap-6">
                             {/* <span>
@@ -94,7 +94,7 @@ const Management = () => {
                         </div>
                     </div>
                 </div>
-                <div className="flex flex-col w-full border-none rounded-xl bg-[#EBFCFF] p-3 mt-3">
+                <div className="flex flex-col w-full border-none rounded-xl bg-[#FFFFFF] hover:bg-[#EBFCFF] hover: cursor-pointer p-3 mt-3">
                     <div className="flex flex-row w-full justify-between px-4 ">
                         <div className="flex gap-6">
                             <span>
@@ -109,8 +109,8 @@ const Management = () => {
                                 </span>
                             </div>
                         </div>
-                        <div className="flex py-2 items-center">
-                            <span className="bg-[#E7E7E7] font-['Poppins'] text-[#155263] rounded-[50px] px-10 py-2">Sin asignar</span>
+                        <div className="flex py-2 items-center ">
+                            <span className="bg-[#E7E7E7] font-['Poppins'] bg-[#FDFFA1] text-[#155263] rounded-[50px] px-10 py-2">En envió</span>
                         </div>
                         <div className="flex flex-row items-center justify-between gap-10">
                             <span className="flex flex-row">
@@ -137,7 +137,7 @@ const Management = () => {
                         </div>
                     </div>
                 </div>
-                <div className="flex flex-col w-full border-none rounded-xl bg-[#EBFCFF] p-3 mt-3">
+                <div className="flex flex-col w-full border-none rounded-xl bg-[#FFFFFF] hover:bg-[#EBFCFF] hover: cursor-pointer p-3 mt-3">
                     <div className="flex flex-row w-full justify-between px-4 ">
                         <div className="flex gap-6">
                             <span>

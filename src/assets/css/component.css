@@ -1,0 +1,32 @@
+.info-client {
+    background-image: url("../images/backgrounds/profile_background.png");
+    /* border: 1px solid black; */
+    background-size: cover;
+    
+}
+
+.avatar-client {
+    background-image: url("../images/avatars/Fotocliente.png");
+    background-size: cover;
+    width: 200px;
+    height: 200px;
+}
+.title-info {
+    color: #155263;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.avatar-dog {
+    background-image: url("../images/avatars/Group 385.png");
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+}
+
+.panel-QR {
+    width: 100%;
+    height: 200px;
+    
+    text-align: center;
+}
