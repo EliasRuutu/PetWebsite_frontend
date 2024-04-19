@@ -3,10 +3,12 @@ import { useState } from "react";
 import { Input } from "@material-tailwind/react";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
+import { useNavigate } from "react-router-dom";
 
 import User from "../../assets/images/user.svg";
 
 const PanelForClient = () => {
+
   const [file, setFile] = useState(User);
   function handleChange(e) {
     console.log(e.target.files);
@@ -19,6 +21,7 @@ const PanelForClient = () => {
     input.click();
   };
 
+ 
   return (
     <>
       <div className="flex flex-row">
@@ -141,20 +144,6 @@ const PanelForClient = () => {
               control={<Checkbox defaultChecked />}
               label="Correo"
             />
-          </div>
-          <div className="flex justify-end pt-2">
-            <button
-              type="submit"
-              class="text-sm items-center text-black text-center w-36 h-11 bottom-2.5 font-['Poppins'] bg-[#FFFFFF] rounded-md px-5  border-2 border-[#155263]"
-            >
-              VOLVER
-            </button>
-            <button
-              type="submit"
-              class="text-sm items-center text-white text-center w-36 h-11 bottom-2.5 font-['Poppins'] bg-[#3D9FAD] rounded-md px-5  mx-3.5"
-            >
-              EDITAR
-            </button>
           </div>
         </div>
       </div>

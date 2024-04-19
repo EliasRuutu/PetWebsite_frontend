@@ -1,16 +1,12 @@
 import { useState } from "react";
 import { Input } from "@material-tailwind/react";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
+
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 
-import PasswordInput from "../../components/passwordInput";
-import User from "../../assets/images/user.svg";
 import DogAvatar from "../../assets/images/avatars/dog-avatar.png";
 
 const PanelForPet = () => {
-  const [updatePassword, setUpdatePassword] = useState("");
   const [file, setFile] = useState(DogAvatar);
   function handleChange(e) {
     console.log(e.target.files);
@@ -122,20 +118,6 @@ const PanelForPet = () => {
                 )}
               />
             </div>
-          </div>
-          <div className="flex justify-end pt-2">
-            <button
-              type="submit"
-              class="text-sm items-center text-black text-center w-36 h-11 bottom-2.5 font-['Poppins'] bg-[#FFFFFF] rounded-md px-5  border-2 border-[#155263]"
-            >
-              VOLVER
-            </button>
-            <button
-              type="submit"
-              class="text-sm items-center text-white text-center w-36 h-11 bottom-2.5 font-['Poppins'] bg-[#3D9FAD] rounded-md px-5  mx-3.5"
-            >
-              EDITAR
-            </button>
           </div>
         </div>
       </div>

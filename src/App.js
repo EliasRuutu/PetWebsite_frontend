@@ -8,7 +8,8 @@ import Management from "./Management/Management";
 import BalanceOfClients from "./Management/BalanceOfClients"
 import AssignedPetsList from './Management/AssignedPetsList';
 import UpdateProfile from './ProfileUpdate/UpdateProfile';
-import ClientAccount from './ClientAccount';
+import ClientAccount from './Account/ClientAccountInfo';
+import PetAccount from './Account/PetAccountInfo';
 import CreateAccount from './CreateAccount' 
 
 import { ToastContainer } from 'react-toastify';
@@ -27,7 +28,8 @@ function App() {
           <Route path="balanceofclient" element={<BalanceOfClients />} />
           <Route path="assignedpetslist" element={<AssignedPetsList />} />
           <Route path="updateprofile" element={<UpdateProfile />} />
-          <Route path="accountinfo" element={<ClientAccount />} />
+          <Route path="clientaccountinfo" element={<ClientAccount />} />
+          <Route path="petaccountinfo" element={<PetAccount />} />
           <Route path="createaccount" element={<CreateAccount />} />
         </Routes>
       </Router>

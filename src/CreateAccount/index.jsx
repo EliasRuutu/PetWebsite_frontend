@@ -1,11 +1,12 @@
 import '../assets/css/component.css'
 // import profileBackground from "../assests/images/backgrounds/profile_background.png"
  import CreateTapPanel from './CreateTapPanel'
+import { useNavigate } from 'react-router-dom';
 
 const CreateAccount = () => {
   return (
     <>
-      <div className="w-full flex top-10">
+      <div className="w-full flex">
         <div className="flex w-1/6 border-r-2 h-screen flex-col mt-[130px]">
           <span className="w-full pt-8 text-xl border-t-2 flex justify-center">
             <svg
@@ -62,8 +63,8 @@ const CreateAccount = () => {
             </h1>
           </span>
         </div>
-        <div className="flex w-full items-center justify-between h-1/2 mt-[130px] bg-[#EBFCFF] flex-col border-t-2 px-24 mb-3 pt-28 pb-52 px-9">
-          <CreateTapPanel/>
+        <div className="flex w-full flex-col items-center justify-between h-[55rem]  mt-[130px] bg-[#EBFCFF]  border-t-2 px-24 mb-3 pt-28 pb-52 px-9">
+          <CreateTapPanel className="h-full"/>
         </div>
       </div>
     </>
