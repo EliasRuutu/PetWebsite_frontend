@@ -1,7 +1,14 @@
 import DogCard from "../components/DogCard";
 import MoveBtn from "../components/MoveBtn";
+import { useNavigate } from "react-router-dom";
 
 const CustomerInfo = () => {
+  let navigate = useNavigate();
+
+  function goToEditPage() {
+    alert("hi")
+    navigate('/createaccount');
+  }
   return (
     <>
       <div className="mb-7 font-bold text-[#155263] text-3xl">
@@ -98,13 +105,14 @@ const CustomerInfo = () => {
         <MoveBtn name="EDITAR" direction="Next"/> */}
         <button
           type="submit"
-          class="text-sm items-center text-black text-center w-36 h-11 bottom-2.5 font-['Poppins'] bg-[#FFFFFF] rounded-md px-5  border-2 border-[#155263]"
+          class="text-sm items-center text-[#3D9FAD] text-center w-36 h-11 bottom-2.5 font-['Poppins'] bg-[#FFFFFF] rounded-md px-5  border-2 border-[#3D9FAD] hover:bg-[#3D9FAD] hover:text-white"
         >
           VOLVER
         </button>
         <button
           type="submit"
-          class="text-sm items-center text-white text-center w-36 h-11 bottom-2.5 font-['Poppins'] bg-[#3D9FAD] rounded-md px-5  mx-3.5"
+          class="text-sm items-center text-white text-center w-36 h-11 bottom-2.5 font-['Poppins'] bg-[#3D9FAD] rounded-md px-5  mx-3.5 hover:border-[#243c5a] hover:bg-white hover:text-[#3D9FAD]"
+          onClick={goToEditPage}
         >
           EDITAR
         </button>

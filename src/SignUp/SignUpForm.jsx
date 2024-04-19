@@ -107,16 +107,18 @@ const SignUpForm = () => {
         }
     }
 
+
+    
     return(
         <div className="bg-[url('./assets/images/signupback.svg')] relative w-screen h-screen py-4 bg-no-repeat bg-cover bg-center flex justify-end items-center">
             <div className="absolute -translate-x-1/3 -translate-y-1/2 float-end top-1/2  w-full h-[650px] max-w-[550px] max-h-screen px-10 py-10 flex flex-col justify-around">
                 <h1 className="font-['Poppins'] text-[#155263] font-bold text-4xl flex justify-center">¡Bienvenido a Paw Track!</h1>
                 <h1 className="font-['Poppins'] text-[#155263] font-bold text-md flex justify-center">Lorem ipsum dolor sit amet, consectetur adi piscing.</h1>
                 <div className="w-full">
-                    <Input className="p-2 rounded-md bg-[#F8F8F8] indent-1.5" onChange={(e) => {
+                    {/* <Input className="p-2 rounded-md bg-[#F8F8F8] indent-1.5" onChange={(e) => {
                         setEmail(e.target.value), setIsValidEmail(validateEmail(e.target.value))
                     }} placeholder="Correo Electronico" />
-                    {!isValidEmail && <p style={{color:'red', fontFamily:'Poppins', float:'right'}}>Por favor, introduce una dirección de correo electrónico válida.</p> }
+                    {!isValidEmail && <p style={{color:'red', fontFamily:'Poppins', float:'right'}}>Por favor, introduce una dirección de correo electrónico válida.</p> } */}
                 </div>
                 <div className="w-full">
                    <InputWithDropdown sendDataToParent={setCountryInfo} sendData1ToParent={setCountry}/>

@@ -82,8 +82,8 @@ const SignInForm = () => {
             <div className="absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 bg-white w-full h-[500px] max-w-[450px] max-h-screen px-10 py-10 flex flex-col justify-around rounded-3xl">
                 <h1 className="font-['Poppins'] text-[#155263] font-bold text-4xl flex justify-center">Incia Sesión</h1>
                 <div className="w-full">
-                    <Input className="p-2 rounded-md bg-[#F8F8F8] indent-1.5" onChange={(e) => {setSignInEmail(e.target.value), setIsValidEmail(validateEmail(e.target.value))}} placeholder="Correo Electronico" />
-                    {!isValidEmail && <p style={{color:'red', fontFamily:'Poppins', float:'right'}}>Por favor, introduce una dirección de correo electrónico válida.</p> }
+                    {/* <Input className="p-2 rounded-md bg-[#F8F8F8] indent-1.5" onChange={(e) => {setSignInEmail(e.target.value), setIsValidEmail(validateEmail(e.target.value))}} placeholder="Correo Electronico" />
+                    {!isValidEmail && <p style={{color:'red', fontFamily:'Poppins', float:'right'}}>Por favor, introduce una dirección de correo electrónico válida.</p> } */}
                 </div>
                 <div className="w-full">
                     <PasswordInput sendPasswordToParent = {setSignInPassword} />
