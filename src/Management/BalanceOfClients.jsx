@@ -1,17 +1,18 @@
 import * as React from "react";
-import QRCode from "react-qr-code";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
 import ClientCard1 from "../components/ClientCard1";
 
 import dogAvatar from "../assets/images/avatars//Group 385.png";
+import { useNavigate } from "react-router-dom";
 
 const BalanceOfClients = () => {
+  let navigator = useNavigate();
+
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
+  const openDeleteMoadl = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const style = {
@@ -130,9 +131,9 @@ const BalanceOfClients = () => {
           </div>
         </div>
         <div className="">
-          <ClientCard1 onClick={handleOpen} />
-          <ClientCard1 onClick={handleOpen} />
-          <ClientCard1 onClick={handleOpen} />
+          <ClientCard1 deleteInfo={openDeleteMoadl} />
+          <ClientCard1 deleteInfo={openDeleteMoadl} />
+          <ClientCard1 deleteInfo={openDeleteMoadl} />
         </div>
         <Modal
           open={open}
@@ -196,10 +197,10 @@ const BalanceOfClients = () => {
               <p className="text-[#155263]">Al eliminarse, estos datos no podrán recuperarse.</p>
             </div>
             <div className="flex flex-row gap-4">
-              <button className="view-detail items-center font-bold text-base text-[#3D9FAD] text-center w-36 h-11 bottom-2.5 font-['Poppins'] bg-[#FFFFFF] rounded-md px-5  border-2 border-[#3D9FAD] hover:bg-[#3D9FAD] hover:text-[#FFFFFF]">
+              <button className="view-detail items-center font-bold text-base text-[#3D9FAD] text-center w-36 h-11 bottom-2.5 font-['Poppins'] bg-[#FFFFFF] rounded-md px-5  border-2 border-[#3D9FAD] hover:bg-[#3D9FAD] hover:text-[#FFFFFF]" onClick={handleClose}>
                 VOLVER
               </button>
-              <button className="delete-card items-center font-bold text-base text-[#155263] text-center w-36 h-11 bottom-2.5 font-['Poppins'] bg-[#FFFFFF] rounded-md px-5  border-2 border-[#155263] hover:bg-[#155263] hover:text-[#FFFFFF]">
+              <button className="delete-card items-center font-bold text-base text-[#FFFFFF] text-center w-36 h-11 bottom-2.5 font-['Poppins'] bg-[#3D9FAD] rounded-md px-5 hover:bg-[#155263] hover:text-[#FFFFFF]" >
                 DESCARGAR
               </button>
             </div>

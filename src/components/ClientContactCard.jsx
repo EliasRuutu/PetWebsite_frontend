@@ -1,7 +1,7 @@
 
 import clientAvatar from "../assets/images/avatars/avatar2.png";
 
-const ClientCard = () => {
+const ClientContactCard = () => {
   return (
     <>
       <div className="flex flex-row w-full h-24 px-4 py-3 ">
@@ -34,4 +34,4 @@ const ClientCard = () => {
   );
 };
 
-export default ClientCard;
+export default ClientContactCard;

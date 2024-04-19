@@ -1,4 +1,6 @@
 import * as React from "react";
+import { useNavigate } from "react-router-dom";
+
 import PropTypes from "prop-types";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -44,11 +46,15 @@ function a11yProps(index) {
 
 export default function CreateTapPanel() {
   const [value, setValue] = React.useState(0);
+  let naviagtor = useNavigate();
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
+  const goToPrevious = () => {
+    naviagtor('/clientaccountinfo')
+  }
   return (
     <Box
       sx={{
@@ -57,8 +63,9 @@ export default function CreateTapPanel() {
         paddingX: "48px",
         paddingY: "24px",
         height: "100%",
+        position: "relative",
       }}
-      className="rounded-lg"
+      className="rounded-lg "
     >
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs
@@ -71,11 +78,25 @@ export default function CreateTapPanel() {
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        <PanelForClient></PanelForClient>
+        <PanelForClient />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        <PanelForPet></PanelForPet>
+        <PanelForPet />
       </CustomTabPanel>
+      <div className="flex items-end bottom-4 right-4 gap-4 absolute">
+        <button
+          type="submit"
+          class="text-sm items-center text-[#3D9FAD] text-center w-36 h-11 bottom-2.5 font-['Poppins'] bg-[#FFFFFF] rounded-md px-5  border-2 border-[#3D9FAD] hover:bg-[#3D9FAD] hover:text-white" onClick={goToPrevious}
+        >
+          VOLVER
+        </button>
+        <button
+          type="submit"
+          class="text-sm items-center text-[#3D9FAD] text-center w-36 h-11 bottom-2.5 font-['Poppins'] bg-[#FFFFFF] rounded-md px-5  border-2 border-[#3D9FAD] hover:bg-[#3D9FAD] hover:text-white"
+        >
+          SIGUIENTE
+        </button>
+      </div>
     </Box>
   );
 }
