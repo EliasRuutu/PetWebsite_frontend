@@ -3,10 +3,8 @@ import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
-
-import ClientCard1 from "../components/ClientCard1";
-
 import dogAvatar from "../assets/images/avatars//Group 385.png";
+import ClientCard1 from "../components/ClientCard1";
 import LeftSidePanel from "../components/LeftSidePanel";
 
 const BalanceOfClients = () => {
@@ -71,9 +69,10 @@ const BalanceOfClients = () => {
             <div className="flex flex-row py-7 w-1/6 justify-end">
               <button
                 type="submit"
-                class="flex text-sm items-center text-white bottom-2.5 font-['Poppins'] bg-[#F1B21B] rounded-md px-5 hover:bg-white hover:text-[#F1B21B] hover:border hover:border-[#F1B21B]"
+                class="flex font-bold text-sm items-center text-white bottom-2.5 font-['Poppins'] bg-[#F1B21B] rounded-md px-5 hover:bg-white hover:text-[#F1B21B] hover:border hover:border-[#F1B21B]"
+                onClick={() => navigator('/registerNewClient')}
               >
-                AGREGAR
+                New Client
               </button>
             </div>
           </div>

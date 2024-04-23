@@ -7,7 +7,7 @@ import SignUpForm from "./SignUp/SignUpForm";
 import Management from "./Management/Management";
 import BalanceOfClients from "./Management/BalanceOfClients"
 import AssignedPetsList from './Management/AssignedPetsList';
-import UpdateProfile from './ProfileUpdate/UpdateProfile';
+import RegisterNewClient from './ProfileUpdate/RegisterNewClient';
 import ClientAccount from './Account/ClientAccountInfo';
 import PetAccount from './Account/PetAccountInfo';
 import CreateAccount from './CreateAccount' 
@@ -27,7 +27,7 @@ function App() {
           <Route path="management" element={<Management />} />
           <Route path="balanceofclient" element={<BalanceOfClients />} />
           <Route path="assignedpetslist" element={<AssignedPetsList />} />
-          <Route path="updateprofile" element={<UpdateProfile />} />
+          <Route path="registerNewClient" element={<RegisterNewClient />} />
           <Route path="clientaccountinfo" element={<ClientAccount />} />
           <Route path="petaccountinfo" element={<PetAccount />} />
           <Route path="createaccount" element={<CreateAccount />} />

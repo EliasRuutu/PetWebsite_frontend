@@ -14,6 +14,7 @@ export default function PasswordInput({sendPasswordToParent}) {
       <input
         type={isPasswordVisible ? "text" : "password"}
         placeholder="Contraseña"
+        name="password"
         onChange={(e) => setPassword(e.target.value)}
         className="w-full px-4 py-2 text-base border bg-[#F8F8F8] border-gray-300 rounded-md outline-none focus:ring-blue-500 focus:border-blue-500 focus:ring-1"
       />
