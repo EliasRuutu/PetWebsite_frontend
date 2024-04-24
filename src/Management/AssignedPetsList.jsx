@@ -1,40 +1,56 @@
 import * as React from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import { useNavigate } from "react-router-dom";
+
 import LeftSidePanel from "../components/LeftSidePanel";
-
-import PetsCard1 from "../components/PetCard1";
-
+import PetsCard from "../components/PetCard";
 import dogAvatar from "../assets/images/avatars/Group 385.png";
 import QR from "../assets/images/QR/QR.png";
-import BackgroundImage from '../assets/images/backgrounds/QR Box.png';
-import { faBorderNone } from "@fortawesome/free-solid-svg-icons";
+import { loadAllPetsInfo } from "../redux/client/clientSlice";
 
 const AssignedPetsList = () => {
   const [open, setOpen] = React.useState(false);
+  const [petsInfo, setPetsInfo] = React.useState([]);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const dispatch = useDispatch();
 
-  let navigator = useNavigate()
+  React.useEffect(() => {
+    axios
+      .get("http://localhost:5000/getallpets")
+      .then((response) => {
+        // setClientsInfo(response.data);
+        console.log(response.data);
+        dispatch(loadAllPetsInfo(response.data));
+        setPetsInfo(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
+  const navigator = useNavigate();
   const style = {
     backgroundImage: "url(assets/QR_Box.png)",
-    backgroundSize: 'cover',
+    backgroundSize: "cover",
     position: "absolute",
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
     width: 500,
     padding: 10,
-    color: 'white'
+    color: "white",
     // boxShadow: 24,
     // p: 4,
-};
-
+  };
 
   return (
     <div className="w-full flex top-10">
-      <LeftSidePanel/>
+      <LeftSidePanel />
       <div className="flex w-5/6 h-screen mt-[130px] flex-col border-t-2 px-20 mb-3">
         <div className="flex flex-row">
           <h1 className="title-info font-['Poppins'] py-7 text-[#155263] text-2xl font-bold w-1/2">
@@ -84,9 +100,9 @@ const AssignedPetsList = () => {
           </div>
         </div>
         <div className="">
-          <PetsCard1 onClick={handleOpen} />
-          <PetsCard1 onClick={handleOpen} />
-          <PetsCard1 onClick={handleOpen} />
+          {petsInfo.map((pet) => (
+            <PetsCard key={pet.id} petsInfo={pet} onClick={handleOpen} />
+          ))}
         </div>
         <Modal
           open={open}
@@ -104,11 +120,7 @@ const AssignedPetsList = () => {
               </div>
               <div className="pet-info flex flex-col justify-arround p-10 w-full">
                 <div className="flex flex-row justify-center items-center gap-2 mb-2 h-1/2">
-                  <img
-                    src={dogAvatar}
-                    alt="pet"
-                    className=""
-                  />
+                  <img src={dogAvatar} alt="pet" className="" />
                   <span className="text-3xl font-bold">Bella</span>
                 </div>
                 <div className="w-full">
@@ -134,7 +146,7 @@ const AssignedPetsList = () => {
                       fill="white"
                     />
                   </svg>
-                <span>Hembra</span>
+                  <span>Hembra</span>
                 </div>
               </div>
             </div>

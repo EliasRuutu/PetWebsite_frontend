@@ -1,5 +1,6 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import axios from 'axios';
 import Navbar from "./Layout/Navbar";
 import Footer from "./Layout/Footer";
 import SignInForm from "./SignIn/SignInForm";
@@ -28,7 +29,7 @@ function App() {
           <Route path="balanceofclient" element={<BalanceOfClients />} />
           <Route path="assignedpetslist" element={<AssignedPetsList />} />
           <Route path="registerNewClient" element={<RegisterNewClient />} />
-          <Route path="clientaccountinfo" element={<ClientAccount />} />
+          <Route path="clientaccountinfo/:ProfileID" element={<ClientAccount />} />
           <Route path="petaccountinfo" element={<PetAccount />} />
           <Route path="createaccount" element={<CreateAccount />} />
         </Routes>

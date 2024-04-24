@@ -1,3 +1,4 @@
+import * as React from "react";
 import { useState } from "react";
 import { Input } from "@material-tailwind/react";
 
@@ -5,12 +6,36 @@ import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 
 import DogAvatar from "../../assets/images/avatars/dog-avatar.png";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { uploadPetInfo } from "../../redux/client/clientSlice";
+import { useDispatch } from "react-redux";
 
 const PanelForPet = () => {
+  const navigator = useNavigate()
+   
+  const dispatch = useDispatch();
+
   const [file, setFile] = useState(DogAvatar);
+  
+  const [newPet, setNewPet] = React.useState({
+    name: '',
+    gender: '',
+    birthday: '',
+    microchip: '',
+    speciaDCondition: '',
+    petAvatar: ''
+  });
+
+  function updateClientProfile(e) {
+    setNewPet({ ...newPet, [e.target.name]: e.target.value});
+  }
+
   function handleChange(e) {
     console.log(e.target.files);
     setFile(URL.createObjectURL(e.target.files[0]));
+    setNewPet({...newPet, petAvatar: e.target.files[0]});
   }
   const handleUpload = (e) => {
     const input = document.createElement("input");
@@ -18,17 +43,55 @@ const PanelForPet = () => {
     input.onchange = (e) => handleChange(e);
     input.click();
   };
+
+  const updatePetProfile =() => {
+    if((newPet.name.trim() === "" ) || (newPet.gender === "")) {
+      alert("input all the data")
+    } else {
+      const formData = new FormData();
+      formData.append("name", newPet.name);
+      formData.append("gender", newPet.gender);
+      formData.append("birthday", newPet.birthday);
+      formData.append("microchip", newPet.microchip);
+      formData.append("specialDCondition", newPet.speciaDCondition);
+      formData.append("petAvatar", newPet.petAvatar);
+
+      axios
+      .post("http://localhost:5000/pet", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((response) => {
+        // toast.error("Plese enter the data correctly", {
+        //   position: "bottom-right",
+        //   autoClose: 1,
+        //   hideProgressBar: false,
+        //   closeOnClick: true,
+        //   pauseOnHover: true,
+        //   draggable: true,
+        //   progress: undefined,
+        //   theme: "light",
+        // });
+        dispatch(uploadPetInfo(response.data));
+        // alert("successfully Pet registerd");
+        navigator('/assignedpetslist');
+      }).catch((error) => {
+        console.log(error)
+      });
+    }
+  }
   const select_items = ["1", "2", "3"];
   return (
     <>
-      <div className="flex flex-row">
-        <div className="flex w-1/5 overflow-hidden h-[160px] relative">
+      <div className="flex flex-row bg-[#FFFFFF] h-full p-6 items-center rounded-0">
+        <div className="flex flex-row items-start w-1/5 overflow-hidden h-[160px] relative">
           <input type="file" onChange={handleChange} className="hidden" />
           <img
             src={file}
-            width={160}
+            width={140}
             height={128}
-            className="border border-gray-100 rounded-full p-1"
+            className="border border-gray-100 p-1"
           />
           <svg
             width="40"
@@ -58,34 +121,41 @@ const PanelForPet = () => {
             </defs>
           </svg>
         </div>
-        <div className="w-5/6 px-20">
+        <div className="w-5/6 px-20 items-center">
           <div className="flex flex-col justify-between">
-            <div className="flex flex-row justify-between mb-5">
+            <div className="flex flex-row gap-2 justify-between mb-5">
               <div className="flex flex-col gap-2">
                 <h1 className="text-[16px] text-[#155263] font-['Poppins']">
-                  Nombre
+                  Name
                 </h1>
                 <Input
                   className="p-2 rounded-md bg-[#F8F8F8] indent-1.5"
                   placeholder="Tommy"
+                  name="name"
+                  onChange = {updateClientProfile}
                 />
               </div>
               <div className="flex flex-col gap-2">
                 <h1 className="text-[16px] text-[#155263] font-['Poppins']">
-                  Genero
+                  Gender
                 </h1>
                 <Input
                   className="p-2 rounded-md bg-[#F8F8F8] indent-1.5"
                   placeholder="Macho"
+                  name="gender"
+                  onChange = {updateClientProfile}
                 />
+              
               </div>
               <div className="flex flex-col gap-2">
                 <h1 className="text-[16px] text-[#155263] font-['Poppins']">
-                  Edad
+                  Birthday
                 </h1>
                 <Input
                   className="p-2 rounded-md bg-[#F8F8F8] indent-1.5"
                   placeholder="5 años"
+                  name="birthday"
+                  onChange = { updateClientProfile }
                 />
               </div>
             </div>
@@ -97,14 +167,18 @@ const PanelForPet = () => {
                 multiline
                 rows={4}
                 defaultValue="Descripción"
+                name = "microchip"
+                onChange = { updateClientProfile }
               />
               <TextField
                 id="outlined-multiline-static"
                 className="w-1/2"
-                label="Condiciones especiales"
+                label="Special Conditions"
                 multiline
                 rows={4}
                 defaultValue="Descripción"
+                name = "speciaDCondition"
+                onChange = {  updateClientProfile } 
               />
             </div>
             <div className="flex flex-row">
@@ -114,11 +188,22 @@ const PanelForPet = () => {
                 options={select_items}
                 sx={{ width: 300 }}
                 renderInput={(params) => (
-                  <TextField {...params} label="Plaquita" />
+                  <TextField {...params} label="Plaquita" 
+                  onChange = {  updateClientProfile }/>
                 )}
               />
-            </div>
+            </div>  
           </div>
+          <div className="flex flex-row gap-4 justify-end mt-4">
+              <button
+                className="view-detail items-center font-bold text-base text-[#3D9FAD] text-center w-36 h-11 bottom-2.5 font-['Poppins'] bg-[#FFFFFF] rounded-md px-5  border-2 border-[#3D9FAD] hover:bg-[#3D9FAD] hover:text-[#FFFFFF]" 
+              >
+                Back
+              </button>
+              <button className="delete-card items-center font-bold text-base text-[#FFFFFF] text-center w-36 h-11 bottom-2.5 font-['Poppins'] bg-[#F1B21B] rounded-md px-5 hover:bg-[#FFCA4A] hover:text-[#FFFFFF]" onClick={updatePetProfile}>
+                Save
+              </button>
+            </div>
         </div>
       </div>
     </>

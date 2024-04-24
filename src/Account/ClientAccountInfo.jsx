@@ -1,12 +1,44 @@
+import * as React from "react";
+
 import DogCard from "../components/DogCard";
 import MoveBtn from "../components/MoveBtn";
 import { useNavigate } from "react-router-dom";
 
 import "../assets/css/component.css";
 import LeftSidePanel from "../components/LeftSidePanel";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { current } from "@reduxjs/toolkit";
+import axios from "axios";
+import { loadAllClientsInfo } from "../redux/client/clientSlice";
 
 const CustomerInfo = () => {
   let navigate = useNavigate();
+  const dispatch = useDispatch();
+  const urlParam = useParams();
+  // .find((clientInfo) => clientInfo.Profile_ID == urlParam.ProfileID)
+  const [currentClient, setCurrentClient] = React.useState();
+
+  React.useEffect(() => {
+    axios
+      .get("http://localhost:5000/getAllClientInfos/")
+      .then((response) => {
+        // setClientsInfo(response.data);
+        dispatch(loadAllClientsInfo(response.data));
+      })
+      .catch((error) => {});
+  }, []);
+
+  const clientInfo = useSelector((state) => state.client.allClientsInfo);
+  React.useEffect(() => {
+    if (clientInfo.length > 0) {
+      const selectedClient = clientInfo[0].forEach((element) => {
+        if (element.Profile_ID == urlParam.ProfileID) {
+          setCurrentClient(element);
+        }
+      });
+    }
+  }, [clientInfo]);
 
   function goToBalancePage() {
     navigate("/balanceofclient");
@@ -15,10 +47,12 @@ const CustomerInfo = () => {
   function goToEditPage() {
     navigate("/createaccount");
   }
+  const Pets = [];
+  console.log(currentClient);
   return (
     <>
       <div className="w-full flex mt-10">
-        <LeftSidePanel/>
+        <LeftSidePanel />
         <div className="flex flex-col w-5/6 h-screen mt-[130px] bg-[#EBFCFF] rounded-lg border-t-2 px-32 mb-3 pt-28 pb-52 px-10 ">
           <div className="mb-7 font-bold text-[#155263] text-3xl">
             Información del Cliente
@@ -28,7 +62,7 @@ const CustomerInfo = () => {
               <div className="flex flex-col justify-around items-center h-3/4 align-middle">
                 <div className="avatar-client"></div>
                 <div className="text-3xl font-bold text-white">
-                  <span>Sebastian Torres</span>
+                  {currentClient && <span>{currentClient.name}</span>}
                 </div>
               </div>
               <hr />
@@ -56,7 +90,7 @@ const CustomerInfo = () => {
                       stroke-width="1.7"
                     />
                   </svg>
-                  torresebastian14@gmail.com
+                  {currentClient && <span>{currentClient.email}</span>}
                 </div>
                 <div className="flex flex-row text-white">
                   <svg
@@ -72,27 +106,22 @@ const CustomerInfo = () => {
                       stroke-width="1.7"
                     />
                   </svg>
-                  +54 569-312 -127
+                  {currentClient && <span>{currentClient.phone}</span>}
                 </div>
               </div>
             </div>
             <div className="w-3/5 px-10 pt-10 bg-[#FFFFFF]">
               <div className="h-1/3">
                 <div className="flex h-1/4 title-info items-center justify-start">
-                  Detalles Personales
+                  Personal Information
                 </div>
                 <hr />
                 <div className="mt-5">
                   <span className="text-[#155263]">
-                    Dirección:{" "}
-                    <span className="text-[#929292]">
-                      23243 Pto Madero, Buenos Aires
-                    </span>
+                    Address:{" "}
+                    {currentClient && <span>{currentClient.address}</span>}
                   </span>
                   <br />
-                  <span className="text-[#155263]">
-                    Pais: <span className="text-[#929292]">Argentina</span>
-                  </span>
                 </div>
               </div>
               <hr />
@@ -101,8 +130,13 @@ const CustomerInfo = () => {
                   Detalles Personales
                 </div>
                 <div className="flex flex-row flex-wrap">
-                  <DogCard dogName="Tommy" gender="Macho" />
-                  <DogCard dogName="Bella" gender="Hembra" />
+                  {Pets.length > 0 ? (
+                    Pets.map((element) => <DogCard key={element.id} />)
+                  ) : (
+                    <button className="view-detail items-center font-bold text-base text-[#FFFFFF] text-center w-36 h-11 bottom-2.5 font-['Poppins'] bg-[#F1B21B] rounded-md px-5   hover:bg-[#FFCA4A] hover:text-[#FFFFFF]" onClick={goToEditPage}>
+                      ADD A PET
+                    </button>
+                  )}
                 </div>
               </div>
             </div>

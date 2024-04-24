@@ -1,5 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {uploadClientInfo} from "../redux/client/clientSlice";
+
 import { Avatar } from "flowbite-react";
+import axios from "axios";
 
 import { Input } from "@material-tailwind/react";
 import { Textarea } from "@material-tailwind/react";
@@ -9,28 +13,40 @@ import Checkbox from "@mui/material/Checkbox";
 import User from "../assets/images/user.svg";
 import PasswordInput from "../components/passwordInput";
 import LeftSidePanel from "../components/LeftSidePanel";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+// import {showToast} from "../utils/showToast";
 
 const RegisterNewClient = () => {
-  const [updatePassword, setUpdatePassword] = useState("");
   const [file, setFile] = useState(User);
   const [newClient, setNewClient] = useState({
-    name: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    password: '',
-    address: '',
-    avatar: ''
+    name: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    password: "",
+    address: "",
+    avatar: "",
   });
 
+  const navigator = useNavigate();
+
+  const dispatch = useDispatch();
+
+  const clientPassword = useSelector((state) => state.client.clientPassword);
+
+  useEffect(() => {
+    setNewClient({ ...newClient, password: clientPassword });
+  }, [clientPassword]);
+
   function updateClientProfile(e) {
-    console.log(e.target.name);
-    setNewClient({...newClient, [e.target.name]:e.target.value})
-  } 
+    setNewClient({ ...newClient, [e.target.name]: e.target.value });
+  }
 
   function handleChange(e) {
-    console.log(e.target.files);
+    console.log(e.target.files[0]);
     setFile(URL.createObjectURL(e.target.files[0]));
+    setNewClient({ ...newClient, avatar: e.target.files[0] });
   }
   const handleUpload = (e) => {
     const input = document.createElement("input");
@@ -39,9 +55,59 @@ const RegisterNewClient = () => {
     input.click();
   };
 
+  const saveClientProfile = () => {
+    if (
+      newClient.name.trim() === "" || 
+      newClient.lastName.trim() === "" ||
+      newClient.email.trim() === "" ||
+      newClient.phone.trim() === "" ||
+      newClient.password.trim() === "" ||
+      newClient.address.trim() === "" ||
+      newClient.avatar.trim() === ""
+    ) {
+      // toast.success("Plese enter the data correctly", {
+      //   position: "bottom-right",
+      //   autoClose: 5000,
+      //   hideProgressBar: false,
+      //   closeOnClick: true,
+      //   pauseOnHover: true,
+      //   draggable: true,
+      //   progress: undefined,
+      //   theme: "light",
+      // });
+      alert("enter the data")
+    } else {
+      const formData = new FormData();
+      formData.append("name", newClient.name);
+      formData.append("lastName", newClient.lastName);
+      formData.append("email", newClient.email);
+      formData.append("phone", newClient.phone);
+      formData.append("password", newClient.password);
+      formData.append("address", newClient.address);
+      formData.append("avatar", newClient.avatar);
+
+      axios
+        .post("http://localhost:5000/register/", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((response) => {
+          const personalInfo = response.data;
+          console.log("personalInfo", personalInfo)
+          dispatch(uploadClientInfo(personalInfo))
+          alert("successfully registerd")
+          navigator('/balanceofclient');
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  };
+
   return (
     <div className="w-full flex top-10">
-      <LeftSidePanel/>
+      <LeftSidePanel />
       <div className="flex w-5/6 h-screen mt-[130px] flex-col border-t-2 mb-3 bg-[#EBFCFF] px-[250px] pt-[30px]">
         <div className="flex mb-[10px]">
           <h1 className="font-['Poppins'] py-7 text-[#155263] text-2xl font-bold w-full">
@@ -88,14 +154,15 @@ const RegisterNewClient = () => {
             </div>
             <div className="flex flex-col w-1/3 gap-3">
               <div className="flex flex-col gap-2">
-                <h1 className="text-[16px] text-[#155263] font-['Poppins']" >
+                <h1 className="text-[16px] text-[#155263] font-['Poppins']">
                   Name
                 </h1>
                 <Input
                   className="p-2 rounded-md bg-[#F8F8F8] indent-1.5"
                   placeholder="Alexandra"
                   name="name"
-                  onChange ={updateClientProfile}
+                  onChange={updateClientProfile}
+                  required
                 />
               </div>
               <div className="flex flex-col text-[#155263] gap-2">
@@ -106,14 +173,14 @@ const RegisterNewClient = () => {
                   className="p-2 rounded-md bg-[#F8F8F8] indent-1.5"
                   placeholder="alexandra@gmail.com"
                   name="email"
-                  onChange ={updateClientProfile}
+                  onChange={updateClientProfile}
                 />
               </div>
               <div className="flex flex-col text-[#155263] gap-2">
                 <h1 className="text-[16px] text-[#155263] font-['Poppins']">
                   Password
                 </h1>
-                <PasswordInput  sendPasswordToParent={setUpdatePassword} />
+                <PasswordInput />
               </div>
             </div>
             <div className="flex flex-col gap-3 w-1/3">
@@ -125,7 +192,7 @@ const RegisterNewClient = () => {
                   className="p-2 rounded-md bg-[#F8F8F8] indent-1.5"
                   placeholder="Gomez"
                   name="lastName"
-                  onChange ={updateClientProfile}
+                  onChange={updateClientProfile}
                 />
               </div>
               <div className="flex flex-col text-[#155263] gap-2">
@@ -136,17 +203,14 @@ const RegisterNewClient = () => {
                   className="p-2 rounded-md bg-[#F8F8F8] indent-1.5"
                   placeholder="+58 789-564-52"
                   name="phone"
-                  onChange ={updateClientProfile}
+                  onChange={updateClientProfile}
                 />
               </div>
               <div className="flex flex-col text-[#155263] gap-2">
                 <h1 className="text-[16px] text-[#155263] font-['Poppins']">
                   Confirm Password
                 </h1>
-                <PasswordInput 
-                  sendPasswordToParent={setUpdatePassword} 
-                  onChange ={updateClientProfile}
-                  />
+                <PasswordInput />
               </div>
             </div>
           </div>
@@ -154,7 +218,11 @@ const RegisterNewClient = () => {
             <h1 className="text-[#155263] font-['Poppins'] text-[16px]">
               Address
             </h1>
-            <Textarea className="border rounded-md py-2" name="address" onChange ={updateClientProfile}/>
+            <Textarea
+              className="border rounded-md py-2"
+              name="address"
+              onChange={updateClientProfile}
+            />
           </div>
           <div className="flex flex-row">
             <div className="grid grid-cols-3 flex-wrap pt-2">
@@ -185,8 +253,9 @@ const RegisterNewClient = () => {
               Back
             </button>
             <button
+              type="submit"
               className="w-[200px] font-['Poppins'] h-[40px] ml-[6px] font-bold bg-[#F1B21B] hover:bg-white hover:text-[#F1B21B] hover:border hover:border-[#F1B21B] rounded-md text-white transition-colors duration-300 ease-in-out"
-              // onClick={handleSignUpClick}
+              onClick={saveClientProfile}
             >
               Save
             </button>

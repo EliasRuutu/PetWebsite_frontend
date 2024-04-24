@@ -6,17 +6,18 @@ import { updatePassword } from "../redux/client/clientSlice";
 export default function PasswordInput({sendPasswordToParent}) {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [password, setPassword] = useState("");
-
-  const clientPassword = useSelector((state) => state.client.clientPassword);
+  const [newClient, setNewClient] = useState("");
   const dispatch = useDispatch();
-
-  sendPasswordToParent(password);
+  
+  function updateClientProfile(e) {
+    setNewClient({ ...newClient, [e.target.name]: e.target.value });
+  }
+  
   function togglePasswordVisibility() {
     setIsPasswordVisible((prevState) => !prevState);
   }
 
   function handleChange (e) {
-    console.log("hi");
     dispatch(updatePassword(e.target.value))
   }
   return (
