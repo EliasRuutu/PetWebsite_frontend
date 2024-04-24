@@ -1,15 +1,27 @@
+import * as React from "react";
 
 import clientAvatar from "../assets/images/avatars/avatar2.png";
+import { useNavigate } from "react-router-dom";
 
-const ClientContactCard = () => {
+const ClientContactCard = (props) => {
+  const navigator = useNavigate()
+  const [currentInfo, setCurrentInfo] = React.useState()
+  
+  React.useEffect(() => {
+    setCurrentInfo(props.info)
+  }, [props.info])
+
+  const showClientInfo = () => {
+    if(currentInfo.Profile_ID) navigator(`/clientaccountinfo/${currentInfo.Profile_ID}`)
+  }
   return (
     <>
-      <div className="flex flex-row w-full h-24 px-4 py-3 ">
+      <div className="flex flex-row w-full h-24 px-4 py-3 hover:bg-[#EBFCFF] hover:cursor-pointer" onClick={showClientInfo}>
         <div className="w-20 bg-cover h-20 bg-cover">
           <img src={clientAvatar} alt="" />
         </div>
         <div className="w-2/3 ml-5">
-          <p className="client-name title-info">Sebastian Torres</p>
+          <p className="client-name title-info">{currentInfo && currentInfo.name}</p>
           <p className="client-phone flex flex-row">
              <span>
               <svg
@@ -26,7 +38,7 @@ const ClientContactCard = () => {
                 />
               </svg>             
             </span>
-            <span className="">+54  569-312 -127</span>
+            <span className="">{currentInfo && currentInfo.phone}</span>
           </p>
         </div>
       </div>

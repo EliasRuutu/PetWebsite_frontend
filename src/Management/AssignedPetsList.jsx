@@ -1,7 +1,5 @@
 import * as React from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
@@ -10,6 +8,9 @@ import LeftSidePanel from "../components/LeftSidePanel";
 import PetsCard from "../components/PetCard";
 import dogAvatar from "../assets/images/avatars/Group 385.png";
 import QR from "../assets/images/QR/QR.png";
+
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
 import { loadAllClientsInfo, loadAllPetsInfo } from "../redux/client/clientSlice";
 
 const AssignedPetsList = () => {

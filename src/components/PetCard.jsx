@@ -12,11 +12,9 @@ const PetCard = (props) => {
   const [petOwnerID, setPetOwnerID] = React.useState(petInfo.Profile_ID);
   const [clientsInfo, setAllClients] = React.useState(props.clientsInfo)
   const [currentClient, setCurrentClient] = React.useState();
-  console.log("allClientsOf Pet card==>", props.clientsInfo)
 
   // const clientInfo = useSelector((state) => state.client.allClientsInfo);
   React.useEffect(() => {
-    console.log("clientsInfo state")
     if (clientsInfo[0].length > 0) {
       clientsInfo[0].forEach((element) => {
         if (element.Profile_ID == petOwnerID) {
@@ -37,7 +35,7 @@ const PetCard = (props) => {
   };
 
 
-  const goToDetailedPetInfo = () => navigator(`/petaccountinfo/:${petOwnerID}`)
+  const goToDetailedPetInfo = () => navigator(`/petaccountinfo/${petOwnerID}`)
   return (
     <>
       <div className="flex flex-row justify-between items-center w-full p-4 rounded-lg hover:bg-[#EBFCFF] hover:cursor-pointer">

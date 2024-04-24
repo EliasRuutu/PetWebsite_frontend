@@ -1,6 +1,9 @@
 import React from "react";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { loadAllClientsInfo, loadAllPetsInfo } from "../redux/client/clientSlice";
+import axios from "axios";
 
 import ClientContactCard from "../components/ClientContactCard.jsx";
 import "../assets/css/component.css";
@@ -11,15 +14,75 @@ import LeftSidePanel from "../components/LeftSidePanel.jsx";
 
 const PetInfo = () => {
   const urlParam = useParams()
-
+  const dispatch = useDispatch();
+  
   const [file, setFile] = useState(uploadQR);
   const [isUploaded, setNotifyUpload] = useState(false);
-  const [profileID, setProfileID] = useState(urlParam.ProfileID)
+  const [profileID, setProfileID] = useState(urlParam.ProfileID);
+  
+  const [clientsInfo, setClientsInfo] = useState([]);
+  const [petsInfo, setPetsInfo] = React.useState([]);
+
+  const [currentPet, setCurrentPet] = useState();
+  const [currentClient, setCurrentClient] = useState();
+  
   let navigator = useNavigate();
+  
+  React.useEffect(() => {
+    axios
+    .get("http://localhost:5000/getAllClientInfos/")
+    .then((response) => {
+      dispatch(loadAllClientsInfo(response.data));
+    })
+    .catch((error) => {});
+  }, []);
+  
+  React.useEffect(() => {
+    axios
+      .get("http://localhost:5000/getallpets")
+      .then((response) => {
+        // setClientsInfo(response.data);
+        dispatch(loadAllPetsInfo(response.data));
+        setPetsInfo(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    }, []);
+
+  const allClients = useSelector((state) => state.client.allClientsInfo);
+
+  // React.useEffect(() => {
+  //   console.log("allclients", allClients)
+  //   setClientsInfo(allClients)
+  // },[allClients])
 
   React.useEffect(() => {
-    // console.log(profileID)
-  },[profileID])
+    if (allClients[0].length > 0) {
+      allClients[0].forEach((element) => {
+        if (element.Profile_ID == profileID) {
+          console.log("element", element)
+          setCurrentClient(element);
+        }
+      });
+    }
+    console.log("allclients, ",allClients)
+  },[allClients])
+
+  React.useEffect(() => {
+    if (petsInfo.length > 0) {
+      petsInfo.forEach((element) => {
+        if (element.Profile_ID == profileID) {
+          console.log("element", element)
+          setCurrentPet(element);
+        }
+      });
+    }
+  },[petsInfo])
+  
+  React.useEffect(() => {},[currentClient])
+  React.useEffect(() => {},[currentPet])
+
 
   function handleChange(e) {
     const file = e.target.files[0];
@@ -86,11 +149,11 @@ const PetInfo = () => {
                     </span>
                   </div>
                 )}
-                <div className="flex flex-row items-left text-3xl mt-5 font-bold text-white">
-                  <span className="ml-0">Bella</span>
+                <div className="flex flex-row  items-left text-3xl mt-5 font-bold text-white">
+                  <span className="ml-0">Ron</span>
                 </div>
                 <hr />
-                <div className="flex flex-row text-white text-base pt-4">
+                <div className="flex flex-row items-center text-white text-base pt-4">
                   <div className="pr-2">
                     <svg
                       width="13"
@@ -108,10 +171,13 @@ const PetInfo = () => {
                         clip-rule="evenodd"
                         d="M12.8658 6.08071C12.863 7.55961 12.2903 8.98522 11.2574 10.0925C10.264 11.1575 8.91026 11.8584 7.43269 12.0795V14.3533H8.71772C8.97865 14.3533 9.23108 14.4509 9.41896 14.628C9.60723 14.8056 9.7154 15.0489 9.7154 15.3054C9.7154 15.5618 9.60723 15.8052 9.41896 15.9827C9.23108 16.1598 8.97865 16.2574 8.71772 16.2574H7.43269V17.4685C7.41913 17.7164 7.30491 17.9473 7.11816 18.1145C6.93175 18.2815 6.68669 18.3729 6.43395 18.3729C6.18121 18.3729 5.93614 18.2815 5.74974 18.1145C5.56299 17.9473 5.44906 17.7164 5.43551 17.4685L5.43491 17.4576L5.43521 16.2574H4.15018C3.88925 16.2574 3.63682 16.1598 3.44894 15.9827C3.26066 15.8052 3.15252 15.5618 3.15252 15.3054C3.15252 15.0489 3.26066 14.8056 3.44894 14.628C3.63682 14.4509 3.88925 14.3533 4.15018 14.3533H5.43521V12.0798C4.27587 11.9079 3.18632 11.4393 2.2862 10.7224C1.3406 9.96934 0.643858 8.97378 0.281328 7.85412C-0.0812449 6.73433 -0.0936252 5.53937 0.245741 4.41304C0.585069 3.28685 1.26117 2.27855 2.19112 1.50811C3.12096 0.737759 4.26543 0.237566 5.48701 0.0660457C6.70856 -0.105472 7.95692 0.0587167 9.08281 0.539475C10.2088 1.02026 11.1656 1.79778 11.8372 2.78041C12.5089 3.7632 12.8666 4.90927 12.8658 6.08071ZM5.63521 11.905C4.44619 11.7603 3.32666 11.2954 2.4108 10.566C1.49495 9.83659 0.821648 8.87361 0.471602 7.79251C0.121557 6.71141 0.10962 5.55807 0.437237 4.47074C0.764854 3.38341 1.41812 2.40824 2.31871 1.66212C3.2193 0.916002 4.32902 0.4306 5.51482 0.264103C6.70061 0.0976061 7.91217 0.257081 9.00427 0.723408C10.0964 1.18974 11.0226 1.94313 11.6721 2.89327C12.3215 3.84341 12.6665 4.94999 12.6658 6.08034C12.6631 7.50725 12.1106 8.88463 11.1111 9.95612C10.1117 11.0276 8.73335 11.7202 7.23269 11.905V14.5533H8.71772C8.92928 14.5533 9.13216 14.6325 9.28175 14.7736C9.43135 14.9146 9.5154 15.1059 9.5154 15.3054C9.5154 15.5048 9.43135 15.6961 9.28175 15.8372C9.13216 15.9782 8.92928 16.0574 8.71772 16.0574H7.23269V17.4576C7.22213 17.6506 7.13337 17.8324 6.98474 17.9655C6.8361 18.0986 6.63894 18.1729 6.43395 18.1729C6.22896 18.1729 6.0318 18.0986 5.88316 17.9655C5.73453 17.8324 5.64576 17.6506 5.63521 17.4576V16.0574H4.15018C3.93862 16.0574 3.73574 15.9782 3.58614 15.8372C3.43655 15.6961 3.35252 15.5048 3.35252 15.3054C3.35252 15.1059 3.43655 14.9146 3.58614 14.7736C3.73574 14.6325 3.93862 14.5533 4.15018 14.5533H5.63521V11.905ZM2.87529 3.8506C2.40717 4.51173 2.15835 5.28756 2.15871 6.08004C2.16031 7.14183 2.60841 8.16223 3.40894 8.91665C4.20987 9.67144 5.29801 10.0978 6.43519 10.0988C7.28352 10.0988 8.11191 9.8615 8.81552 9.41818C9.51908 8.97489 10.0655 8.34604 10.3877 7.61256C10.7097 6.87925 10.7937 6.07311 10.6295 5.29555C10.4653 4.51789 10.0598 3.8019 9.46233 3.23886C8.86475 2.6757 8.10207 2.29107 7.27019 2.1353C6.43828 1.97953 5.57617 2.05995 4.79335 2.36598C4.0106 2.67198 3.34355 3.18925 2.87529 3.8506ZM6.43501 10.2988C7.32043 10.2988 8.18596 10.0512 8.92214 9.58739C9.65831 9.12355 10.232 8.46428 10.5708 7.69298C10.9095 6.92167 10.998 6.07298 10.8252 5.25423C10.6523 4.43548 10.2257 3.68347 9.5995 3.09331C8.97326 2.50314 8.17546 2.10134 7.307 1.93872C6.43854 1.7761 5.53843 1.85996 4.72053 2.17971C3.90263 2.49945 3.20367 3.04071 2.71206 3.73503C2.22045 4.42934 1.95829 5.24552 1.95871 6.08034C1.96039 7.199 2.4326 8.27137 3.27177 9.0622C4.11094 9.85303 5.24853 10.2977 6.43501 10.2988Z"
                         fill="white"
-                      />
+                        />
                     </svg>
                   </div>
-                  <span>Hembra</span>
+                  <div className="text-lg">
+                        {currentPet && <b>{currentPet.gender}</b>}
+
+                  </div>
                 </div>
               </div>
             </div>
@@ -123,29 +189,23 @@ const PetInfo = () => {
                   </div>
                   <div className="w-4/5 ml-10">
                     <div className="">
-                      <div className="title-info pb-4">Detalles Personales</div>
+                      <div className="title-info pb-4">Pet details</div>
                       <hr />
                       <div className="text-base pt-4">
                         <p className="text-[#155263]">
-                          Edad: <span>3 años</span>
+                          <b>Birthday:</b> {currentPet && <span>{currentPet.birthday}</span>}
                         </p>
                         <p className="text-[#155263]">
-                          Condición Especial : &nbsp;
-                          <span>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing
-                            elit, sed do eiusmod tempor incididunt.
-                          </span>
+                          <b>Microchip:</b> &nbsp;
+                          {currentPet && <span>{currentPet.microchip}</span>}
+                        </p>
+                        <p className="text-[#155263]">
+                          <b>Special Condition: </b>
+                          {currentPet && <span>{currentPet.microchip}</span>}
                         </p>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className="">
-                  <span>
-                    <span className="text-[#155263]">Microchip :</span> Lorem
-                    ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                    nulla pariatur excepteur.
-                  </span>
                 </div>
               </div>
               <div className="h-1/2">
@@ -154,7 +214,7 @@ const PetInfo = () => {
                 </div>
                 <hr />
                 <div className="flex flex-row flex-wrap w-2/3 pt-5">
-                  <ClientContactCard />
+                  <ClientContactCard info={currentClient} />
                 </div>
               </div>
             </div>

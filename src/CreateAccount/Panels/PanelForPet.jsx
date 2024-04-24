@@ -26,7 +26,7 @@ const PanelForPet = () => {
     gender: '',
     birthday: '',
     microchip: '',
-    speciaDCondition: '',
+    specialDCondition: '',
     petAvatar: ''
   });
 
@@ -56,7 +56,7 @@ const PanelForPet = () => {
       formData.append("gender", newPet.gender);
       formData.append("birthday", newPet.birthday);
       formData.append("microchip", newPet.microchip);
-      formData.append("specialDCondition", newPet.speciaDCondition);
+      formData.append("specialDCondition", newPet.specialDCondition);
       formData.append("petAvatar", newPet.petAvatar);
 
       axios
@@ -180,7 +180,7 @@ const PanelForPet = () => {
                 multiline
                 rows={4}
                 defaultValue="Descripción"
-                name = "speciaDCondition"
+                name = "specialDCondition"
                 onChange = {  updateClientProfile } 
               />
             </div>
