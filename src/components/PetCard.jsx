@@ -1,12 +1,14 @@
+import * as React from "react";
 import { useNavigate } from "react-router-dom";
 
 import dogAvatar from "../assets/images/avatars//Group 385.png";
 import QRcodeCard from "./QRcodeCard";
 
-const ClientCard1 = (props) => {
+const PetCard = (props) => {
   let navigator = useNavigate();
-
-  const petName = "Nenita";
+  console.log("props", props.petsInfo)
+  const[petInfo, setPetInfo] = React.useState(props.petsInfo)
+  const[petName, setPetName] = React.useState(petInfo.name);
   const petOwner = "Rodolfo Guerra";
 
   const viewQRCode = () => {
@@ -20,12 +22,12 @@ const ClientCard1 = (props) => {
         <div className="client flex flex-row h-16">
           <img className="object-cover" src={dogAvatar} alt="avatar" />
           <div className="client-name flex flex-col justify-around p-2">
-            <p>Nombre</p>
+            <p>Name</p>
             <p>{petName}</p>
           </div>
         </div>
         <div className="client-contact-info">
-          <p>Dueño:</p>
+          <p>Owner</p>
           <p>{petOwner}</p>
         </div>
         <div
@@ -47,4 +49,4 @@ const ClientCard1 = (props) => {
   );
 };
 
-export default ClientCard1;
+export default PetCard;

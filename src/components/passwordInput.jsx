@@ -1,20 +1,32 @@
 import { step } from "@material-tailwind/react";
 import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { updatePassword } from "../redux/client/clientSlice";
 
 export default function PasswordInput({sendPasswordToParent}) {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [password, setPassword] = useState("");
-  sendPasswordToParent(password);
+  const [newClient, setNewClient] = useState("");
+  const dispatch = useDispatch();
+  
+  function updateClientProfile(e) {
+    setNewClient({ ...newClient, [e.target.name]: e.target.value });
+  }
+  
   function togglePasswordVisibility() {
     setIsPasswordVisible((prevState) => !prevState);
   }
 
+  function handleChange (e) {
+    dispatch(updatePassword(e.target.value))
+  }
   return (
     <div className="relative w-full container mx-auto">
       <input
         type={isPasswordVisible ? "text" : "password"}
         placeholder="Contraseña"
-        onChange={(e) => setPassword(e.target.value)}
+        name="password"
+        onChange={handleChange}
         className="w-full px-4 py-2 text-base border bg-[#F8F8F8] border-gray-300 rounded-md outline-none focus:ring-blue-500 focus:border-blue-500 focus:ring-1"
       />
       <button

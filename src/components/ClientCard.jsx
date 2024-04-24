@@ -1,18 +1,24 @@
+import * as React from "react";
 import { useNavigate } from "react-router-dom";
 
 import clientAvatar from "../assets/images/avatars/avatar2.png";
 
-const ClientCard1 = (props) => {
+const ClientCard = (props) => {
   let navigator = useNavigate();
+  const [clientInfo, setClientsInfo] = React.useState(props.clientInfo)
+  const [profileID, setProfileID] = React.useState(clientInfo.Profile_ID);
+  const [clientName, setClientName] = React.useState(clientInfo.name);
+  const [clientPhoneNumber, setClientPhoneNumber] = React.useState(clientInfo.phone);
+  const [avatar, setAvatar] = React.useState(clientInfo.avatarName);
+  const [avatarURL, setAvatarURL] = React.useState("../assets/images/avatars/avatar2.png");
   
-  const clientName = "Rafael Perez";
-  const clientPhoneNumber = "+54  598 -856- 635";
-  const petsNumber = 4;
-  const petsType = "Sienna";
-  const petsName = "Labrador";
-  const petsInfo = petsNumber + " " + petsType + " (" + petsName + ")";
+  //Pets info
+  const petsNumber = "";
+  const petsType = "";
+  const petsName = "";
+  const petsInfo = "";
 
-  const goToDetailedClientInfo =() => navigator('/clientaccountinfo')
+  const goToDetailedClientInfo =() => navigator(`/clientaccountinfo/${profileID}`)
 
   const deleteInfo = () => {
     props.deleteInfo();
@@ -45,4 +51,4 @@ const ClientCard1 = (props) => {
   );
 };
 
-export default ClientCard1;
+export default ClientCard;

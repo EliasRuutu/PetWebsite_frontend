@@ -3,19 +3,33 @@ import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
-
-import ClientCard1 from "../components/ClientCard1";
-
 import dogAvatar from "../assets/images/avatars//Group 385.png";
+import ClientCard1 from "../components/ClientCard";
 import LeftSidePanel from "../components/LeftSidePanel";
-
+import { useDispatch, useSelector } from "react-redux";
+import { loadAllClientsInfo } from "./../redux/client/clientSlice";
+import axios from "axios";
 const BalanceOfClients = () => {
   let navigator = useNavigate();
+  const dispatch = useDispatch();
 
   const [open, setOpen] = React.useState(false);
+  const [clientsInfo, setClientsInfo] = React.useState([])
   const openDeleteMoadl = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  React.useEffect(() => {
+    axios
+    .get("http://localhost:5000/getAllClientInfos/")
+    .then((response) => {
+      // setClientsInfo(response.data);
+      dispatch(loadAllClientsInfo(response.data));
+      setClientsInfo(response.data);
+    })
+    .catch((error) => {});
+  }, []);  
+
+  
   const style = {
     position: "absolute",
     top: "50%",
@@ -27,9 +41,11 @@ const BalanceOfClients = () => {
     p: 4,
   };
 
+  const allClients = useSelector((state) => state.client.allClientsInfo)
+  console.log(allClients)
   return (
     <div className="w-full flex top-10">
-      <LeftSidePanel/>
+      <LeftSidePanel />
       <div className="flex w-5/6 h-screen mt-[130px] flex-col border-t-2 px-20 mb-3">
         <div className="flex flex-row">
           <h1 className="title-info font-['Poppins'] py-7 text-[#155263] text-2xl font-bold w-1/2">
@@ -71,17 +87,21 @@ const BalanceOfClients = () => {
             <div className="flex flex-row py-7 w-1/6 justify-end">
               <button
                 type="submit"
-                class="flex text-sm items-center text-white bottom-2.5 font-['Poppins'] bg-[#F1B21B] rounded-md px-5 hover:bg-white hover:text-[#F1B21B] hover:border hover:border-[#F1B21B]"
+                class="flex font-bold text-sm items-center text-white bottom-2.5 font-['Poppins'] bg-[#F1B21B] rounded-md px-5 hover:bg-white hover:text-[#F1B21B] hover:border hover:border-[#F1B21B]"
+                onClick={() => navigator("/registerNewClient")}
               >
-                AGREGAR
+                New Client
               </button>
             </div>
           </div>
         </div>
         <div className="">
-          <ClientCard1 deleteInfo={openDeleteMoadl} />
-          <ClientCard1 deleteInfo={openDeleteMoadl} />
-          <ClientCard1 deleteInfo={openDeleteMoadl} />
+          {/* {clientsInfo.map((client) => (
+            <ClientCard1 key={client.id} deleteInfo={openDeleteMoadl} />
+          )} */}
+          {clientsInfo.map((client) => (
+            <ClientCard1 key={client.id} deleteInfo={openDeleteMoadl} clientInfo = {client}/>
+          ))}
         </div>
         <Modal
           open={open}
