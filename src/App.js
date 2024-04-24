@@ -30,8 +30,8 @@ function App() {
           <Route path="assignedpetslist" element={<AssignedPetsList />} />
           <Route path="registerNewClient" element={<RegisterNewClient />} />
           <Route path="clientaccountinfo/:ProfileID" element={<ClientAccount />} />
-          <Route path="petaccountinfo" element={<PetAccount />} />
-          <Route path="createaccount" element={<CreateAccount />} />
+          <Route path="petaccountinfo/:ProfileID" element={<PetAccount />} />
+          <Route path="createaccount/:ProfileID" element={<CreateAccount />} />
         </Routes>
       </Router>
       <Footer />

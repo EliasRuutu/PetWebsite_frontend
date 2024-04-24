@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import ClientContactCard from "../components/ClientContactCard.jsx";
 import "../assets/css/component.css";
@@ -10,10 +10,16 @@ import uploadQR from "../assets/images/backgrounds/uploadQR.png";
 import LeftSidePanel from "../components/LeftSidePanel.jsx";
 
 const PetInfo = () => {
+  const urlParam = useParams()
+
   const [file, setFile] = useState(uploadQR);
   const [isUploaded, setNotifyUpload] = useState(false);
-
+  const [profileID, setProfileID] = useState(urlParam.ProfileID)
   let navigator = useNavigate();
+
+  React.useEffect(() => {
+    // console.log(profileID)
+  },[profileID])
 
   function handleChange(e) {
     const file = e.target.files[0];

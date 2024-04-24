@@ -32,7 +32,7 @@ const CustomerInfo = () => {
   const clientInfo = useSelector((state) => state.client.allClientsInfo);
   React.useEffect(() => {
     if (clientInfo.length > 0) {
-      const selectedClient = clientInfo[0].forEach((element) => {
+      clientInfo[0].forEach((element) => {
         if (element.Profile_ID == urlParam.ProfileID) {
           setCurrentClient(element);
         }
@@ -45,10 +45,9 @@ const CustomerInfo = () => {
   }
 
   function goToEditPage() {
-    navigate("/createaccount");
+    navigate(`/createaccount/${urlParam.ProfileID}`);
   }
   const Pets = [];
-  console.log(currentClient);
   return (
     <>
       <div className="w-full flex mt-10">

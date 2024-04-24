@@ -3,19 +3,41 @@ import { useNavigate } from "react-router-dom";
 
 import dogAvatar from "../assets/images/avatars//Group 385.png";
 import QRcodeCard from "./QRcodeCard";
+// import { useSelector } from "react-redux";
 
 const PetCard = (props) => {
   let navigator = useNavigate();
-  console.log("props", props.petsInfo)
   const[petInfo, setPetInfo] = React.useState(props.petsInfo)
   const[petName, setPetName] = React.useState(petInfo.name);
-  const petOwner = "Rodolfo Guerra";
+  const [petOwnerID, setPetOwnerID] = React.useState(petInfo.Profile_ID);
+  const [clientsInfo, setAllClients] = React.useState(props.clientsInfo)
+  const [currentClient, setCurrentClient] = React.useState();
+  console.log("allClientsOf Pet card==>", props.clientsInfo)
+
+  // const clientInfo = useSelector((state) => state.client.allClientsInfo);
+  React.useEffect(() => {
+    console.log("clientsInfo state")
+    if (clientsInfo[0].length > 0) {
+      clientsInfo[0].forEach((element) => {
+        if (element.Profile_ID == petOwnerID) {
+          console.log("element", element)
+          setCurrentClient(element);
+        }
+      });
+    }
+  }, [props.clientsInfo]);
+  
+  React.useEffect(() => {
+    console.log("currentClient==>", currentClient)
+
+  }, [currentClient])
 
   const viewQRCode = () => {
     props.onClick();
   };
 
-  const goToDetailedPetInfo = () => navigator('/petaccountinfo')
+
+  const goToDetailedPetInfo = () => navigator(`/petaccountinfo/:${petOwnerID}`)
   return (
     <>
       <div className="flex flex-row justify-between items-center w-full p-4 rounded-lg hover:bg-[#EBFCFF] hover:cursor-pointer">
@@ -28,7 +50,7 @@ const PetCard = (props) => {
         </div>
         <div className="client-contact-info">
           <p>Owner</p>
-          <p>{petOwner}</p>
+          {currentClient && <span>{currentClient.name}</span>}
         </div>
         <div
           className="client-pets-info flex flex-row items-center hover:cursor-pointer"

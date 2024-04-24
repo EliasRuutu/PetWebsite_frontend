@@ -6,15 +6,17 @@ import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 
 import DogAvatar from "../../assets/images/avatars/dog-avatar.png";
+import { useDispatch } from "react-redux";
+import { uploadPetInfo } from "../../redux/client/clientSlice";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-import { uploadPetInfo } from "../../redux/client/clientSlice";
-import { useDispatch } from "react-redux";
 
 const PanelForPet = () => {
   const navigator = useNavigate()
-   
+  
+  const urlParams = useParams()
+
   const dispatch = useDispatch();
 
   const [file, setFile] = useState(DogAvatar);
@@ -49,6 +51,7 @@ const PanelForPet = () => {
       alert("input all the data")
     } else {
       const formData = new FormData();
+      formData.append("Profile_ID", urlParams.ProfileID)
       formData.append("name", newPet.name);
       formData.append("gender", newPet.gender);
       formData.append("birthday", newPet.birthday);
@@ -74,7 +77,7 @@ const PanelForPet = () => {
         //   theme: "light",
         // });
         dispatch(uploadPetInfo(response.data));
-        // alert("successfully Pet registerd");
+        alert("successfully Pet registerd");
         navigator('/assignedpetslist');
       }).catch((error) => {
         console.log(error)

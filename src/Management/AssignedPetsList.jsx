@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -10,29 +10,59 @@ import LeftSidePanel from "../components/LeftSidePanel";
 import PetsCard from "../components/PetCard";
 import dogAvatar from "../assets/images/avatars/Group 385.png";
 import QR from "../assets/images/QR/QR.png";
-import { loadAllPetsInfo } from "../redux/client/clientSlice";
+import { loadAllClientsInfo, loadAllPetsInfo } from "../redux/client/clientSlice";
 
 const AssignedPetsList = () => {
   const [open, setOpen] = React.useState(false);
   const [petsInfo, setPetsInfo] = React.useState([]);
+  const [clientsInfo, setClientsInfo ] = React.useState([]);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const dispatch = useDispatch();
 
   React.useEffect(() => {
     axios
+    .get("http://localhost:5000/getAllClientInfos/")
+    .then((response) => {
+      dispatch(loadAllClientsInfo(response.data));
+    })
+    .catch((error) => {});
+  }, []); 
+
+  React.useEffect(() => {
+    axios
       .get("http://localhost:5000/getallpets")
       .then((response) => {
         // setClientsInfo(response.data);
-        console.log(response.data);
         dispatch(loadAllPetsInfo(response.data));
         setPetsInfo(response.data);
       })
       .catch((error) => {
         console.log(error);
       });
-  }, []);
-
+    }, []);
+    
+    const allclients = useSelector((state) => state.client.allClientsInfo);
+    React.useEffect(() => {
+    console.log("allclients",allclients);
+    setClientsInfo(allclients)
+  },[allclients])
+  
+  React.useEffect(() => {
+    
+    console.log("clientsInfo", clientsInfo)
+  }, [clientsInfo])
+  // React.useEffect(() => {
+  //   if (clientInfo.length > 0) {
+  //     clientInfo[0].forEach((element) => {
+  //       if (element.Profile_ID == petOwnerID) {
+  //         setCurrentClient(element);
+  //         // console.log("currentClient==>", currentClient)
+  //       }
+  //     });
+  //   }
+  // }, [clientInfo]);
+  // React.useEffect([clientsInfo]);
   const navigator = useNavigate();
   const style = {
     backgroundImage: "url(assets/QR_Box.png)",
@@ -100,8 +130,8 @@ const AssignedPetsList = () => {
           </div>
         </div>
         <div className="">
-          {petsInfo.map((pet) => (
-            <PetsCard key={pet.id} petsInfo={pet} onClick={handleOpen} />
+        {clientsInfo && petsInfo.map((pet) => (
+            <PetsCard key={pet.id} petsInfo={pet} onClick={handleOpen} clientsInfo={clientsInfo} />
           ))}
         </div>
         <Modal

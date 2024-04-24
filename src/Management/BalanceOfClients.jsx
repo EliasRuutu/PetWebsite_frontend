@@ -1,4 +1,5 @@
 import * as React from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
@@ -8,7 +9,6 @@ import ClientCard1 from "../components/ClientCard";
 import LeftSidePanel from "../components/LeftSidePanel";
 import { useDispatch, useSelector } from "react-redux";
 import { loadAllClientsInfo } from "./../redux/client/clientSlice";
-import axios from "axios";
 const BalanceOfClients = () => {
   let navigator = useNavigate();
   const dispatch = useDispatch();
@@ -41,8 +41,6 @@ const BalanceOfClients = () => {
     p: 4,
   };
 
-  const allClients = useSelector((state) => state.client.allClientsInfo)
-  console.log(allClients)
   return (
     <div className="w-full flex top-10">
       <LeftSidePanel />
