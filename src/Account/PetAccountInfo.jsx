@@ -19,12 +19,12 @@ const PetInfo = () => {
   const [file, setFile] = useState(uploadQR);
   const [isUploaded, setNotifyUpload] = useState(false);
   const [profileID, setProfileID] = useState(urlParam.ProfileID);
-  
   const [clientsInfo, setClientsInfo] = useState([]);
-  const [petsInfo, setPetsInfo] = React.useState([]);
-
-  const [currentPet, setCurrentPet] = useState();
   const [currentClient, setCurrentClient] = useState();
+  
+  const [petsInfo, setPetsInfo] = React.useState([]);
+  const [idTag, setIdTag] = React.useState(urlParam.IdTag)
+  const [currentPet, setCurrentPet] = useState();
   
   let navigator = useNavigate();
   
@@ -58,10 +58,11 @@ const PetInfo = () => {
   // },[allClients])
 
   React.useEffect(() => {
-    if (allClients[0].length > 0) {
+    if (allClients.length > 0) {
       allClients[0].forEach((element) => {
+        console.log("client element", allClients[0].length)
         if (element.Profile_ID == profileID) {
-          console.log("element", element)
+          console.log("client element", element)
           setCurrentClient(element);
         }
       });
@@ -72,7 +73,7 @@ const PetInfo = () => {
   React.useEffect(() => {
     if (petsInfo.length > 0) {
       petsInfo.forEach((element) => {
-        if (element.Profile_ID == profileID) {
+        if (element.idTag == idTag) {
           console.log("element", element)
           setCurrentPet(element);
         }
@@ -80,7 +81,7 @@ const PetInfo = () => {
     }
   },[petsInfo])
   
-  React.useEffect(() => {},[currentClient])
+  React.useEffect(() => {console.log("currentClient", currentClient)},[currentClient])
   React.useEffect(() => {},[currentPet])
 
 

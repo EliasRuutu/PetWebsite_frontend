@@ -44,6 +44,7 @@ const CustomerInfo = () => {
     }, []);
 
   const clientInfo = useSelector((state) => state.client.allClientsInfo);
+
   React.useEffect(() => {
     if (clientInfo.length > 0) {
       clientInfo[0].forEach((element) => {
@@ -54,9 +55,18 @@ const CustomerInfo = () => {
     }
   }, [clientInfo]);
 
+  let petsList = [];
   React.useEffect(() => {
-    // if(petsInfo[0])
-    console.log(petsInfo);
+    if (petsInfo.length > 0) {
+      petsInfo.forEach((element) => {
+        if (element.Profile_ID == urlParam.ProfileID) {
+          
+          petsList.push(element)
+        }
+      });
+
+      setOwnedPets(petsList)
+    }
   }, [petsInfo])
   
   function goToBalancePage() {
@@ -147,8 +157,8 @@ const CustomerInfo = () => {
                   Pets
                 </div>
                 <div className="flex flex-row items-center flex-wrap">
-                  {petsInfo.length > 0 ? (
-                    petsInfo.map((element) => <DogCard key={element.id} />)
+                  {ownedPets.length > 0 ? (
+                    ownedPets.map((element) => <DogCard key={element.id} />)
                   ) : null}
                   <button className="view-detail items-center font-bold text-base text-[#FFFFFF] text-center w-36 h-11 bottom-2.5 font-['Poppins'] bg-[#F1B21B] rounded-md px-5   hover:bg-[#FFCA4A] hover:text-[#FFFFFF]" onClick={goToEditPage}>
                       ADD A PET

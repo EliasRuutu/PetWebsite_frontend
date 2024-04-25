@@ -8,6 +8,7 @@ import QRcodeCard from "./QRcodeCard";
 const PetCard = (props) => {
   let navigator = useNavigate();
   const[petInfo, setPetInfo] = React.useState(props.petsInfo)
+  const [idTag, setIdTag] = React.useState(petInfo.idTag)
   const[petName, setPetName] = React.useState(petInfo.name);
   const [petOwnerID, setPetOwnerID] = React.useState(petInfo.Profile_ID);
   const [clientsInfo, setAllClients] = React.useState(props.clientsInfo)
@@ -35,7 +36,7 @@ const PetCard = (props) => {
   };
 
 
-  const goToDetailedPetInfo = () => navigator(`/petaccountinfo/${petOwnerID}`)
+  const goToDetailedPetInfo = () => navigator(`/petaccountinfo/${petOwnerID}/${idTag}`)
   return (
     <>
       <div className="flex flex-row justify-between items-center w-full p-4 rounded-lg hover:bg-[#EBFCFF] hover:cursor-pointer">

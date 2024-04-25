@@ -17,13 +17,15 @@ import {
 } from "../redux/client/clientSlice";
 
 const AssignedPetsList = () => {
+  const navigator = useNavigate();
+  const dispatch = useDispatch();
+
   const [open, setOpen] = React.useState(false);
   const [petsInfo, setPetsInfo] = React.useState([]);
   const [clientsInfo, setClientsInfo] = React.useState([]);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const dispatch = useDispatch();
-
+  
   React.useEffect(() => {
     axios
       .get("http://localhost:5000/getAllClientInfos/")
@@ -55,18 +57,8 @@ const AssignedPetsList = () => {
   React.useEffect(() => {
     console.log("clientsInfo", clientsInfo);
   }, [clientsInfo]);
-  // React.useEffect(() => {
-  //   if (clientInfo.length > 0) {
-  //     clientInfo[0].forEach((element) => {
-  //       if (element.Profile_ID == petOwnerID) {
-  //         setCurrentClient(element);
-  //         // console.log("currentClient==>", currentClient)
-  //       }
-  //     });
-  //   }
-  // }, [clientInfo]);
-  // React.useEffect([clientsInfo]);
-  const navigator = useNavigate();
+
+
   const style = {
     backgroundImage: "url(assets/QR_Box.png)",
     backgroundSize: "cover",
@@ -77,8 +69,6 @@ const AssignedPetsList = () => {
     width: 500,
     padding: 10,
     color: "white",
-    // boxShadow: 24,
-    // p: 4,
   };
 
   return (
