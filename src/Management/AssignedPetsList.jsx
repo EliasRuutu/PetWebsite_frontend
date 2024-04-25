@@ -11,24 +11,27 @@ import QR from "../assets/images/QR/QR.png";
 
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { loadAllClientsInfo, loadAllPetsInfo } from "../redux/client/clientSlice";
+import {
+  loadAllClientsInfo,
+  loadAllPetsInfo,
+} from "../redux/client/clientSlice";
 
 const AssignedPetsList = () => {
   const [open, setOpen] = React.useState(false);
   const [petsInfo, setPetsInfo] = React.useState([]);
-  const [clientsInfo, setClientsInfo ] = React.useState([]);
+  const [clientsInfo, setClientsInfo] = React.useState([]);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const dispatch = useDispatch();
 
   React.useEffect(() => {
     axios
-    .get("http://localhost:5000/getAllClientInfos/")
-    .then((response) => {
-      dispatch(loadAllClientsInfo(response.data));
-    })
-    .catch((error) => {});
-  }, []); 
+      .get("http://localhost:5000/getAllClientInfos/")
+      .then((response) => {
+        dispatch(loadAllClientsInfo(response.data));
+      })
+      .catch((error) => {});
+  }, []);
 
   React.useEffect(() => {
     axios
@@ -41,18 +44,17 @@ const AssignedPetsList = () => {
       .catch((error) => {
         console.log(error);
       });
-    }, []);
-    
-    const allclients = useSelector((state) => state.client.allClientsInfo);
-    React.useEffect(() => {
-    console.log("allclients",allclients);
-    setClientsInfo(allclients)
-  },[allclients])
-  
+  }, []);
+
+  const allclients = useSelector((state) => state.client.allClientsInfo);
   React.useEffect(() => {
-    
-    console.log("clientsInfo", clientsInfo)
-  }, [clientsInfo])
+    console.log("allclients", allclients);
+    setClientsInfo(allclients);
+  }, [allclients]);
+
+  React.useEffect(() => {
+    console.log("clientsInfo", clientsInfo);
+  }, [clientsInfo]);
   // React.useEffect(() => {
   //   if (clientInfo.length > 0) {
   //     clientInfo[0].forEach((element) => {
@@ -131,9 +133,15 @@ const AssignedPetsList = () => {
           </div>
         </div>
         <div className="">
-        {clientsInfo && petsInfo.map((pet) => (
-            <PetsCard key={pet.id} petsInfo={pet} onClick={handleOpen} clientsInfo={clientsInfo} />
-          ))}
+          {clientsInfo &&
+            petsInfo.map((pet) => (
+              <PetsCard
+                key={pet.id}
+                petsInfo={pet}
+                onClick={handleOpen}
+                clientsInfo={clientsInfo}
+              />
+            ))}
         </div>
         <Modal
           open={open}
