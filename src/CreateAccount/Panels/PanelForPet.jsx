@@ -6,15 +6,17 @@ import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 
 import DogAvatar from "../../assets/images/avatars/dog-avatar.png";
+import { useDispatch } from "react-redux";
+import { uploadPetInfo } from "../../redux/client/clientSlice";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-import { uploadPetInfo } from "../../redux/client/clientSlice";
-import { useDispatch } from "react-redux";
 
 const PanelForPet = () => {
   const navigator = useNavigate()
-   
+  
+  const urlParams = useParams()
+
   const dispatch = useDispatch();
 
   const [file, setFile] = useState(DogAvatar);
@@ -24,7 +26,7 @@ const PanelForPet = () => {
     gender: '',
     birthday: '',
     microchip: '',
-    speciaDCondition: '',
+    specialDCondition: '',
     petAvatar: ''
   });
 
@@ -45,15 +47,22 @@ const PanelForPet = () => {
   };
 
   const updatePetProfile =() => {
-    if((newPet.name.trim() === "" ) || (newPet.gender === "")) {
+    if(newPet.name.trim() === ""  || 
+        newPet.gender === "" ||
+        newPet.birthday === "" ||
+        newPet.microchip === "" ||
+        newPet.specialDCondition === "" ||
+        !newPet.petAvatar
+        ) {
       alert("input all the data")
     } else {
       const formData = new FormData();
+      formData.append("Profile_ID", urlParams.ProfileID)
       formData.append("name", newPet.name);
       formData.append("gender", newPet.gender);
       formData.append("birthday", newPet.birthday);
       formData.append("microchip", newPet.microchip);
-      formData.append("specialDCondition", newPet.speciaDCondition);
+      formData.append("specialDCondition", newPet.specialDCondition);
       formData.append("petAvatar", newPet.petAvatar);
 
       axios
@@ -74,12 +83,16 @@ const PanelForPet = () => {
         //   theme: "light",
         // });
         dispatch(uploadPetInfo(response.data));
-        // alert("successfully Pet registerd");
-        navigator('/assignedpetslist');
+        alert("successfully Pet registerd");
+        navigator(`/petaccountinfo/${urlParams.ProfileID}`);
       }).catch((error) => {
         console.log(error)
       });
     }
+  }
+
+  const backToClientInfo = () => {
+    navigator(`/petaccountinfo/${urlParams.ProfileID}`);
   }
   const select_items = ["1", "2", "3"];
   return (
@@ -166,7 +179,7 @@ const PanelForPet = () => {
                 label="Microchip"
                 multiline
                 rows={4}
-                defaultValue="Descripción"
+                defaultValue=""
                 name = "microchip"
                 onChange = { updateClientProfile }
               />
@@ -176,8 +189,8 @@ const PanelForPet = () => {
                 label="Special Conditions"
                 multiline
                 rows={4}
-                defaultValue="Descripción"
-                name = "speciaDCondition"
+                defaultValue=""
+                name = "specialDCondition"
                 onChange = {  updateClientProfile } 
               />
             </div>
@@ -196,7 +209,7 @@ const PanelForPet = () => {
           </div>
           <div className="flex flex-row gap-4 justify-end mt-4">
               <button
-                className="view-detail items-center font-bold text-base text-[#3D9FAD] text-center w-36 h-11 bottom-2.5 font-['Poppins'] bg-[#FFFFFF] rounded-md px-5  border-2 border-[#3D9FAD] hover:bg-[#3D9FAD] hover:text-[#FFFFFF]" 
+                className="view-detail items-center font-bold text-base text-[#3D9FAD] text-center w-36 h-11 bottom-2.5 font-['Poppins'] bg-[#FFFFFF] rounded-md px-5  border-2 border-[#3D9FAD] hover:bg-[#3D9FAD] hover:text-[#FFFFFF]" onClick={backToClientInfo}
               >
                 Back
               </button>
