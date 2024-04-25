@@ -47,7 +47,13 @@ const PanelForPet = () => {
   };
 
   const updatePetProfile =() => {
-    if((newPet.name.trim() === "" ) || (newPet.gender === "")) {
+    if(newPet.name.trim() === ""  || 
+        newPet.gender === "" ||
+        newPet.birthday === "" ||
+        newPet.microchip === "" ||
+        newPet.specialDCondition === "" ||
+        !newPet.petAvatar
+        ) {
       alert("input all the data")
     } else {
       const formData = new FormData();
@@ -78,11 +84,15 @@ const PanelForPet = () => {
         // });
         dispatch(uploadPetInfo(response.data));
         alert("successfully Pet registerd");
-        navigator('/assignedpetslist');
+        navigator(`/petaccountinfo/${urlParams.ProfileID}`);
       }).catch((error) => {
         console.log(error)
       });
     }
+  }
+
+  const backToClientInfo = () => {
+    navigator(`/petaccountinfo/${urlParams.ProfileID}`);
   }
   const select_items = ["1", "2", "3"];
   return (
@@ -169,7 +179,7 @@ const PanelForPet = () => {
                 label="Microchip"
                 multiline
                 rows={4}
-                defaultValue="Descripción"
+                defaultValue=""
                 name = "microchip"
                 onChange = { updateClientProfile }
               />
@@ -179,7 +189,7 @@ const PanelForPet = () => {
                 label="Special Conditions"
                 multiline
                 rows={4}
-                defaultValue="Descripción"
+                defaultValue=""
                 name = "specialDCondition"
                 onChange = {  updateClientProfile } 
               />
@@ -199,7 +209,7 @@ const PanelForPet = () => {
           </div>
           <div className="flex flex-row gap-4 justify-end mt-4">
               <button
-                className="view-detail items-center font-bold text-base text-[#3D9FAD] text-center w-36 h-11 bottom-2.5 font-['Poppins'] bg-[#FFFFFF] rounded-md px-5  border-2 border-[#3D9FAD] hover:bg-[#3D9FAD] hover:text-[#FFFFFF]" 
+                className="view-detail items-center font-bold text-base text-[#3D9FAD] text-center w-36 h-11 bottom-2.5 font-['Poppins'] bg-[#FFFFFF] rounded-md px-5  border-2 border-[#3D9FAD] hover:bg-[#3D9FAD] hover:text-[#FFFFFF]" onClick={backToClientInfo}
               >
                 Back
               </button>

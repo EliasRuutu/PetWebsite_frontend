@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { current } from "@reduxjs/toolkit";
 import axios from "axios";
-import { loadAllClientsInfo } from "../redux/client/clientSlice";
+import { loadAllClientsInfo, loadAllPetsInfo } from "../redux/client/clientSlice";
 
 const CustomerInfo = () => {
   let navigate = useNavigate();
@@ -18,7 +18,8 @@ const CustomerInfo = () => {
   const urlParam = useParams();
   // .find((clientInfo) => clientInfo.Profile_ID == urlParam.ProfileID)
   const [currentClient, setCurrentClient] = React.useState();
-
+  const [petsInfo, setPetsInfo] = React.useState([]);
+  const [ownedPets, setOwnedPets] = React.useState([]);
   React.useEffect(() => {
     axios
       .get("http://localhost:5000/getAllClientInfos/")
@@ -28,6 +29,19 @@ const CustomerInfo = () => {
       })
       .catch((error) => {});
   }, []);
+
+  React.useEffect(() => {
+    axios
+      .get("http://localhost:5000/getallpets")
+      .then((response) => {
+        // setClientsInfo(response.data);
+        dispatch(loadAllPetsInfo(response.data));
+        setPetsInfo(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    }, []);
 
   const clientInfo = useSelector((state) => state.client.allClientsInfo);
   React.useEffect(() => {
@@ -40,6 +54,11 @@ const CustomerInfo = () => {
     }
   }, [clientInfo]);
 
+  React.useEffect(() => {
+    // if(petsInfo[0])
+    console.log(petsInfo);
+  }, [petsInfo])
+  
   function goToBalancePage() {
     navigate("/balanceofclient");
   }
@@ -47,7 +66,6 @@ const CustomerInfo = () => {
   function goToEditPage() {
     navigate(`/createaccount/${urlParam.ProfileID}`);
   }
-  const Pets = [];
   return (
     <>
       <div className="w-full flex mt-10">
@@ -105,7 +123,7 @@ const CustomerInfo = () => {
                       stroke-width="1.7"
                     />
                   </svg>
-                  {currentClient && <span>{currentClient.phone}</span>}
+                  {currentClient && <span className="hover:cursor-pointer">{currentClient.phone}</span>}
                 </div>
               </div>
             </div>
@@ -126,16 +144,15 @@ const CustomerInfo = () => {
               <hr />
               <div className="h-2/3">
                 <div className="flex h-1/4 title-info title-info items-center justify-start">
-                  Detalles Personales
+                  Pets
                 </div>
-                <div className="flex flex-row flex-wrap">
-                  {Pets.length > 0 ? (
-                    Pets.map((element) => <DogCard key={element.id} />)
-                  ) : (
-                    <button className="view-detail items-center font-bold text-base text-[#FFFFFF] text-center w-36 h-11 bottom-2.5 font-['Poppins'] bg-[#F1B21B] rounded-md px-5   hover:bg-[#FFCA4A] hover:text-[#FFFFFF]" onClick={goToEditPage}>
+                <div className="flex flex-row items-center flex-wrap">
+                  {petsInfo.length > 0 ? (
+                    petsInfo.map((element) => <DogCard key={element.id} />)
+                  ) : null}
+                  <button className="view-detail items-center font-bold text-base text-[#FFFFFF] text-center w-36 h-11 bottom-2.5 font-['Poppins'] bg-[#F1B21B] rounded-md px-5   hover:bg-[#FFCA4A] hover:text-[#FFFFFF]" onClick={goToEditPage}>
                       ADD A PET
-                    </button>
-                  )}
+                  </button>
                 </div>
               </div>
             </div>

@@ -62,8 +62,7 @@ const RegisterNewClient = () => {
       newClient.email.trim() === "" ||
       newClient.phone.trim() === "" ||
       newClient.password.trim() === "" ||
-      newClient.address.trim() === "" ||
-      newClient.avatar.trim() === ""
+      newClient.address.trim() === "" 
     ) {
       // toast.success("Plese enter the data correctly", {
       //   position: "bottom-right",
