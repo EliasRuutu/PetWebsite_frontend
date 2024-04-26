@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 export const clientSlice = createSlice({
     name: 'client',
     initialState: {
+        panelActiveState:[],
         clientPassword: "",
         clientInfo: {},
         avatarInfo: {},
@@ -10,6 +11,11 @@ export const clientSlice = createSlice({
         allPetsInfo: []
     },
     reducers: {
+        setPanelActiveState: (state, action) => {
+            state.panelActiveState.length = 0;
+            state.panelActiveState.push(action.payload);
+        },
+
         updatePassword: (state, action) => {
             return {
                 ...state,
@@ -43,6 +49,6 @@ export const clientSlice = createSlice({
     }
 })
 
-export const { updatePassword, uploadClientInfo, uploadPetInfo, loadAllClientsInfo, loadAllPetsInfo } = clientSlice.actions;
+export const { updatePassword, uploadClientInfo, uploadPetInfo, loadAllClientsInfo, loadAllPetsInfo, setPanelActiveState } = clientSlice.actions;
 
 export default clientSlice.reducer;

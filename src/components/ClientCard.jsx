@@ -16,11 +16,8 @@ const ClientCard = (props) => {
   const [clientPhoneNumber, setClientPhoneNumber] = React.useState(
     clientInfo.phone
   );
-  const [avatar, setAvatar] = React.useState(clientInfo.avatarName);
-  const [avatarURL, setAvatarURL] = React.useState(
-    "../assets/images/avatars/avatar2.png"
-  );
-
+  const [avatarURL, setAvatar] = React.useState(`/assets/images/clients/${clientInfo.avatarName}`);
+ 
   const [petsInfo, setPetsInfo] = React.useState([]);
   const [petInfoRecap, setPetInfoRecap] = React.useState("0")
 
@@ -67,7 +64,7 @@ const ClientCard = (props) => {
     <>
       <div className="flex flex-row justify-between items-center w-full p-4 rounded-lg hover:bg-[#EBFCFF] hover:cursor-pointer">
         <div className="client flex flex-row h-16">
-          <img className="object-cover" src={clientAvatar} alt="avatar" />
+          <img className="object-cover" src={avatarURL} alt="avatar" />
           <div className="client-name flex flex-col justify-around p-2">
             <p className="font-bold">Client</p>
             <p>{clientName}</p>

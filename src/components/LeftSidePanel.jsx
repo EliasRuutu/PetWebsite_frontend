@@ -1,8 +1,22 @@
+import * as React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { setPanelActiveState } from "../redux/client/clientSlice"
 
 const LeftSidePanel = () => {
   let navigator = useNavigate();
+  const dispatch = useDispatch();
 
+  const [checked, setChecked] = React.useState([]);
+  React.useEffect(() => {console.log("✅🙄✅", checked)},[checked]);
+
+  const activeState = useSelector((state) => state.client.panelActiveState)
+
+  React.useEffect(() => {
+      if(activeState) {
+      setChecked(activeState);
+    }
+  },[activeState]);
   return (
     <>
       <div className="flex w-1/6 border-r-2 h-screen flex-col mt-[130px]">
@@ -22,7 +36,7 @@ const LeftSidePanel = () => {
               fill="#929292"
             />
           </svg>
-          <h1 className="font-['Poppins'] text-xl text-[#155263]">Plaquitas</h1>
+          <h1 className={`font-['Poppins'] text-xl text-[#155263] ${checked && checked[0] ? 'font-bold' : ''}`} onClick={() => {navigator("/idtags"); dispatch(setPanelActiveState([true,false,false]));}}>Id Tags</h1>
         </span>
         <span className="w-full flex pt-5 text-xl justify-center items-center hover:font-bold hover:cursor-pointer ">
           <svg
@@ -40,8 +54,8 @@ const LeftSidePanel = () => {
           </svg>
 
           <h1
-            className="font-['Poppins'] text-xl text-[#155263] "
-            onClick={() => navigator("/assignedpetslist")}
+            className={`font-['Poppins'] text-xl text-[#155263] ${checked && checked[1] ? 'font-bold' : ''}`}
+            onClick={() =>{navigator("/assignedpetslist"); dispatch(setPanelActiveState([false, true, false]));}}
           >
             Mascotas
           </h1>
@@ -69,8 +83,8 @@ const LeftSidePanel = () => {
             />
           </svg>
           <h1
-            className="font-['Poppins'] text-xl text-[#155263] hover:font-bold hover:cursor-pointer"
-            onClick={() => navigator("/balanceofclient")}
+            className={`font-['Poppins'] text-xl text-[#155263] ${checked && checked[2] ? 'font-bold' : ''}`}
+            onClick={() => {navigator("/balanceofclient");  dispatch(setPanelActiveState([false,false,true]));}}
           >
             Clientes
           </h1>

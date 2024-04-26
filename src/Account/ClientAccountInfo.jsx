@@ -151,14 +151,14 @@ const CustomerInfo = () => {
                   <br />
                 </div>
               </div>
-              <hr />
               <div className="h-2/3">
                 <div className="flex h-1/4 title-info title-info items-center justify-start">
                   Pets
                 </div>
-                <div className="flex flex-row items-center flex-wrap">
+                <hr />
+                <div className="flex flex-row items-center flex-wrap p-4">
                   {ownedPets.length > 0 ? (
-                    ownedPets.map((element) => <DogCard key={element.id} />)
+                    ownedPets.map((element) => <DogCard key={element.id} name={element.name} gender={element.gender}/>)
                   ) : null}
                   <button className="view-detail items-center font-bold text-base text-[#FFFFFF] text-center w-36 h-11 bottom-2.5 font-['Poppins'] bg-[#F1B21B] rounded-md px-5   hover:bg-[#FFCA4A] hover:text-[#FFFFFF]" onClick={goToEditPage}>
                       ADD A PET

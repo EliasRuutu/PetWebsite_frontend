@@ -8,19 +8,19 @@ const DogCard = (props) => {
 
   return (
     <>
-      <div className="flex flex-col justify-center rounded-lg items-center h-52 w-48 bg-[#EBFCFF] mx-5 p-5">
-        <img className="object-cover" src={dogAvatar}></img>
-        <div className="flex flex-row justify-around items-center gap-2 text-left">
+      <div className="flex flex-col justify-center rounded-lg items-center h-44 w-40 bg-[#EBFCFF] mx-5">
+        <img className="object-cover" src={dogAvatar} ></img>
+        <div className="flex flex-row justify-between items-center gap-2 text-left">
           <div class="name-dog">
-            <span className="text-xl font-bold text-[#155263]"> {props.dogName} </span> <br />
+            <span className="text-md font-bold text-[#155263]"> {props.name} </span> <br />
             <span className="text-[#3D9FAD]"> {props.gender} </span>
           </div>
           <div className="" style= {customStyle}>
-            {props.gender === "Macho" ? (
+            {props.gender === "Her" ? (
               <>
                 <svg
-                  width="26"
-                  height="23"
+                  width="23"
+                  height="20"
                   viewBox="0 0 26 23"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"

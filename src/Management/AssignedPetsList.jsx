@@ -77,7 +77,7 @@ const AssignedPetsList = () => {
       <div className="flex w-5/6 h-screen mt-[130px] flex-col border-t-2 px-20 mb-3">
         <div className="flex flex-row">
           <h1 className="title-info font-['Poppins'] py-7 text-[#155263] text-2xl font-bold w-1/2">
-            Mascotas Registradas
+            Pets
           </h1>
           <div className="w-1/2 flex flex-row justify-end">
             <label
@@ -123,7 +123,7 @@ const AssignedPetsList = () => {
           </div>
         </div>
         <div className="">
-          {clientsInfo &&
+          {clientsInfo && clientsInfo.length > 0 ? (
             petsInfo.map((pet) => (
               <PetsCard
                 key={pet.id}
@@ -131,7 +131,11 @@ const AssignedPetsList = () => {
                 onClick={handleOpen}
                 clientsInfo={clientsInfo}
               />
-            ))}
+              ))
+            ) : (
+              <div className="bg-red-300 text-white pt-5 text-lg font-bold text-center h-16">No Data</div>
+            )            
+            }
         </div>
         <Modal
           open={open}
