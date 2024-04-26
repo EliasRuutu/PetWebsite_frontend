@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
 
-import dogAvatar from "../assets/images/avatars//Group 385.png";
+import dogAvatar from "../assets/images/avatars/Group 385.png";
 import QRcodeCard from "./QRcodeCard";
 // import { useSelector } from "react-redux";
 
@@ -10,6 +10,7 @@ const PetCard = (props) => {
   const[petInfo, setPetInfo] = React.useState(props.petsInfo)
   const [idTag, setIdTag] = React.useState(petInfo.idTag)
   const[petName, setPetName] = React.useState(petInfo.name);
+  const [petAvatarPath, setPetAvatarPath] = React.useState(`/assets/images/pets/${petInfo.petAvatar}`);
   const [petOwnerID, setPetOwnerID] = React.useState(petInfo.Profile_ID);
   const [clientsInfo, setAllClients] = React.useState(props.clientsInfo)
   const [currentClient, setCurrentClient] = React.useState();
@@ -41,7 +42,7 @@ const PetCard = (props) => {
     <>
       <div className="flex flex-row justify-between items-center w-full p-4 rounded-lg hover:bg-[#EBFCFF] hover:cursor-pointer">
         <div className="client flex flex-row h-16">
-          <img className="object-cover" src={dogAvatar} alt="avatar" />
+          <img className="object-cover" src={petAvatarPath} alt="avatar" />
           <div className="client-name flex flex-col justify-around p-2">
             <p>Name</p>
             <p>{petName}</p>

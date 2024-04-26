@@ -19,6 +19,7 @@ const CustomerInfo = () => {
   // .find((clientInfo) => clientInfo.Profile_ID == urlParam.ProfileID)
   const [currentClient, setCurrentClient] = React.useState();
   const [petsInfo, setPetsInfo] = React.useState([]);
+  const [clientAvatarUrl, setClientAvatarUrl] = React.useState("")
   const [ownedPets, setOwnedPets] = React.useState([]);
   React.useEffect(() => {
     axios
@@ -50,6 +51,7 @@ const CustomerInfo = () => {
       clientInfo[0].forEach((element) => {
         if (element.Profile_ID == urlParam.ProfileID) {
           setCurrentClient(element);
+          setClientAvatarUrl(`/assets/images/clients/${element.avatarName}`)
         }
       });
     }
@@ -59,8 +61,7 @@ const CustomerInfo = () => {
   React.useEffect(() => {
     if (petsInfo.length > 0) {
       petsInfo.forEach((element) => {
-        if (element.Profile_ID == urlParam.ProfileID) {
-          
+        if (element.Profile_ID == urlParam.ProfileID) {          
           petsList.push(element)
         }
       });
@@ -87,7 +88,8 @@ const CustomerInfo = () => {
           <div className="flex flex-row h-full mb-18 border rounded-[20px]">
             <div className="info-client flex flex-col w-2/5 bg-cover px-16 pt-14 pb-12 ">
               <div className="flex flex-col justify-around items-center h-3/4 align-middle">
-                <div className="avatar-client"></div>
+                {/* <div className="avatar-client"></div> */}
+                <img src={clientAvatarUrl}></img>
                 <div className="text-3xl font-bold text-white">
                   {currentClient && <span>{currentClient.name}</span>}
                 </div>
@@ -151,14 +153,14 @@ const CustomerInfo = () => {
                   <br />
                 </div>
               </div>
-              <hr />
               <div className="h-2/3">
                 <div className="flex h-1/4 title-info title-info items-center justify-start">
                   Pets
                 </div>
-                <div className="flex flex-row items-center flex-wrap">
+                <hr />
+                <div className="flex flex-row items-center flex-wrap p-4">
                   {ownedPets.length > 0 ? (
-                    ownedPets.map((element) => <DogCard key={element.id} />)
+                    ownedPets.map((element) => <DogCard key={element.id} name={element.name} avatarName={element.petAvatar} gender={element.gender}/>)
                   ) : null}
                   <button className="view-detail items-center font-bold text-base text-[#FFFFFF] text-center w-36 h-11 bottom-2.5 font-['Poppins'] bg-[#F1B21B] rounded-md px-5   hover:bg-[#FFCA4A] hover:text-[#FFFFFF]" onClick={goToEditPage}>
                       ADD A PET

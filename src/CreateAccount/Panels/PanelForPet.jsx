@@ -36,10 +36,10 @@ const PanelForPet = () => {
   }, []);
 
   React.useEffect(() => {
-    let petNumber = (petsInfo.length + 1).toString().padStart(7, '0');
+    let petNumber = (petsInfo.length + 1).toString().padStart(7, "0");
     setPetsNumber(petNumber);
 
-    setNewPet({ ...newPet, "idTag": "PT" + petNumber });
+    setNewPet({ ...newPet, idTag: "PT" + petNumber });
   }, [petsInfo]);
 
   const [newPet, setNewPet] = React.useState({
@@ -75,10 +75,10 @@ const PanelForPet = () => {
       newPet.birthday.trim() === "" ||
       newPet.microchip.trim() === "" ||
       newPet.specialDCondition.trim() === "" ||
-      !newPet.petAvatar ||
-      !newPet.idTag
+      !newPet.petAvatar
     ) {
       alert("input all the data");
+      console.log(newPet.gender)
     } else {
       const formData = new FormData();
       formData.append("Profile_ID", urlParams.ProfileID);
@@ -109,7 +109,7 @@ const PanelForPet = () => {
           // });
           dispatch(uploadPetInfo(response.data));
           alert("successfully Pet registerd");
-          navigator(`/petaccountinfo/${urlParams.ProfileID}`);
+          navigator(`/petaccountinfo/${urlParams.ProfileID}/${newPet.idTag}`);
         })
         .catch((error) => {
           console.log(error);
@@ -118,9 +118,9 @@ const PanelForPet = () => {
   };
 
   const backToClientInfo = () => {
-    navigator(`/petaccountinfo/${urlParams.ProfileID}`);
+    navigator(`/petaccountinfo/${urlParams.ProfileID}/${newPet.idTag}`);
   };
-  const select_items = ["1", "2", "3"];
+  const select_items = ["Him", "Her"];
   return (
     <>
       <div className="flex flex-row bg-[#FFFFFF] h-full p-6 items-center rounded-0">
@@ -182,7 +182,7 @@ const PanelForPet = () => {
                   />
                 </div>
                 <div className="flex flex-col gap-2">
-                  <h1 className="text-[16px] text-[#155263] font-['Poppins']">
+                  {/* <h1 className="text-[16px] text-[#155263] font-['Poppins']">
                     Gender
                   </h1>
                   <Input
@@ -190,7 +190,33 @@ const PanelForPet = () => {
                     placeholder="Macho"
                     name="gender"
                     onChange={updateClientProfile}
-                  />
+                  /> */}
+                  <h1 className="text-[16px] text-[#155263] font-['Poppins']">
+                    Gender
+                  </h1>
+                  <select className="p-2 rounded-md bg-[#F8F8F8]" name="gender" onChange={updateClientProfile}>
+                    <option></option>
+                    <option>Him</option>
+                    <option>Her</option>
+                  </select>
+                  {/* <Autocomplete
+                    disablePortal
+                    id="combo-box-demo"
+                    options={select_items}
+                    sx={{ width: 150}}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        className="p-2 rounded-md bg-[#F8F8F8]"
+                        label=""
+                        onChange={updateClientProfile}
+                        InputProps={{
+                          ...params.InputProps,
+                          style: { height: '40px', textAlign: "center" } // Custom styles for the input
+                        }}
+                      />
+                    )}
+                  /> */}
                 </div>
                 <div className="flex flex-col gap-2">
                   <h1 className="text-[16px] text-[#155263] font-['Poppins']">
@@ -241,7 +267,13 @@ const PanelForPet = () => {
                   <h1 className="text-[16px] text-[#155263] font-['Poppins']">
                     ID Tag
                   </h1>
-                  <label htmlFor="" name="idTag" className="border border-double p-2">PT{petsNumber}</label>
+                  <label
+                    htmlFor=""
+                    name="idTag"
+                    className="border border-double p-2"
+                  >
+                    PT{petsNumber}
+                  </label>
                 </div>
               </div>
             </div>

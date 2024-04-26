@@ -14,22 +14,21 @@ const BalanceOfClients = () => {
   const dispatch = useDispatch();
 
   const [open, setOpen] = React.useState(false);
-  const [clientsInfo, setClientsInfo] = React.useState([])
-  const openDeleteMoadl = () => setOpen(true);
+  const [clientsInfo, setClientsInfo] = React.useState([]);
+  const openDeleteModal = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   React.useEffect(() => {
     axios
-    .get("http://localhost:5000/getAllClientInfos/")
-    .then((response) => {
-      // setClientsInfo(response.data);
-      dispatch(loadAllClientsInfo(response.data));
-      setClientsInfo(response.data);
-    })
-    .catch((error) => {});
-  }, []);  
+      .get("http://localhost:5000/getAllClientInfos/")
+      .then((response) => {
+        // setClientsInfo(response.data);
+        dispatch(loadAllClientsInfo(response.data));
+        setClientsInfo(response.data);
+      })
+      .catch((error) => {});
+  }, []);
 
-  
   const style = {
     position: "absolute",
     top: "50%",
@@ -47,7 +46,7 @@ const BalanceOfClients = () => {
       <div className="flex w-5/6 h-screen mt-[130px] flex-col border-t-2 px-20 mb-3">
         <div className="flex flex-row">
           <h1 className="title-info font-['Poppins'] py-7 text-[#155263] text-2xl font-bold w-1/2">
-            Balance de tus Clientes
+            Clients
           </h1>
           <div className="w-1/2 flex flex-row justify-end">
             <label
@@ -94,12 +93,17 @@ const BalanceOfClients = () => {
           </div>
         </div>
         <div className="">
-          {/* {clientsInfo.map((client) => (
-            <ClientCard1 key={client.id} deleteInfo={openDeleteMoadl} />
-          )} */}
-          {clientsInfo.map((client) => (
-            <ClientCard1 key={client.id} deleteInfo={openDeleteMoadl} clientInfo = {client}/>
-          ))}
+          {clientsInfo && clientsInfo.length > 0 ? (
+            clientsInfo.map((client) => (
+              <ClientCard1
+                key={client.id}
+                deleteInfo={openDeleteModal}
+                clientInfo={client}
+              />
+            ))
+          ) : (
+            <div className="bg-red-300 text-white pt-5 text-lg font-bold text-center h-16">No Data</div>
+          )}
         </div>
         <Modal
           open={open}
