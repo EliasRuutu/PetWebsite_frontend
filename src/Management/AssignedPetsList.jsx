@@ -123,7 +123,7 @@ const AssignedPetsList = () => {
           </div>
         </div>
         <div className="">
-          {clientsInfo && clientsInfo.length > 0 ? (
+          {clientsInfo[0] && clientsInfo[0].length > 0 ? (
             petsInfo.map((pet) => (
               <PetsCard
                 key={pet.id}

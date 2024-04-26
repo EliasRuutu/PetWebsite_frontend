@@ -177,7 +177,6 @@ const PetInfo = () => {
                   </div>
                   <div className="text-lg">
                         {currentPet && <b>{currentPet.gender}</b>}
-
                   </div>
                 </div>
               </div>
@@ -186,7 +185,7 @@ const PetInfo = () => {
               <div className="flex flex-col h-1/2">
                 <div className="flex flex-row w-full h-4/5 mt-10">
                   <div className="w-1/5">
-                    <img src={petImage} alt="" className="" />
+                    <img src={`/assets/images/pets/${currentPet && currentPet.petAvatar}`} alt="" className="" />
                   </div>
                   <div className="w-4/5 ml-10">
                     <div className="">
