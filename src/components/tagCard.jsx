@@ -1,5 +1,7 @@
+import { useNavigate } from "react-router-dom";
 import QR from "../assets/images/QR.svg";
 const TagCard = (props) => {
+  const navigator = useNavigate();
   const isAssign = false;
   return (
     <>
@@ -38,7 +40,7 @@ const TagCard = (props) => {
           </div>
           <div className="flex flex-row items-center justify-between gap-10">
             <div>
-              <button className="font-['Poppins'] text-[#3D9FAD] border border-[#3D9FAD] hover:bg-[#3D9FAD] hover:text-white py-1 px-6 rounded-md">
+              <button className="font-['Poppins'] text-[#3D9FAD] border border-[#3D9FAD] hover:bg-[#3D9FAD] hover:text-white py-1 px-6 rounded-md" onClick={() => navigator("/assign")}>
                 Details
               </button>
             </div>

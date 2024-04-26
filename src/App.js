@@ -6,8 +6,9 @@ import Footer from "./Layout/Footer";
 import SignInForm from "./SignIn/SignInForm";
 import SignUpForm from "./SignUp/SignUpForm";
 import IdTagsList from "./AssignManagement";
-import BalanceOfClients from "./Management/BalanceOfClients"
-import AssignedPetsList from './Management/AssignedPetsList';
+import BalanceOfClients from "./AssignManagement/BalanceOfClients"
+import AssignedPetsList from './AssignManagement/AssignedPetsList';
+import AssignSetting from "./AssignManagement/assign_setting"
 import RegisterNewClient from './ProfileUpdate/RegisterNewClient';
 import ClientAccount from './Account/ClientAccountInfo';
 import PetAccount from './Account/PetAccountInfo';
@@ -26,6 +27,7 @@ function App() {
           <Route path="/" element={<SignInForm />} />
           <Route path="signup" element={<SignUpForm />} />
           <Route path="/idtags" element={<IdTagsList />} />
+          <Route path="/assign" element={<AssignSetting />} />
           <Route path="balanceofclient" element={<BalanceOfClients />} />
           <Route path="assignedpetslist" element={<AssignedPetsList />} />
           <Route path="registerNewClient" element={<RegisterNewClient />} />
