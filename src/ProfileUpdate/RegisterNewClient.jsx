@@ -93,7 +93,6 @@ const RegisterNewClient = () => {
         })
         .then((response) => {
           const personalInfo = response.data;
-          console.log("personalInfo", personalInfo)
           dispatch(uploadClientInfo(personalInfo))
           alert("successfully registerd")
           navigator('/balanceofclient');

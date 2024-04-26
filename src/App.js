@@ -5,7 +5,7 @@ import Navbar from "./Layout/Navbar";
 import Footer from "./Layout/Footer";
 import SignInForm from "./SignIn/SignInForm";
 import SignUpForm from "./SignUp/SignUpForm";
-import Management from "./Management/Management";
+import IdTagsList from "./AssignManagement";
 import BalanceOfClients from "./Management/BalanceOfClients"
 import AssignedPetsList from './Management/AssignedPetsList';
 import RegisterNewClient from './ProfileUpdate/RegisterNewClient';
@@ -25,7 +25,7 @@ function App() {
         <Routes>
           <Route path="/" element={<SignInForm />} />
           <Route path="signup" element={<SignUpForm />} />
-          <Route path="/idtags" element={<Management />} />
+          <Route path="/idtags" element={<IdTagsList />} />
           <Route path="balanceofclient" element={<BalanceOfClients />} />
           <Route path="assignedpetslist" element={<AssignedPetsList />} />
           <Route path="registerNewClient" element={<RegisterNewClient />} />
