@@ -36,7 +36,10 @@ const PetInfo = () => {
 
   const [open, setOpen] = React.useState(false);
   const [hideClient, setShowClient] = React.useState(true);
-  const [selectedClient, setSelectedClient] = React.useState({visible: false, client: {}});
+  const [selectedClient, setSelectedClient] = React.useState({
+    visible: false,
+    client: {},
+  });
 
   const openAssignModal = () => {
     setOpen(true);
@@ -129,24 +132,39 @@ const PetInfo = () => {
 
   const toggleShow = () => {
     setShowClient(!hideClient);
-  }
+  };
 
   const hideList = () => {
     setShowClient(true);
-  }
+  };
 
   const selectClient = (id) => {
     allClients[0].forEach((element) => {
       if (element.Profile_ID == id) {
-        setSelectedClient({visible: true, client: element});
+        setSelectedClient({ visible: true, client: element });
       }
-    }); 
-  }
+    });
+  };
 
   const doAssign = () => {
-    
-  }
-  
+    if (selectedClient.client) {
+      const data = {
+        Tag_ID: idTag,
+        Assigned_Client: selectedClient.client.Profile_ID,
+      };
+
+      axios
+        .put(`http://localhost:5000/assign`, data)
+        .then((res) => {
+          // Handle the response data here
+          setOpen(false);
+        })
+        .catch((error) => {
+          // Handle errors here
+        });
+    }
+  };
+
   return (
     <>
       <div className="w-full flex mt-10">
@@ -250,7 +268,7 @@ const PetInfo = () => {
                         <p className="text-[#155263] pb-2">
                           <b>Tag ID: </b>
                           {/* {currentPet && <span>{currentPet.microchip}</span>} */}
-                          <span className="">PT000001</span>
+                          <span className="">{idTag}</span>
                         </p>
                         <p className="text-[#155263] pb-2">
                           <b>Times scanned: </b>
@@ -309,9 +327,20 @@ const PetInfo = () => {
                 <div className="grow ">
                   <div className="flex flex-row justify-around items-center border w-3/4 p-2">
                     <div className="grow text-[#D0D0D0]">
-                      {selectedClient && selectedClient.visible ? <ClientNameCard client={selectedClient.client} hide={hideList} select={selectClient}/> : "Select a client..."}
+                      {selectedClient && selectedClient.visible ? (
+                        <ClientNameCard
+                          client={selectedClient.client}
+                          hide={hideList}
+                          select={selectClient}
+                        />
+                      ) : (
+                        "Select a client..."
+                      )}
                     </div>
-                    <div className="grow-0 mr-0 cursor-pointer" onClick={toggleShow}>
+                    <div
+                      className="grow-0 mr-0 cursor-pointer"
+                      onClick={toggleShow}
+                    >
                       <svg
                         width="24"
                         height="24"
@@ -326,17 +355,30 @@ const PetInfo = () => {
                           stroke-linecap="round"
                           stroke-linejoin="round"
                         />
-
                       </svg>
                     </div>
                   </div>
-                  <div className={`w-2/3 m-2 overflow-y-auto overflow-x-hidden h-40 ${hideClient ? 'hidden' : ''}`}>
-                  {allClients[0] && allClients[0].map((client) => (<ClientNameCard client={client} hide={hideList} select={selectClient}/>))}
-                       <AddNewClientCard/>
+                  <div
+                    className={`w-2/3 m-2 overflow-y-auto overflow-x-hidden h-40 ${
+                      hideClient ? "hidden" : ""
+                    }`}
+                  >
+                    {allClients[0] &&
+                      allClients[0].map((client) => (
+                        <ClientNameCard
+                          client={client}
+                          hide={hideList}
+                          select={selectClient}
+                        />
+                      ))}
+                    <AddNewClientCard />
                   </div>
                 </div>
                 <div className="flex flex-row gap-4 bottom-5">
-                  <button className="delete-card items-center font-bold text-base text-[#FFFFFF] text-center w-36 h-11 bottom-2.5 font-['Poppins'] bg-[#3D9FAD] rounded-md px-5 hover:bg-[#155263] hover:text-[#FFFFFF]" onClick={doAssign}>
+                  <button
+                    className="delete-card items-center font-bold text-base text-[#FFFFFF] text-center w-36 h-11 bottom-2.5 font-['Poppins'] bg-[#3D9FAD] rounded-md px-5 hover:bg-[#155263] hover:text-[#FFFFFF]"
+                    onClick={doAssign}
+                  >
                     ASSIGN
                   </button>
                 </div>

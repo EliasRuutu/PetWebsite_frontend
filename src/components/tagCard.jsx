@@ -40,7 +40,7 @@ const TagCard = (props) => {
           </div>
           <div className="flex flex-row items-center justify-between gap-10">
             <div>
-              <button className="font-['Poppins'] text-[#3D9FAD] border border-[#3D9FAD] hover:bg-[#3D9FAD] hover:text-white py-1 px-6 rounded-md" onClick={() => navigator("/assign")}>
+              <button className="font-['Poppins'] text-[#3D9FAD] border border-[#3D9FAD] hover:bg-[#3D9FAD] hover:text-white py-1 px-6 rounded-md" onClick={() => navigator(`/assign/${props.tagNumber}`)}>
                 Details
               </button>
             </div>

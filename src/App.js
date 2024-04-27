@@ -27,7 +27,7 @@ function App() {
           <Route path="/" element={<SignInForm />} />
           <Route path="signup" element={<SignUpForm />} />
           <Route path="/idtags" element={<IdTagsList />} />
-          <Route path="/assign" element={<AssignSetting />} />
+          <Route path="/assign/:IdTag" element={<AssignSetting />} />
           <Route path="balanceofclient" element={<BalanceOfClients />} />
           <Route path="assignedpetslist" element={<AssignedPetsList />} />
           <Route path="registerNewClient" element={<RegisterNewClient />} />
