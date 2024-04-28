@@ -210,8 +210,11 @@ const PetInfo = () => {
                 >
                   <img src={file} height={128} alt="" className="" />
                 </div> */}
+                <div
+                className="panel-QR flex flex-col justify-center items-center  hover: cursor-pointer px-2"
+              >
                 {
-                QRInfo && 
+                QRInfo ?  
                 <>
                   <QRcodeGenerater info={QRInfo}/>
                   <div className="flex flex-row justify-center items-center mt-10 gap-2 hover: cursor-pointer hover:text-[#3D9FAD]">
@@ -240,8 +243,11 @@ const PetInfo = () => {
                       Descargar Codigo QR
                     </span>
                   </div>
-                </>
-                }             
+                </> :
+                
+                <img src={file} height={128} alt="" className="" />
+                }
+                </div>             
               </div>
             </div>
             <div className="w-2/3 px-10 bg-[#FFFFFF]">
