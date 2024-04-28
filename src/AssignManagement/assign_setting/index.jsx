@@ -11,6 +11,7 @@ import {
   loadAllPetsInfo,
 } from "../../redux/client/clientSlice";
 
+import QRcodeGenerater from "../../components/QRcreater";
 import QRCard from "../../assets/images/QR/QRCard.png";
 import "../../assets/css/component.css";
 import petImage from "../../assets/images/avatars/Rectangle 4290.png"; // Import the image file
@@ -31,16 +32,20 @@ const PetInfo = () => {
   const [currentClient, setCurrentClient] = useState();
 
   const [petsInfo, setPetsInfo] = React.useState([]);
-  const [idTag, setIdTag] = React.useState(urlParam.IdTag);
+  const [idTagNumber, setIdTagNumber] = React.useState(urlParam.IdTag);
+  const [idTagInfo, setIdTagInfo] = React.useState();
   const [currentPet, setCurrentPet] = useState();
 
   const [open, setOpen] = React.useState(false);
+  const [assignMark,setAssignMark] = React.useState(false);
+
   const [hideClient, setShowClient] = React.useState(true);
   const [selectedClient, setSelectedClient] = React.useState({
     visible: false,
     client: {},
   });
-
+  const [assignedClientID, setAssignedClientID] = React.useState("");
+  const [QRInfo, setQRInfo] = React.useState();
   const openAssignModal = () => {
     setOpen(true);
   };
@@ -88,13 +93,23 @@ const PetInfo = () => {
   React.useEffect(() => {
     if (petsInfo.length > 0) {
       petsInfo.forEach((element) => {
-        if (element.idTag == idTag) {
+        if (element.idTag == idTagNumber) {
           console.log("element", element);
           setCurrentPet(element);
         }
       });
     }
   }, [petsInfo]);
+  React.useEffect(() => {
+    if (allClients.length > 0) {
+      allClients[0].forEach((element) => {
+        if (element.Profile_ID == assignedClientID) {
+          console.log("client element", element);
+          setCurrentClient(element);
+        }
+      });
+    }
+  }, [assignedClientID]);
 
   React.useEffect(() => {
     console.log("currentClient", currentClient);
@@ -149,7 +164,7 @@ const PetInfo = () => {
   const doAssign = () => {
     if (selectedClient.client) {
       const data = {
-        Tag_ID: idTag,
+        Tag_ID: idTagNumber,
         Assigned_Client: selectedClient.client.Profile_ID,
       };
 
@@ -157,7 +172,20 @@ const PetInfo = () => {
         .put(`http://localhost:5000/assign`, data)
         .then((res) => {
           // Handle the response data here
+          if (res.status == 200) {
+            alert(res.data.message);
+            const assignedtagInfo = res.data.tagInfo;
+            setIdTagInfo(assignedtagInfo);
+            setAssignedClientID(assignedtagInfo.Assigned_Client);
+          }
+          setAssignMark(true);
           setOpen(false);
+
+          const qrInfo = {
+            idTag: idTagNumber,
+            clientId:  assignedClientID
+          }
+          setQRInfo(qrInfo);
         })
         .catch((error) => {
           // Handle errors here
@@ -167,25 +195,25 @@ const PetInfo = () => {
 
   return (
     <>
-      <div className="w-full flex mt-10">
+      <div className="w-full flex mt-1">
         <LeftSidePanel />
-        <div className="flex flex-col w-5/6 h-screen mt-[130px] bg-[#EBFCFF] rounded-lg border-t-2 px-32 mb-3 pt-20 pb-52 px-10 ">
-          <div className="mb-7 font-bold text-[#155263] text-3xl">
+        <div className="flex flex-col w-5/6 h-screen  bg-[#EBFCFF]  border-t-2 px-32 py-20 ">
+          <div className="mb-7 font-bold text-[#155263] rounded-lg text-3xl">
             ID Tag Details
           </div>
-          <div className="flex flex-row h-full mb-18">
+          <div className="flex flex-row h-full rounded-lg mb-18">
             <div className="info-client flex flex-col w-1/3 bg-cover px-28 pt-10 pb-40">
               <div className="flex flex-col justify-center items-left h-5/6 gap-2 align-middle">
-                <div
+                {/* <div
                   className="panel-QR flex flex-col justify-center items-center  hover: cursor-pointer px-2"
                   onClick={handleUpload}
                 >
                   <img src={file} height={128} alt="" className="" />
-                  {/* <div className="title-info">
-                Plaquita no <br /> asignada aun
-              </div> */}
-                </div>
-                {isUploaded && (
+                </div> */}
+                {
+                QRInfo && 
+                <>
+                  <QRcodeGenerater info={QRInfo}/>
                   <div className="flex flex-row justify-center items-center mt-10 gap-2 hover: cursor-pointer hover:text-[#3D9FAD]">
                     <svg
                       className=""
@@ -212,32 +240,8 @@ const PetInfo = () => {
                       Descargar Codigo QR
                     </span>
                   </div>
-                )}
-                <div className="flex flex-row  items-center text-base mt-5 ml-5 font-bold text-white">
-                  <svg
-                    width="16"
-                    height="18"
-                    viewBox="0 0 16 18"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
-                      d="M1.27439 5.96615C1.64024 5.6003 2.23341 5.6003 2.59926 5.96615L6.69179 10.0587L6.69179 0.936793C6.69179 0.4194 7.11122 -3.02504e-05 7.62862 -3.02278e-05C8.14601 -3.02052e-05 8.56544 0.4194 8.56544 0.936793L8.56544 10.0587L12.658 5.96615C13.0238 5.6003 13.617 5.6003 13.9828 5.96615C14.3487 6.332 14.3487 6.92517 13.9828 7.29102L8.29105 12.9828C7.9252 13.3487 7.33203 13.3487 6.96618 12.9828L1.27439 7.29102C0.908537 6.92517 0.908537 6.332 1.27439 5.96615Z"
-                      fill="white"
-                    />
-                    <path
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
-                      d="M0 17.0631C0 17.5804 0.41943 17.9999 0.936823 17.9999H14.2177C14.7351 17.9999 15.1545 17.5804 15.1545 17.0631C15.1545 16.5457 14.7351 16.1262 14.2177 16.1262H0.936823C0.41943 16.1262 0 16.5457 0 17.0631Z"
-                      fill="white"
-                    />
-                  </svg>
-                  <span className="ml-2 hover:cursor-pointer hover:text-slate-200">
-                    Download QR code
-                  </span>
-                </div>
+                </>
+                }             
               </div>
             </div>
             <div className="w-2/3 px-10 bg-[#FFFFFF]">
@@ -261,14 +265,17 @@ const PetInfo = () => {
                         <p className="text-[#155263] pb-2">
                           <b>Status:</b> &nbsp;
                           {/* {currentPet && <span>{currentPet.microchip}</span>} */}
-                          <span className="bg-[#E7E7E7] rounded-lg px-2 py-1">
+                          {!assignMark ? (<span className="bg-[#E7E7E7] rounded-full px-2 py-1">
                             Unassigned
-                          </span>
+                          </span>) : (<span className="bg-[#3D9FAD] text-white rounded-full px-2 py-1">
+                            Assigned
+                          </span>)}
+                          
                         </p>
                         <p className="text-[#155263] pb-2">
                           <b>Tag ID: </b>
                           {/* {currentPet && <span>{currentPet.microchip}</span>} */}
-                          <span className="">{idTag}</span>
+                          <span className="">{idTagNumber}</span>
                         </p>
                         <p className="text-[#155263] pb-2">
                           <b>Times scanned: </b>
@@ -281,18 +288,39 @@ const PetInfo = () => {
                 </div>
               </div>
               <div className="h-1/2">
-                <div className="flex h-1/4 text-lg font-bold text-[#155263] items-center justify-start">
+                <p className="flex h-1/4 text-lg font-bold text-[#155263] items-center justify-start">
                   Client
-                </div>
+                </p>
                 <hr />
-                <div className="flex flex-row flex-wrap w-2/3 pt-5">
-                  <button
-                    className="view-detail items-center font-bold text-base text-[#FFFFFF] text-center w-36 h-11 bottom-2.5 font-['Poppins'] bg-[#F1B21B] rounded-md px-5   hover:bg-[#FFCA4A] hover:text-[#FFFFFF]"
-                    onClick={openAssignModal}
-                  >
-                    ASSIGN
-                  </button>
+                <div className="flex flex-row flex-wrap w-2/3 pt-5 mb-5">
+                  {idTagInfo && idTagInfo.IsAssigned ? (
+                    <ClientContactCard info={currentClient} />
+                  ) : (
+                    <button
+                      className="view-detail items-center font-bold text-base text-[#FFFFFF] text-center w-36 h-11 bottom-2.5 font-['Poppins'] bg-[#F1B21B] rounded-md px-5   hover:bg-[#FFCA4A] hover:text-[#FFFFFF]"
+                      onClick={openAssignModal}
+                    >
+                      ASSIGN
+                    </button>
+                  )}
                 </div>
+
+                {idTagInfo && idTagInfo.IsAssigned ? (
+                  <>
+                    <div className="">
+                      <hr />
+                      <p className="flex h-1/4 text-lg font-bold text-[#155263] items-center justify-start">
+                        Pet
+                      </p>
+                      <button
+                        className="view-detail items-center font-bold text-base text-[#FFFFFF] text-center w-36 h-11 bottom-2.5 font-['Poppins'] bg-[#F1B21B] rounded-md px-5   hover:bg-[#FFCA4A] hover:text-[#FFFFFF]"
+                        onClick={() => {navigator(`/createpetaccount/${assignedClientID}/${idTagNumber}`)}}
+                      >
+                        ADD A PET
+                      </button>
+                    </div>
+                  </>
+                ) : null}
               </div>
             </div>
           </div>

@@ -5,7 +5,7 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 
 import LeftSidePanel from "../components/LeftSidePanel";
-import PetsCard from "../components/PetCard";
+import PetsCard from "../components/PetInfoCard";
 import dogAvatar from "../assets/images/avatars/Group 385.png";
 import QR from "../assets/images/QR/QR.png";
 
@@ -74,7 +74,7 @@ const AssignedPetsList = () => {
   return (
     <div className="w-full flex top-10">
       <LeftSidePanel />
-      <div className="flex w-5/6 h-screen mt-[130px] flex-col border-t-2 px-20 mb-3">
+      <div className="flex w-5/6 h-screen  flex-col border-t-2 px-20 mb-3">
         <div className="flex flex-row">
           <h1 className="title-info font-['Poppins'] py-7 text-[#155263] text-2xl font-bold w-1/2">
             Pets

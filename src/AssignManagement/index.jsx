@@ -4,7 +4,7 @@ import axios from "axios";
 
 import QR from "../assets/images/QR.svg";
 import LeftSidePanel from "../components/LeftSidePanel";
-import TagCard from "../components/tagCard";
+import TagInfoCard from "../components/tagInfoCard";
 import { useDispatch, useSelector } from "react-redux";
 
 const Management = () => {
@@ -23,6 +23,7 @@ const Management = () => {
 
   React.useEffect(() => {
     if (allTagsInfo.length > 0) {
+      console.log("-------------allTagsInfo---->", allTagsInfo[0].IsAssigned)
       let petNumber = (allTagsInfo.length + 1).toString().padStart(7, "0");
       console.log(allTagsInfo);
       setNewTagNumber(`PT${petNumber}`);
@@ -45,7 +46,7 @@ const Management = () => {
   return (
     <div className="w-full flex top-10">
       <LeftSidePanel />
-      <div className="flex w-5/6 h-screen mt-[130px] flex-col border-t-2 px-7 mb-3">
+      <div className="flex w-5/6 h-screen  flex-col border-t-2 px-7 mb-3">
         <div className="flex flex-row">
           <h1 className="font-['Poppins'] py-7 text-[#155263] text-2xl font-bold w-1/2">
             ID Tags
@@ -96,7 +97,7 @@ const Management = () => {
         </div>
         {allTagsInfo && allTagsInfo.length > 0
           ? allTagsInfo.map((tag) => {
-              return <TagCard tagNumber={tag.Tag_ID} />;
+              return <TagInfoCard tagNumber={tag.Tag_ID} isAssigned = {tag.IsAssigned}/>;
             })
           : null}
       </div>

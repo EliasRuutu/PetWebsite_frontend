@@ -28,7 +28,7 @@ const Navbar = () => {
     return (
     <>
       <div
-        className="fixed bg-white w-full h-24 sm:h-28 md:h-32 mx-auto flex flex-row justify-between md:justify-evenly px-8 sm:px-20 md:px-4 items-center border-sky-950  border-t-0 shadow-gray-400 z-50"
+        className="bg-white w-full h-12 sm:h-28 md:h-32 mx-auto flex flex-row justify-between md:justify-evenly px-8 sm:px-20 md:px-4 items-center border-sky-950  border-t-0 shadow-gray-400 z-50"
       >
         <span onClick={logoClick} className="flex items-center w-[170px] h-[40px] xs:w-[200px] xs:items-center xs:h-[48px] lg:w-[280px] lg:h-[60px] cursor-pointer sm:mb-4 hover:scale-105 transition-all duration-300 hover:brightness-150">
           <svg width="223" height="35" viewBox="0 0 223 35" fill="none" xmlns="http://www.w3.org/2000/svg">

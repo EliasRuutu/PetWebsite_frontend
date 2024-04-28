@@ -33,7 +33,7 @@ function App() {
           <Route path="registerNewClient" element={<RegisterNewClient />} />
           <Route path="/clientaccountinfo/:ProfileID" element={<ClientAccount />} />
           <Route path="/petaccountinfo/:ProfileID/:IdTag" element={<PetAccount />} />
-          <Route path="/createaccount/:ProfileID" element={<CreateAccount />} />
+          <Route path="/createpetaccount/:ProfileID/:IdTagNumber?" element={<CreateAccount />} />
         </Routes>
       </Router>
       <Footer />

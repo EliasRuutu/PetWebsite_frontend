@@ -43,7 +43,7 @@ const BalanceOfClients = () => {
   return (
     <div className="w-full flex top-10">
       <LeftSidePanel />
-      <div className="flex w-5/6 h-screen mt-[130px] flex-col border-t-2 px-20 mb-3">
+      <div className="flex w-5/6 h-screen  flex-col border-t-2 px-20 mb-3">
         <div className="flex flex-row">
           <h1 className="title-info font-['Poppins'] py-7 text-[#155263] text-2xl font-bold w-1/2">
             Clients

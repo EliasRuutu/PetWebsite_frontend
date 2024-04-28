@@ -19,7 +19,7 @@ const LeftSidePanel = () => {
   },[activeState]);
   return (
     <>
-      <div className="flex w-1/6 border-r-2 h-screen flex-col mt-[130px]">
+      <div className="flex w-1/6 border-r-2 h-screen flex-col ">
         <span className="w-full pt-8 text-xl border-t-2 flex justify-center hover:font-bold hover:cursor-pointer">
           <svg
             className="mr-4"
