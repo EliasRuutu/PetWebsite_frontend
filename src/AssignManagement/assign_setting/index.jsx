@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Modal from "@mui/material/Modal";
 import { Box } from "@mui/material";
+import htmlToImage from 'html-to-image'
 
 import {
   loadAllClientsInfo,
@@ -203,6 +204,22 @@ const PetInfo = () => {
     });
   };
 
+  const handleDownloadQRcode = () => {
+    const svgElements  = document.getElementsByClassName('QRcode-to-download');
+    const svgContent = new XMLSerializer().serializeToString(svgElements[0]);
+
+    const blob = new Blob([svgContent], { type: 'image/svg+xml' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'downloaded-svg.svg';
+    document.body.appendChild(link);
+    link.click();
+
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(link);
+  }
+
   const doAssign = () => {
     if (selectedClient.client) {
       const data = {
@@ -246,10 +263,11 @@ const PetInfo = () => {
                   <img src={file} height={128} alt="" className="" />
                 </div> */}
                 <div className="panel-QR flex flex-col justify-center items-center  hover: cursor-pointer px-2">
-                  {QRInfo && urlParam.success ? (
+                  {QRInfo ? (
                     <>
                       <QRcodeGenerater info={QRInfo} />
-                      <div className="flex flex-row justify-center items-center mt-10 gap-2 hover: cursor-pointer hover:text-[#3D9FAD]">
+
+                      <div className="flex flex-row justify-center items-center mt-10 gap-2 hover: cursor-pointer hover:text-[#3D9FAD]" onClick={handleDownloadQRcode}>
                         <svg
                           className=""
                           width="16"
@@ -272,7 +290,7 @@ const PetInfo = () => {
                           />
                         </svg>
                         <span className="text-white font-bold">
-                          Descargar Codigo QR
+                          Download the QRCode
                         </span>
                       </div>
                     </>
