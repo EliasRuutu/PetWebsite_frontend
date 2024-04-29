@@ -75,27 +75,27 @@ const CustomerInfo = () => {
   }
 
   function goToEditPage() {
-    navigate(`/createaccount/${urlParam.ProfileID}`);
+    navigate(`/createpetaccount/${urlParam.ProfileID}`);
   }
   return (
     <>
       <div className="w-full flex mt-10">
         <LeftSidePanel />
-        <div className="flex flex-col w-5/6 h-screen mt-[130px] bg-[#EBFCFF] rounded-lg border-t-2 px-32 mb-3 pt-28 pb-52 px-10 ">
+        <div className="flex flex-col w-5/6 h-screen bg-[#EBFCFF] rounded-lg border-t-2 px-32 mb-3 pt-28 pb-52 px-10 ">
           <div className="mb-7 font-bold text-[#155263] text-3xl">
             Información del Cliente
           </div>
           <div className="flex flex-row h-full mb-18 border rounded-[20px]">
             <div className="info-client flex flex-col w-2/5 bg-cover px-16 pt-14 pb-12 ">
-              <div className="flex flex-col justify-around items-center h-3/4 align-middle">
+              <div className="flex flex-col justify-around items-center h-3/4 align-middle mb-4">
                 {/* <div className="avatar-client"></div> */}
-                <img src={clientAvatarUrl}></img>
+                <img className="object-cover w-64 h-64 rounded-full" src={clientAvatarUrl} ></img>
                 <div className="text-3xl font-bold text-white">
                   {currentClient && <span>{currentClient.name}</span>}
                 </div>
               </div>
               <hr />
-              <div className="flex flex-col text-white text-base">
+              <div className="flex flex-col text-white text-base mt-2">
                 <div className="flex flex-row">
                   <svg
                     width="24"

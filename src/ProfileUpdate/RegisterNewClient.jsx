@@ -93,10 +93,10 @@ const RegisterNewClient = () => {
         })
         .then((response) => {
           const personalInfo = response.data;
-          console.log("personalInfo", personalInfo)
-          dispatch(uploadClientInfo(personalInfo))
-          alert("successfully registerd")
           navigator('/balanceofclient');
+          // dispatch(uploadClientInfo(personalInfo))
+          alert("successfully registerd")
+          
         })
         .catch((error) => {
           console.log(error);
@@ -107,7 +107,7 @@ const RegisterNewClient = () => {
   return (
     <div className="w-full flex top-10">
       <LeftSidePanel />
-      <div className="flex w-5/6 h-screen mt-[130px] flex-col border-t-2 mb-3 bg-[#EBFCFF] px-[250px] pt-[30px]">
+      <div className="flex w-5/6 h-screen  flex-col border-t-2 mb-3 bg-[#EBFCFF] px-[250px] pt-[30px]">
         <div className="flex mb-[10px]">
           <h1 className="font-['Poppins'] py-7 text-[#155263] text-2xl font-bold w-full">
             New Client

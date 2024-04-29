@@ -57,14 +57,14 @@ const ClientCard = (props) => {
     navigator(`/clientaccountinfo/${profileID}`);
 
   const deleteInfo = () => {
-    props.deleteInfo();
+    props.deleteInfo(profileID);
   };
 
   return (
     <>
       <div className="flex flex-row justify-between items-center w-full p-4 rounded-lg hover:bg-[#EBFCFF] hover:cursor-pointer">
         <div className="client flex flex-row h-16">
-          <img className="object-cover" src={avatarURL} alt="avatar" />
+          <img className="object-cover w-16 h-16 rounded-full" src={avatarURL} alt="avatar" />
           <div className="client-name flex flex-col justify-around p-2">
             <p className="font-bold">Client</p>
             <p>{clientName}</p>

@@ -15,7 +15,12 @@ const BalanceOfClients = () => {
 
   const [open, setOpen] = React.useState(false);
   const [clientsInfo, setClientsInfo] = React.useState([]);
-  const openDeleteModal = () => setOpen(true);
+  const [clientIdToDelete, setClientIdToDelete] = React.useState("");
+  const [deleteSuccess, setDeleteSuccess] = React.useState(false);
+  const openDeleteModal = (id) =>{
+    setOpen(true);
+    setClientIdToDelete(id)
+  } 
   const handleClose = () => setOpen(false);
 
   React.useEffect(() => {
@@ -29,6 +34,17 @@ const BalanceOfClients = () => {
       .catch((error) => {});
   }, []);
 
+  React.useEffect(() => {
+    axios
+      .get("http://localhost:5000/getAllClientInfos/")
+      .then((response) => {
+        // setClientsInfo(response.data);
+        dispatch(loadAllClientsInfo(response.data));
+        setClientsInfo(response.data);
+      })
+      .catch((error) => {});
+  }, [deleteSuccess]);
+
   const style = {
     position: "absolute",
     top: "50%",
@@ -39,11 +55,23 @@ const BalanceOfClients = () => {
     boxShadow: 24,
     p: 4,
   };
-
+  
+  const deleteHandle = () => {
+    const endpoint = `http://localhost:5000/deleteclient/${clientIdToDelete}`;
+  //  const itemName = 'clientIdToDelete';
+  console.log(endpoint)
+    axios.delete(endpoint).then((res) => {
+      if(res.status == 200) {
+        alert(res.data.message);
+        setDeleteSuccess(!deleteSuccess)
+      }
+    }).catch();
+    setOpen(false);
+  }
   return (
     <div className="w-full flex top-10">
       <LeftSidePanel />
-      <div className="flex w-5/6 h-screen mt-[130px] flex-col border-t-2 px-20 mb-3">
+      <div className="flex w-5/6 h-screen  flex-col border-t-2 px-20 mb-3">
         <div className="flex flex-row">
           <h1 className="title-info font-['Poppins'] py-7 text-[#155263] text-2xl font-bold w-1/2">
             Clients
@@ -179,7 +207,7 @@ const BalanceOfClients = () => {
               >
                 VOLVER
               </button>
-              <button className="delete-card items-center font-bold text-base text-[#FFFFFF] text-center w-36 h-11 bottom-2.5 font-['Poppins'] bg-[#3D9FAD] rounded-md px-5 hover:bg-[#155263] hover:text-[#FFFFFF]">
+              <button className="delete-card items-center font-bold text-base text-[#FFFFFF] text-center w-36 h-11 bottom-2.5 font-['Poppins'] bg-[#3D9FAD] rounded-md px-5 hover:bg-[#155263] hover:text-[#FFFFFF]" onClick={deleteHandle}>
                 DESCARGAR
               </button>
             </div>
