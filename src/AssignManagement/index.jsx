@@ -35,15 +35,19 @@ const Management = () => {
 
   const addTag = () => {
     const body = {Tag_ID: newTagNumber};
-    const response = axios.post("http://localhost:5000/add_tagid/", body)
-        .then((response) => {
-            if(response.status == 200) {
-              console.log("response.data", response.data.tagInfo)
-              setAllTagsInfo([...allTagsInfo, response.data.tagInfo])
-              console.log("allTagsInfo", allTagsInfo)
-            } 
-        }) 
+
+    // for(var i=0; i < 10; i++ ) {
+      const response = axios.post("http://localhost:5000/add_tagid/", body)
+          .then((response) => {
+              if(response.status == 200) {
+                console.log("response.data", response.data.tagInfo)
+                setAllTagsInfo([...allTagsInfo, response.data.tagInfo])
+                console.log("allTagsInfo", allTagsInfo)
+              } 
+          }) 
+    // }
   };
+
   return (
     <div className="w-full flex top-10">
       <LeftSidePanel />
@@ -98,7 +102,7 @@ const Management = () => {
         </div>
         {allTagsInfo && allTagsInfo.length > 0
           ? allTagsInfo.map((tag) => {
-              return <TagInfoCard tagNumber={tag.Tag_ID} isAssigned = {tag.IsAssigned}/>;
+              return <TagInfoCard tagNumber={tag.Tag_ID} assigned_Client = {tag.Assigned_Client} isAssigned = {tag.IsAssigned}/>;
             })
           : null}
       </div>

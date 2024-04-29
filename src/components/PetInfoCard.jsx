@@ -10,6 +10,7 @@ const PetInfoCard = (props) => {
   const [petInfo, setPetInfo] = React.useState(props.petsInfo);
   const [idTag, setIdTag] = React.useState(petInfo.idTag);
   const [petName, setPetName] = React.useState(petInfo.name);
+  const [isAssigned, setAssinged] = React.useState(petInfo.isAssigned);
   const [petAvatarPath, setPetAvatarPath] = React.useState(
     `/assets/images/pets/${petInfo.petAvatar}`
   );
@@ -60,10 +61,18 @@ const PetInfoCard = (props) => {
           {currentClient && <span>{currentClient.name}</span>}
         </div>
         <div
-          className="client-pets-info flex flex-row items-center hover:cursor-pointer"
-          onClick={viewQRCode}
+          className="client-pets-info flex flex-col items-center hover:cursor-pointer"
         >
-          <QRcodeCard />
+          <p>Tag</p>
+          {!isAssigned ? (
+              <span className="bg-[#E7E7E7] font-['Poppins'] text-[#155263] rounded-[50px] px-10 py-2">
+                Unassign
+              </span>
+            ) : (
+              <span className="bg-[#3D9FAD] font-['Poppins'] text-white rounded-[50px] px-10 py-2">
+                Assign
+              </span>
+            )}
         </div>
         <div className=" client-info-manage flex flex-row justify-between gap-2">
           <button

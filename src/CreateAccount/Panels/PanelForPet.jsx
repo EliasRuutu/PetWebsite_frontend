@@ -107,19 +107,6 @@ const PanelForPet = () => {
       alert("input all the data");
       console.log(newPet.gender);
     } else {
-      const formData = new FormData();
-      formData.append("Profile_ID", urlParams.ProfileID);
-      formData.append("name", newPet.name);
-      formData.append("gender", newPet.gender);
-      formData.append("birthday", newPet.birthday);
-      formData.append("microchip", newPet.microchip);
-      formData.append("specialDCondition", newPet.specialDCondition);
-      
-      if(urlParams.IdTagNumber) formData.append("idTag", idTagNumber)
-      else formData.append("idTag", newPet.idTag);    
-      
-      formData.append("petAvatar", newPet.petAvatar);
-      
       const data = {
         Tag_ID: idTagNumber,
         Assigned_Client: urlParams.ProfileID,
@@ -141,6 +128,19 @@ const PanelForPet = () => {
         .catch((error) => {
           // Handle errors here
         });
+
+        const formData = new FormData();
+        formData.append("Profile_ID", urlParams.ProfileID);
+        formData.append("name", newPet.name);
+        formData.append("gender", newPet.gender);
+        formData.append("birthday", newPet.birthday);
+        formData.append("microchip", newPet.microchip);
+        formData.append("specialDCondition", newPet.specialDCondition);
+        
+        if(urlParams.IdTagNumber) formData.append("idTag", idTagNumber)
+        else formData.append("idTag", newPet.idTag);    
+       
+        formData.append("petAvatar", newPet.petAvatar);
 
       axios
         .post("http://localhost:5000/pet", formData, {

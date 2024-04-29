@@ -12,7 +12,7 @@ import {
   loadAllPetsInfo,
 } from "../../redux/client/clientSlice";
 
-import QRcodeGenerater from "../../components/QRcreater";
+import QRcodeGenerater from "../../components/QRgenerator";
 import QRCard from "../../assets/images/QR/QRCard.png";
 import "../../assets/css/component.css";
 import petImage from "../../assets/images/avatars/Rectangle 4290.png"; // Import the image file
@@ -47,7 +47,7 @@ const PetInfo = () => {
   });
   const [assignedClientID, setAssignedClientID] = React.useState("");
   const [assignedPetID, setAssignedPetID] = React.useState("");
-  const [QRInfo, setQRInfo] = React.useState();
+  const [QRInfo, setQRInfo] = React.useState(urlParam.IdTag);
   const openAssignModal = () => {
     setOpen(true);
   };
@@ -64,18 +64,8 @@ const PetInfo = () => {
       .catch((error) => {});
 
     if (urlParam.success) {
-      // const qrInfo = {
-      //   idTag: idTagNumber,
-      //   clientName:  currentClient.name + " " + currentClient.lastName,
-      //   clientEmail: currentClient.email,
-
-      //   petName: currentPet.name,
-      //   petGender: currentPet.gender,
-      //   petBirthday: currentPet.birthday,
-      // }
-      // setQRInfo(qrInfo);
-
-      setAssignMark(true);
+      // setAssignMark(true);
+      
     }
   }, []);
 
@@ -85,20 +75,6 @@ const PetInfo = () => {
       .then((response) => {
         // setClientsInfo(response.data);
         dispatch(loadAllPetsInfo(response.data));
-        setPetsInfo(response.data);
-        // if(currentClient && currentPet) {
-        // const qrInfo = {
-        //   idTag: idTagNumber,
-        //   clientName:  currentClient.name + " " + currentClient.lastName,
-        //   clientEmail: currentClient.email,
-
-        //   petName: currentPet.name,
-        //   petGender: currentPet.gender,
-        //   petBirthday: currentPet.birthday,
-        // }
-        const qrInfo = "sss";
-        setQRInfo(qrInfo);
-        // }
       })
       .catch((error) => {
         console.log(error);
@@ -142,17 +118,6 @@ const PetInfo = () => {
   }, [assignedClientID]);
 
   React.useEffect(() => {
-    console.log("currentClient", currentClient);
-    // const qrInfo = {
-    //   idTag: idTagNumber,
-    //   clientName: currentClient.name + " " + currentClient.lastName,
-    //   clientEmail: currentClient.email,
-
-    //   // petName: currentPet.name,
-    //   // petGender: currentPet.gender,
-    //   // petBirthday: currentPet.birthday,
-    // };
-    // setQRInfo(qrInfo);
   }, [currentClient]);
   React.useEffect(() => {
     console.log("currentPet", currentPet)
@@ -212,7 +177,7 @@ const PetInfo = () => {
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = 'downloaded-svg.svg';
+    link.download = `${idTagNumber}.svg`;
     document.body.appendChild(link);
     link.click();
 
@@ -236,7 +201,7 @@ const PetInfo = () => {
             setIdTagInfo(assignedtagInfo);
             setAssignedClientID(assignedtagInfo.Assigned_Client);
           }
-          // setAssignMark(true);
+          setAssignMark(true);
           setOpen(false);
         })
         .catch((error) => {
