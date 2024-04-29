@@ -57,7 +57,7 @@ const ClientCard = (props) => {
     navigator(`/clientaccountinfo/${profileID}`);
 
   const deleteInfo = () => {
-    props.deleteInfo();
+    props.deleteInfo(profileID);
   };
 
   return (

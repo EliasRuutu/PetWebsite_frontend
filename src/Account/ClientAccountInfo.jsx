@@ -87,7 +87,7 @@ const CustomerInfo = () => {
           </div>
           <div className="flex flex-row h-full mb-18 border rounded-[20px]">
             <div className="info-client flex flex-col w-2/5 bg-cover px-16 pt-14 pb-12 ">
-              <div className="flex flex-col justify-around items-center h-3/4 align-middle">
+              <div className="flex flex-col justify-around items-center h-3/4 align-middle mb-4">
                 {/* <div className="avatar-client"></div> */}
                 <img className="object-cover w-64 h-64 rounded-full" src={clientAvatarUrl} ></img>
                 <div className="text-3xl font-bold text-white">
@@ -95,7 +95,7 @@ const CustomerInfo = () => {
                 </div>
               </div>
               <hr />
-              <div className="flex flex-col text-white text-base">
+              <div className="flex flex-col text-white text-base mt-2">
                 <div className="flex flex-row">
                   <svg
                     width="24"

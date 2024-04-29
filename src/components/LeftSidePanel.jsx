@@ -36,7 +36,7 @@ const LeftSidePanel = () => {
               fill="#929292"
             />
           </svg>
-          <h1 className={`font-['Poppins'] text-xl text-[#155263] ${checked && checked[0] ? 'font-bold' : ''}`} onClick={() => {navigator("/idtags"); dispatch(setPanelActiveState([true,false,false]));}}>Id Tags</h1>
+          <h1 className={`font-['Poppins'] text-xl text-[#155263]`} onClick={() => {navigator("/idtags")}}>Id Tags</h1>
         </span>
         <span className="w-full flex pt-5 text-xl justify-center items-center hover:font-bold hover:cursor-pointer ">
           <svg
@@ -55,7 +55,7 @@ const LeftSidePanel = () => {
 
           <h1
             className={`font-['Poppins'] text-xl text-[#155263] ${checked && checked[1] ? 'font-bold' : ''}`}
-            onClick={() =>{navigator("/assignedpetslist"); dispatch(setPanelActiveState([false, true, false]));}}
+            onClick={() =>{navigator("/assignedpetslist")}}
           >
             Mascotas
           </h1>
@@ -84,7 +84,7 @@ const LeftSidePanel = () => {
           </svg>
           <h1
             className={`font-['Poppins'] text-xl text-[#155263] ${checked && checked[2] ? 'font-bold' : ''}`}
-            onClick={() => {navigator("/balanceofclient");  dispatch(setPanelActiveState([false,false,true]));}}
+            onClick={() => navigator("/balanceofclient")}
           >
             Clientes
           </h1>

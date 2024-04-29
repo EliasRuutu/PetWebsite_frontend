@@ -9,7 +9,7 @@ import { Input } from "@material-tailwind/react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 
-import TagCard from "../../components/tagCard"
+import TagCard from "../../components/tagCard";
 import DogAvatar from "../../assets/images/avatars/dog-avatar.png";
 import QR from "../../assets/images/QR.svg";
 import { loadAllPetsInfo, uploadPetInfo } from "../../redux/client/clientSlice";
@@ -24,8 +24,10 @@ const PanelForPet = () => {
   const [file, setFile] = useState(DogAvatar);
   const [petsInfo, setPetsInfo] = React.useState([]);
   const [petsNumber, setPetsNumber] = React.useState();
+  const [idTagNumber, setIdTagNumber] = React.useState(urlParams.IdTagNumber);
 
-  const[idTagNumber, setIdTagNumber] = React.useState(urlParams.IdTagNumber);
+  const [allTagsInfo, setAllTagsInfo] = React.useState([]);
+  const [unassignedTags, setUnassignedTags] = React.useState([]);
   React.useEffect(() => {
     axios
       .get("http://localhost:5000/getallpets")
@@ -37,14 +39,31 @@ const PanelForPet = () => {
       .catch((error) => {
         console.log(error);
       });
+
+    axios
+      .get("http://localhost:5000/getAllIdTags/")
+      .then((response) => {
+        setAllTagsInfo(response.data);
+      })
+      .catch((error) => {});
   }, []);
 
-  React.useEffect(() => {
-    let petNumber = (petsInfo.length + 1).toString().padStart(7, "0");
-    setPetsNumber(petNumber);
+  // React.useEffect(() => {
+  //   let petNumber = (petsInfo.length + 1).toString().padStart(7, "0");
+  //   setPetsNumber(petNumber);
 
-    setNewPet({ ...newPet, idTag: "PT" + petNumber });
-  }, [petsInfo]);
+  //   setNewPet({ ...newPet, idTag: "PT" + petNumber });
+  // }, [petsInfo]);
+
+  React.useEffect(() => {
+    let unassignedList = [];
+    allTagsInfo.forEach((tag) => {
+      if (tag.IsAssigned == false) unassignedList.push(tag);
+    });
+    setUnassignedTags(unassignedList);
+  }, [allTagsInfo]);
+
+  React.useEffect(() => {}, [unassignedTags]);
 
   const [newPet, setNewPet] = React.useState({
     name: "",
@@ -72,7 +91,11 @@ const PanelForPet = () => {
     input.click();
   };
 
+  const handleTagSelect = (value) => {
+    setNewPet({ ...newPet, idTag: value });
+  }
   const updatePetProfile = () => {
+
     if (
       newPet.name.trim() === "" ||
       newPet.gender.trim() === "" ||
@@ -82,17 +105,42 @@ const PanelForPet = () => {
       !newPet.petAvatar
     ) {
       alert("input all the data");
-      console.log(newPet.gender)
+      console.log(newPet.gender);
     } else {
       const formData = new FormData();
-      formData.append("Profile_ID", urlParams.IdTagNumber);
+      formData.append("Profile_ID", urlParams.ProfileID);
       formData.append("name", newPet.name);
       formData.append("gender", newPet.gender);
       formData.append("birthday", newPet.birthday);
       formData.append("microchip", newPet.microchip);
       formData.append("specialDCondition", newPet.specialDCondition);
-      formData.append("idTag", newPet.idTag);
+      
+      if(urlParams.IdTagNumber) formData.append("idTag", idTagNumber)
+      else formData.append("idTag", newPet.idTag);    
+      
       formData.append("petAvatar", newPet.petAvatar);
+      
+      const data = {
+        Tag_ID: idTagNumber,
+        Assigned_Client: urlParams.ProfileID,
+        Assigned_Pet: newPet.name
+      };
+
+      axios
+        .put(`http://localhost:5000/assign`, data)
+        .then((res) => {
+          // Handle the response data here
+          if (res.status == 200) {
+            // alert(res.data.message);
+            // const assignedtagInfo = res.data.tagInfo;
+            // setIdTagInfo(assignedtagInfo);
+            // setAssignedClientID(assignedtagInfo.Assigned_Client);
+          }
+          // setAssignMark(true);
+        })
+        .catch((error) => {
+          // Handle errors here
+        });
 
       axios
         .post("http://localhost:5000/pet", formData, {
@@ -111,9 +159,10 @@ const PanelForPet = () => {
           //   progress: undefined,
           //   theme: "light",
           // });
-          dispatch(uploadPetInfo(response.data));
+          // dispatch(uploadPetInfo(response.data));
           alert("successfully Pet registerd");
-          navigator("/assignedpetslist");
+          if(urlParams.IdTagNumber) navigator(`/assign/${urlParams.IdTagNumber}/${true}`)
+          else navigator(`/petaccountinfo/${urlParams.ProfileID}/${newPet.idTag}`);
         })
         .catch((error) => {
           console.log(error);
@@ -122,6 +171,7 @@ const PanelForPet = () => {
   };
 
   const backToClientInfo = () => {
+
     navigator(`/petaccountinfo/${urlParams.ProfileID}/${newPet.idTag}`);
   };
   const select_items = ["Him", "Her"];
@@ -137,7 +187,12 @@ const PanelForPet = () => {
                   onChange={handleChange}
                   className="hidden "
                 />
-                <img src={file} width={400} height={400} className="rounded-full" />
+                <img
+                  src={file}
+                  width={400}
+                  height={400}
+                  className="rounded-full"
+                />
                 <svg
                   width="40"
                   onClick={handleUpload}
@@ -198,7 +253,11 @@ const PanelForPet = () => {
                   <h1 className="text-[16px] text-[#155263] font-['Poppins']">
                     Gender
                   </h1>
-                  <select className="p-2 rounded-md bg-[#F8F8F8]" name="gender" onChange={updateClientProfile}>
+                  <select
+                    className="p-2 rounded-md bg-[#F8F8F8]"
+                    name="gender"
+                    onChange={updateClientProfile}
+                  >
                     <option></option>
                     <option>Him</option>
                     <option>Her</option>
@@ -271,8 +330,25 @@ const PanelForPet = () => {
                   <h1 className="text-[16px] text-[#155263] font-['Poppins']">
                     ID Tag
                   </h1>
-                  <div className="flex gap-6 bg-[#EBFCFF] p-2 rounded-md"> 
-                    <TagCard tagNumber = {idTagNumber} imgSrc = {QR}/>
+                  <div className="flex gap-6 p-2 rounded-md">
+                    {idTagNumber ? (
+                      <TagCard tagNumber={idTagNumber} imgSrc={QR} />
+                    ) : (
+                      <select name="" id="" className="w-32" onChange={(e) => handleTagSelect(e.target.value)}>
+                        <option></option>
+                        {unassignedTags.length > 0 &&
+                          unassignedTags.map((element) => {
+                            return (
+                              <option
+                                key={element.Tag_ID}
+                                value={element.Tag_ID}
+                              >                                
+                                {element.Tag_ID}
+                              </option>
+                            );
+                          })}
+                      </select>
+                    )}
                   </div>
                 </div>
               </div>

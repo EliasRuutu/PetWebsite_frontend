@@ -12,6 +12,7 @@ const Management = () => {
   const [allTagsInfo, setAllTagsInfo] = React.useState([]);
   const [newTagNumber, setNewTagNumber] = React.useState();
   const [isAdded, setAddState] = React.useState(false);
+  
   React.useEffect(() => {
     axios
       .get("http://localhost:5000/getAllIdTags/")
@@ -28,7 +29,7 @@ const Management = () => {
       console.log(allTagsInfo);
       setNewTagNumber(`PT${petNumber}`);
     } else {
-      setNewTagNumber("PT000001");
+      setNewTagNumber("PT0000001");
     }
   }, [allTagsInfo]);
 

@@ -27,12 +27,12 @@ function App() {
           <Route path="/" element={<SignInForm />} />
           <Route path="signup" element={<SignUpForm />} />
           <Route path="/idtags" element={<IdTagsList />} />
-          <Route path="/assign/:IdTag" element={<AssignSetting />} />
+          <Route path="/assign/:IdTag/:success?" element={<AssignSetting />} />
           <Route path="balanceofclient" element={<BalanceOfClients />} />
           <Route path="assignedpetslist" element={<AssignedPetsList />} />
           <Route path="registerNewClient" element={<RegisterNewClient />} />
           <Route path="/clientaccountinfo/:ProfileID" element={<ClientAccount />} />
-          <Route path="/petaccountinfo/:ProfileID/:IdTag" element={<PetAccount />} />
+          <Route path="/petaccountinfo/:ProfileID/:IdTag?" element={<PetAccount />} />
           <Route path="/createpetaccount/:ProfileID/:IdTagNumber?" element={<CreateAccount />} />
         </Routes>
       </Router>

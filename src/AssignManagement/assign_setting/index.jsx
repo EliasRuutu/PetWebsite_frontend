@@ -37,7 +37,7 @@ const PetInfo = () => {
   const [currentPet, setCurrentPet] = useState();
 
   const [open, setOpen] = React.useState(false);
-  const [assignMark,setAssignMark] = React.useState(false);
+  const [assignMark, setAssignMark] = React.useState(false);
 
   const [hideClient, setShowClient] = React.useState(true);
   const [selectedClient, setSelectedClient] = React.useState({
@@ -45,6 +45,7 @@ const PetInfo = () => {
     client: {},
   });
   const [assignedClientID, setAssignedClientID] = React.useState("");
+  const [assignedPetID, setAssignedPetID] = React.useState("");
   const [QRInfo, setQRInfo] = React.useState();
   const openAssignModal = () => {
     setOpen(true);
@@ -60,6 +61,21 @@ const PetInfo = () => {
         dispatch(loadAllClientsInfo(response.data));
       })
       .catch((error) => {});
+
+    if (urlParam.success) {
+      // const qrInfo = {
+      //   idTag: idTagNumber,
+      //   clientName:  currentClient.name + " " + currentClient.lastName,
+      //   clientEmail: currentClient.email,
+
+      //   petName: currentPet.name,
+      //   petGender: currentPet.gender,
+      //   petBirthday: currentPet.birthday,
+      // }
+      // setQRInfo(qrInfo);
+
+      setAssignMark(true);
+    }
   }, []);
 
   React.useEffect(() => {
@@ -69,6 +85,19 @@ const PetInfo = () => {
         // setClientsInfo(response.data);
         dispatch(loadAllPetsInfo(response.data));
         setPetsInfo(response.data);
+        // if(currentClient && currentPet) {
+        // const qrInfo = {
+        //   idTag: idTagNumber,
+        //   clientName:  currentClient.name + " " + currentClient.lastName,
+        //   clientEmail: currentClient.email,
+
+        //   petName: currentPet.name,
+        //   petGender: currentPet.gender,
+        //   petBirthday: currentPet.birthday,
+        // }
+        const qrInfo = "sss";
+        setQRInfo(qrInfo);
+        // }
       })
       .catch((error) => {
         console.log(error);
@@ -113,8 +142,21 @@ const PetInfo = () => {
 
   React.useEffect(() => {
     console.log("currentClient", currentClient);
+    // const qrInfo = {
+    //   idTag: idTagNumber,
+    //   clientName: currentClient.name + " " + currentClient.lastName,
+    //   clientEmail: currentClient.email,
+
+    //   // petName: currentPet.name,
+    //   // petGender: currentPet.gender,
+    //   // petBirthday: currentPet.birthday,
+    // };
+    // setQRInfo(qrInfo);
   }, [currentClient]);
-  React.useEffect(() => {}, [currentPet]);
+  React.useEffect(() => {
+    console.log("currentPet", currentPet)
+    // setAssignedClientID(currentPet.Profile_ID);
+  }, [currentPet]);
 
   function handleChange(e) {
     const file = e.target.files[0];
@@ -173,19 +215,12 @@ const PetInfo = () => {
         .then((res) => {
           // Handle the response data here
           if (res.status == 200) {
-            alert(res.data.message);
             const assignedtagInfo = res.data.tagInfo;
             setIdTagInfo(assignedtagInfo);
             setAssignedClientID(assignedtagInfo.Assigned_Client);
           }
-          setAssignMark(true);
+          // setAssignMark(true);
           setOpen(false);
-
-          const qrInfo = {
-            idTag: idTagNumber,
-            clientId:  assignedClientID
-          }
-          setQRInfo(qrInfo);
         })
         .catch((error) => {
           // Handle errors here
@@ -210,44 +245,41 @@ const PetInfo = () => {
                 >
                   <img src={file} height={128} alt="" className="" />
                 </div> */}
-                <div
-                className="panel-QR flex flex-col justify-center items-center  hover: cursor-pointer px-2"
-              >
-                {
-                QRInfo ?  
-                <>
-                  <QRcodeGenerater info={QRInfo}/>
-                  <div className="flex flex-row justify-center items-center mt-10 gap-2 hover: cursor-pointer hover:text-[#3D9FAD]">
-                    <svg
-                      className=""
-                      width="16"
-                      height="18"
-                      viewBox="0 0 16 18"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M1.27439 5.96627C1.64024 5.60042 2.23341 5.60042 2.59926 5.96627L6.69179 10.0588L6.69179 0.936915C6.69179 0.419522 7.11122 9.18199e-05 7.62862 9.18425e-05C8.14601 9.18651e-05 8.56544 0.419522 8.56544 0.936915L8.56544 10.0588L12.658 5.96627C13.0238 5.60042 13.617 5.60042 13.9828 5.96627C14.3487 6.33213 14.3487 6.92529 13.9828 7.29114L8.29105 12.9829C7.9252 13.3488 7.33203 13.3488 6.96618 12.9829L1.27439 7.29114C0.908537 6.92529 0.908537 6.33213 1.27439 5.96627Z"
-                        fill="white"
-                      />
-                      <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M0 17.0632C0 17.5806 0.41943 18 0.936823 18H14.2177C14.7351 18 15.1545 17.5806 15.1545 17.0632C15.1545 16.5458 14.7351 16.1264 14.2177 16.1264H0.936823C0.41943 16.1264 0 16.5458 0 17.0632Z"
-                        fill="white"
-                      />
-                    </svg>
-                    <span className="text-white font-bold">
-                      Descargar Codigo QR
-                    </span>
-                  </div>
-                </> :
-                
-                <img src={file} height={128} alt="" className="" />
-                }
-                </div>             
+                <div className="panel-QR flex flex-col justify-center items-center  hover: cursor-pointer px-2">
+                  {QRInfo && urlParam.success ? (
+                    <>
+                      <QRcodeGenerater info={QRInfo} />
+                      <div className="flex flex-row justify-center items-center mt-10 gap-2 hover: cursor-pointer hover:text-[#3D9FAD]">
+                        <svg
+                          className=""
+                          width="16"
+                          height="18"
+                          viewBox="0 0 16 18"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M1.27439 5.96627C1.64024 5.60042 2.23341 5.60042 2.59926 5.96627L6.69179 10.0588L6.69179 0.936915C6.69179 0.419522 7.11122 9.18199e-05 7.62862 9.18425e-05C8.14601 9.18651e-05 8.56544 0.419522 8.56544 0.936915L8.56544 10.0588L12.658 5.96627C13.0238 5.60042 13.617 5.60042 13.9828 5.96627C14.3487 6.33213 14.3487 6.92529 13.9828 7.29114L8.29105 12.9829C7.9252 13.3488 7.33203 13.3488 6.96618 12.9829L1.27439 7.29114C0.908537 6.92529 0.908537 6.33213 1.27439 5.96627Z"
+                            fill="white"
+                          />
+                          <path
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M0 17.0632C0 17.5806 0.41943 18 0.936823 18H14.2177C14.7351 18 15.1545 17.5806 15.1545 17.0632C15.1545 16.5458 14.7351 16.1264 14.2177 16.1264H0.936823C0.41943 16.1264 0 16.5458 0 17.0632Z"
+                            fill="white"
+                          />
+                        </svg>
+                        <span className="text-white font-bold">
+                          Descargar Codigo QR
+                        </span>
+                      </div>
+                    </>
+                  ) : (
+                    <img src={file} height={128} alt="" className="" />
+                  )}
+                </div>
               </div>
             </div>
             <div className="w-2/3 px-10 bg-[#FFFFFF]">
@@ -271,12 +303,15 @@ const PetInfo = () => {
                         <p className="text-[#155263] pb-2">
                           <b>Status:</b> &nbsp;
                           {/* {currentPet && <span>{currentPet.microchip}</span>} */}
-                          {!assignMark ? (<span className="bg-[#E7E7E7] rounded-full px-2 py-1">
-                            Unassigned
-                          </span>) : (<span className="bg-[#3D9FAD] text-white rounded-full px-2 py-1">
-                            Assigned
-                          </span>)}
-                          
+                          {!assignMark ? (
+                            <span className="bg-[#E7E7E7] rounded-full px-2 py-1">
+                              Unassigned
+                            </span>
+                          ) : (
+                            <span className="bg-[#3D9FAD] text-white rounded-full px-2 py-1">
+                              Assigned
+                            </span>
+                          )}
                         </p>
                         <p className="text-[#155263] pb-2">
                           <b>Tag ID: </b>
@@ -320,7 +355,11 @@ const PetInfo = () => {
                       </p>
                       <button
                         className="view-detail items-center font-bold text-base text-[#FFFFFF] text-center w-36 h-11 bottom-2.5 font-['Poppins'] bg-[#F1B21B] rounded-md px-5   hover:bg-[#FFCA4A] hover:text-[#FFFFFF]"
-                        onClick={() => {navigator(`/createpetaccount/${assignedClientID}/${idTagNumber}`)}}
+                        onClick={() => {
+                          navigator(
+                            `/createpetaccount/${assignedClientID}/${idTagNumber}`
+                          );
+                        }}
                       >
                         ADD A PET
                       </button>
