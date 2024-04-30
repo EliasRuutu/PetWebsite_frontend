@@ -27,7 +27,7 @@ const Navbar = () => {
 
   return (
     <>
-      <div className="flex flex-row bg-white w-full h-12 sm:h-28 md:h-32 mx-auto px-4 justify-between md:justify-evenly px-8 sm:px-20 md:px-4 items-center border-sky-950  border-t-0 shadow-gray-400 z-50">
+      <div className="flex flex-row bg-white w-full h-[1/5] sm:h-28 md:h-32 mx-auto px-4 justify-between md:justify-evenly px-8 sm:px-20 md:px-4 items-center border-sky-950  border-t-0 shadow-gray-400 z-50">
         <div className="mr-4">
           <svg
             width="25"

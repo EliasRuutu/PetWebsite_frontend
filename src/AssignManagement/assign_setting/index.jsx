@@ -212,8 +212,6 @@ const PetInfo = () => {
 
   return (
     <>
-      <div className="w-full flex mt-1">
-        <LeftSidePanel />
         <div className="flex flex-col w-5/6 h-screen  bg-[#EBFCFF]  border-t-2 px-32 py-20 ">
           <div className="mb-7 font-bold text-[#155263] rounded-lg text-3xl">
             ID Tag Details
@@ -442,7 +440,6 @@ const PetInfo = () => {
             </Box>
           </Modal>
         </div>
-      </div>
     </>
   );
 };

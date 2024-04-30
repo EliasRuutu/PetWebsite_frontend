@@ -5,7 +5,7 @@ import MoveBtn from "../components/MoveBtn";
 import { useNavigate } from "react-router-dom";
 
 import "../assets/css/component.css";
-import LeftSidePanel from "../components/LeftSidePanel";
+import LeftSidePanel from "../Layout/LeftSidePanel";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { current } from "@reduxjs/toolkit";
@@ -79,8 +79,6 @@ const CustomerInfo = () => {
   }
   return (
     <>
-      <div className="w-full flex mt-10">
-        <LeftSidePanel />
         <div className="flex flex-col w-5/6 h-screen bg-[#EBFCFF] rounded-lg border-t-2 px-32 mb-3 pt-28 pb-52 px-10 ">
           <div className="mb-7 font-bold text-[#155263] text-3xl">
             Información del Cliente
@@ -188,7 +186,6 @@ const CustomerInfo = () => {
             </button>
           </div>
         </div>
-      </div>
     </>
   );
 };

@@ -3,7 +3,7 @@ import * as React from "react";
 import axios from "axios";
 
 import QR from "../assets/images/QR.svg";
-import LeftSidePanel from "../components/LeftSidePanel1";
+import LeftSidePanel from "../Layout/LeftSidePanel";
 import TagInfoCard from "../components/tagInfoCard";
 import { useDispatch, useSelector } from "react-redux";
 import { Pagination } from "@mui/material";
@@ -66,9 +66,9 @@ const IdTags = () => {
   };
 
   return (
-    <div className="w-full flex top-10">
-      <LeftSidePanel />
-      <div className="flex w-5/6 h-screen  flex-col border-t-2 px-7 mb-3">
+    // <div className="w-full flex top-10">
+    //   <LeftSidePanel />
+      <div className="flex w-5/6 h-[4/5]  flex-col border-t-2 px-7 mb-3">
         <div className="flex flex-row">
           <h1 className="font-['Poppins'] py-7 text-[#155263] text-2xl font-bold w-1/2">
             ID Tags
@@ -145,7 +145,7 @@ const IdTags = () => {
           )}
         </div>
       </div>
-    </div>
+    // </div>
   );
 };
 

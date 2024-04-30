@@ -11,7 +11,6 @@ import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
 
-
 const SignUpForm = () => {
     const navigate = useNavigate();
     const clientPassword = useSelector((state) => state.client.clientPassword);
@@ -119,7 +118,7 @@ const SignUpForm = () => {
 
     const handleChangeSignup = (e) => {
             setEmail(e.target.value);
-            setIsValidEmail(validateEmail(e.target.value))
+            setIsValidEmail(validateEmail(e.target.value));
     }
     
     return(
