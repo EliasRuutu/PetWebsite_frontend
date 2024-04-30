@@ -18,7 +18,7 @@ import "../../assets/css/component.css";
 import petImage from "../../assets/images/avatars/Rectangle 4290.png"; // Import the image file
 import uploadQR from "../../assets/images/backgrounds/uploadQR.png";
 import ClientContactCard from "../../components/ClientContactCard.jsx";
-import LeftSidePanel from "../../components/LeftSidePanel.jsx";
+import LeftSidePanel from "../../components/LeftSidePanel1.jsx";
 import ClientNameCard from "../../components/clientNameCard";
 import AddNewClientCard from "../../components/addNewClientCard";
 

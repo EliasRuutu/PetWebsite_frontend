@@ -12,7 +12,7 @@ import Checkbox from "@mui/material/Checkbox";
 
 import User from "../assets/images/user.svg";
 import PasswordInput from "../components/passwordInput";
-import LeftSidePanel from "../components/LeftSidePanel";
+import LeftSidePanel from "../components/LeftSidePanel1";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 // import {showToast} from "../utils/showToast";

@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from "./Layout/Navbar";
 import Footer from "./Layout/Footer";
+import SideBar from "./components/LeftSidePanel"
+
 import SignInForm from "./SignIn/SignInForm";
 import SignUpForm from "./SignUp/SignUpForm";
 import IdTagsList from "./AssignManagement";
@@ -36,6 +38,7 @@ function App() {
           <Route path="/createpetaccount/:ProfileID/:IdTagNumber?" element={<CreateAccount />} />
         </Routes>
       </Router>
+        {/* <SideBar/> */}
       <Footer />
     </>
   );

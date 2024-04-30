@@ -3,7 +3,7 @@ import * as React from "react";
 import axios from "axios";
 
 import QR from "../assets/images/QR.svg";
-import LeftSidePanel from "../components/LeftSidePanel";
+import LeftSidePanel from "../components/LeftSidePanel1";
 import TagInfoCard from "../components/tagInfoCard";
 import { useDispatch, useSelector } from "react-redux";
 

@@ -6,7 +6,7 @@ import Modal from "@mui/material/Modal";
 import Typography from "@mui/material/Typography";
 import dogAvatar from "../assets/images/avatars//Group 385.png";
 import ClientCard1 from "../components/ClientCard";
-import LeftSidePanel from "../components/LeftSidePanel";
+import LeftSidePanel from "../components/LeftSidePanel1";
 import { useDispatch, useSelector } from "react-redux";
 import { loadAllClientsInfo } from "./../redux/client/clientSlice";
 const BalanceOfClients = () => {

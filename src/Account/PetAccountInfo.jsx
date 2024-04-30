@@ -14,7 +14,7 @@ import QRcodeGenerater from "../components/QRgenerator";
 
 import petImage from "../assets/images/avatars/Rectangle 4290.png"; // Import the image file
 import uploadQR from "../assets/images/backgrounds/uploadQR.png";
-import LeftSidePanel from "../components/LeftSidePanel.jsx";
+import LeftSidePanel from "../components/LeftSidePanel1.jsx";
 
 const PetInfo = () => {
   const urlParam = useParams();

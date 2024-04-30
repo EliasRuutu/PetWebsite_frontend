@@ -1,10 +1,14 @@
 import { Input } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
 import PasswordInput from "../components/passwordInput";
 import axios from "axios";
+import * as React from 'react'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
+
+import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+
 
 const SignInForm = () => {
     const navigate = useNavigate();
@@ -13,6 +17,8 @@ const SignInForm = () => {
         navigate("/signup");
     }
     
+    const clientPassword = useSelector((state) => state.client.clientPassword);
+
     const [signInEmail, setSignInEmail] = useState("");
     const [signInPassword, setSignInPassword] = useState("");
     const [isValidEmail, setIsValidEmail] = useState(true);
@@ -20,6 +26,10 @@ const SignInForm = () => {
         const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         return emailPattern.test(email);
     }
+
+    React.useEffect(() => {
+        setSignInPassword(clientPassword)
+      }, [clientPassword]);
 
     const handleSignInClick = () => {
         console.log("---------Sign In-------------");
@@ -39,7 +49,7 @@ const SignInForm = () => {
                     progress: undefined,
                     theme: "light",
                 });
-                window.location.href = "/management"
+                window.location.href = "/idtags"
             })
         }else if(signInPassword == "" && signInEmail == ""){
             toast.error('Por favor ingrese su correo electrónico y contraseña.', {
@@ -77,13 +87,18 @@ const SignInForm = () => {
         }
     }
 
+    const handleEmailChange = (e) => {
+        setSignInEmail(e.target.value); 
+        setIsValidEmail(validateEmail(e.target.value));
+    };
+
     return(
         <div className="bg-[url('./assets/images/signinback.svg')] relative w-screen h-screen py-4 bg-no-repeat bg-cover bg-center flex justify-center items-center">
             <div className="absolute -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2 bg-white w-full h-[500px] max-w-[450px] max-h-screen px-10 py-10 flex flex-col justify-around rounded-3xl">
                 <h1 className="font-['Poppins'] text-[#155263] font-bold text-4xl flex justify-center">Incia Sesión</h1>
                 <div className="w-full">
-                    {/* <Input className="p-2 rounded-md bg-[#F8F8F8] indent-1.5" onChange={(e) => {setSignInEmail(e.target.value), setIsValidEmail(validateEmail(e.target.value))}} placeholder="Correo Electronico" />
-                    {!isValidEmail && <p style={{color:'red', fontFamily:'Poppins', float:'right'}}>Por favor, introduce una dirección de correo electrónico válida.</p> } */}
+                    <Input className="p-2 rounded-md bg-[#F8F8F8] indent-1.5" onChange={(e) => { setSignInEmail(e.target.value); setIsValidEmail(validateEmail(e.target.value));}} placeholder="Correo Electronico" />
+                    {!isValidEmail && <p style={{color:'red', fontFamily:'Poppins', float:'right'}}>Por favor, introduce una dirección de correo electrónico válida.</p> }
                 </div>
                 <div className="w-full">
                     <PasswordInput sendPasswordToParent = {setSignInPassword} />
