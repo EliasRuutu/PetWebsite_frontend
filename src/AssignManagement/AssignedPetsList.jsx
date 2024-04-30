@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 
-import LeftSidePanel from "../components/LeftSidePanel";
+import LeftSidePanel from "../components/LeftSidePanel1";
 import PetsCard from "../components/PetInfoCard";
 import dogAvatar from "../assets/images/avatars/Group 385.png";
 import QR from "../assets/images/QR/QR.png";

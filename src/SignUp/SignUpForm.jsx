@@ -3,14 +3,19 @@ import { InputWithDropdown } from "../components/telephone";
 import PasswordInput from "../components/passwordInput";
 import ConfirmPasswordInput from "../components/confirmPasswordInput";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import * as React from 'react'
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
+import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+
 
 
 const SignUpForm = () => {
     const navigate = useNavigate();
+    const clientPassword = useSelector((state) => state.client.clientPassword);
+
     const handleIniciaClick = () => {
         window.scrollTo(0,0);
         navigate("/");
@@ -22,6 +27,10 @@ const SignUpForm = () => {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
 
+    React.useEffect(() => {
+        setPassword(clientPassword)
+      }, [clientPassword]);
+
     const validateEmail = (email) => {
         const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         return emailPattern.test(email);
@@ -29,6 +38,7 @@ const SignUpForm = () => {
 
     const handleSignUpClick = () => {
         console.log("-----------Sign Up-------------");
+        console.log("----------------password---->", password)
         if(password === confirmPassword && isValidEmail && email != "" && password != "" && countryInfo != "" && confirmPassword != ""){
           axios.post('http://localhost:5000/signup', {
             email: email,
@@ -107,7 +117,10 @@ const SignUpForm = () => {
         }
     }
 
-
+    const handleChangeSignup = (e) => {
+            setEmail(e.target.value);
+            setIsValidEmail(validateEmail(e.target.value))
+    }
     
     return(
         <div className="bg-[url('./assets/images/signupback.svg')] relative w-screen h-screen py-4 bg-no-repeat bg-cover bg-center flex justify-end items-center">
@@ -115,10 +128,8 @@ const SignUpForm = () => {
                 <h1 className="font-['Poppins'] text-[#155263] font-bold text-4xl flex justify-center">¡Bienvenido a Paw Track!</h1>
                 <h1 className="font-['Poppins'] text-[#155263] font-bold text-md flex justify-center">Lorem ipsum dolor sit amet, consectetur adi piscing.</h1>
                 <div className="w-full">
-                    {/* <Input className="p-2 rounded-md bg-[#F8F8F8] indent-1.5" onChange={(e) => {
-                        setEmail(e.target.value), setIsValidEmail(validateEmail(e.target.value))
-                    }} placeholder="Correo Electronico" />
-                    {!isValidEmail && <p style={{color:'red', fontFamily:'Poppins', float:'right'}}>Por favor, introduce una dirección de correo electrónico válida.</p> } */}
+                    <Input className="p-2 rounded-md bg-[#F8F8F8] indent-1.5" onChange={(e) => {setEmail(e.target.value); setIsValidEmail(validateEmail(e.target.value))}} placeholder="Correo Electronico" />
+                    {!isValidEmail && <p style={{color:'red', fontFamily:'Poppins', float:'right'}}>Por favor, introduce una dirección de correo electrónico válida.</p> }
                 </div>
                 <div className="w-full">
                    <InputWithDropdown sendDataToParent={setCountryInfo} sendData1ToParent={setCountry}/>
