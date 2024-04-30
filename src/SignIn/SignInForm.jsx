@@ -39,6 +39,7 @@ const SignInForm = () => {
                 signInPassword: signInPassword,
             })
             .then((response)=>{
+                console.log("response",response)
                 toast.success('Éxito!', {
                     position: "bottom-right",
                     autoClose: 5000,
@@ -51,6 +52,48 @@ const SignInForm = () => {
                 });
                 window.location.href = "/idtags"
             })
+            .catch((error) => {
+                console.log(error.response.status);
+
+                if(error.response.status == 403) {
+                    toast.error('Password error', {
+                        position: "bottom-right",
+                        autoClose: 1000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "light",
+                    });
+                } 
+                if(error.response.status == 404) {
+                    toast.error('Not signed', {
+                        position: "bottom-right",
+                        autoClose: 1000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "light",
+                    });
+                }  
+                
+                if(error.response.status == 500) {
+                    toast.error('Server error', {
+                        position: "bottom-right",
+                        autoClose: 1000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: "light",
+                    });
+                }
+            });
+
         }else if(signInPassword == "" && signInEmail == ""){
             toast.error('Por favor ingrese su correo electrónico y contraseña.', {
                 position: "bottom-right",
