@@ -6,13 +6,24 @@ import QR from "../assets/images/QR.svg";
 import LeftSidePanel from "../components/LeftSidePanel1";
 import TagInfoCard from "../components/tagInfoCard";
 import { useDispatch, useSelector } from "react-redux";
+import { Pagination } from "@mui/material";
 
-const Management = () => {
+const IdTags = () => {
   const dispatch = useDispatch();
   const [allTagsInfo, setAllTagsInfo] = React.useState([]);
   const [newTagNumber, setNewTagNumber] = React.useState();
   const [isAdded, setAddState] = React.useState(false);
-  
+
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const [totalItems, setTotalItems] = React.useState();
+
+  const itemsPerPage = 8;
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const lastIndex = Math.min(startIndex + itemsPerPage, totalItems);
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+
+  const currentItems = allTagsInfo.slice(startIndex, lastIndex);
+
   React.useEffect(() => {
     axios
       .get("http://localhost:5000/getAllIdTags/")
@@ -24,9 +35,10 @@ const Management = () => {
 
   React.useEffect(() => {
     if (allTagsInfo.length > 0) {
-      console.log("-------------allTagsInfo---->", allTagsInfo[0].IsAssigned)
+      setTotalItems(allTagsInfo.length);
+
       let petNumber = (allTagsInfo.length + 1).toString().padStart(7, "0");
-      console.log(allTagsInfo);
+
       setNewTagNumber(`PT${petNumber}`);
     } else {
       setNewTagNumber("PT0000001");
@@ -34,18 +46,23 @@ const Management = () => {
   }, [allTagsInfo]);
 
   const addTag = () => {
-    const body = {Tag_ID: newTagNumber};
+    const body = { Tag_ID: newTagNumber };
 
     // for(var i=0; i < 10; i++ ) {
-      const response = axios.post("http://localhost:5000/add_tagid/", body)
-          .then((response) => {
-              if(response.status == 200) {
-                console.log("response.data", response.data.tagInfo)
-                setAllTagsInfo([...allTagsInfo, response.data.tagInfo])
-                console.log("allTagsInfo", allTagsInfo)
-              } 
-          }) 
+    const response = axios
+      .post("http://localhost:5000/add_tagid/", body)
+      .then((response) => {
+        if (response.status == 200) {
+          console.log("response.data", response.data.tagInfo);
+          setAllTagsInfo([...allTagsInfo, response.data.tagInfo]);
+          console.log("allTagsInfo", allTagsInfo);
+        }
+      });
     // }
+  };
+
+  const selectPage = (event, page) => {
+    setCurrentPage(page);
   };
 
   return (
@@ -100,14 +117,36 @@ const Management = () => {
             </div>
           </div>
         </div>
-        {allTagsInfo && allTagsInfo.length > 0
-          ? allTagsInfo.map((tag) => {
-              return <TagInfoCard tagNumber={tag.Tag_ID} assigned_Client = {tag.Assigned_Client} isAssigned = {tag.IsAssigned}/>;
+        {currentItems && currentItems.length > 0
+          ? currentItems.map((tag) => {
+              return (
+                <TagInfoCard
+                  tagNumber={tag.Tag_ID}
+                  assigned_Client={tag.Assigned_Client}
+                  isAssigned={tag.IsAssigned}
+                />
+              );
             })
           : null}
+        <div className="flex items-end justify-end">
+          {totalPages > 1 && (
+            <Pagination
+              count={totalPages}
+              page={currentPage}
+              onChange={selectPage}
+              shape="rounded"
+              sx={{
+                '& .Mui-selected': {
+                  color: 'white',
+                  backgroundColor: '#3D9FAD',
+                },
+              }}
+            />
+          )}
+        </div>
       </div>
     </div>
   );
 };
 
-export default Management;
+export default IdTags;
