@@ -30,7 +30,7 @@ const PanelForPet = () => {
   const [unassignedTags, setUnassignedTags] = React.useState([]);
   React.useEffect(() => {
     axios
-      .get("http://localhost:5000/getallpets")
+      .get(`${process.env.REACT_APP_Pet_Backend_Url}/getallpets`)
       .then((response) => {
         // setClientsInfo(response.data);
         dispatch(loadAllPetsInfo(response.data));
@@ -41,7 +41,7 @@ const PanelForPet = () => {
       });
 
     axios
-      .get("http://localhost:5000/getAllIdTags/")
+      .get(`${process.env.REACT_APP_Pet_Backend_Url}/getAllIdTags/`)
       .then((response) => {
         setAllTagsInfo(response.data);
       })
@@ -114,7 +114,7 @@ const PanelForPet = () => {
       };
 
       axios
-        .put(`http://localhost:5000/assign`, data)
+        .put(`${process.env.REACT_APP_Pet_Backend_Url}/assign`, data)
         .then((res) => {
           // Handle the response data here
           if (res.status == 200) {
@@ -143,7 +143,7 @@ const PanelForPet = () => {
         formData.append("petAvatar", newPet.petAvatar);
 
       axios
-        .post("http://localhost:5000/pet", formData, {
+        .post(`${process.env.REACT_APP_Pet_Backend_Url}/pet`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },

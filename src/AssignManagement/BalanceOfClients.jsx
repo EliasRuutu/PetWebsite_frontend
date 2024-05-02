@@ -25,7 +25,7 @@ const BalanceOfClients = () => {
 
   React.useEffect(() => {
     axios
-      .get("http://localhost:5000/getAllClientInfos/")
+      .get(`${process.env.REACT_APP_Pet_Backend_Url}/getAllClientInfos/`)
       .then((response) => {
         // setClientsInfo(response.data);
         dispatch(loadAllClientsInfo(response.data));
@@ -36,7 +36,7 @@ const BalanceOfClients = () => {
 
   React.useEffect(() => {
     axios
-      .get("http://localhost:5000/getAllClientInfos/")
+      .get(`${process.env.REACT_APP_Pet_Backend_Url}/getAllClientInfos/`)
       .then((response) => {
         // setClientsInfo(response.data);
         dispatch(loadAllClientsInfo(response.data));
@@ -57,7 +57,7 @@ const BalanceOfClients = () => {
   };
   
   const deleteHandle = () => {
-    const endpoint = `http://localhost:5000/deleteclient/${clientIdToDelete}`;
+    const endpoint = `${process.env.REACT_APP_Pet_Backend_Url}/deleteclient/${clientIdToDelete}`;
   //  const itemName = 'clientIdToDelete';
   console.log(endpoint)
     axios.delete(endpoint).then((res) => {

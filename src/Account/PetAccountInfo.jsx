@@ -38,7 +38,7 @@ const PetInfo = () => {
 
   React.useEffect(() => {
     axios
-      .get("http://localhost:5000/getAllClientInfos/")
+      .get(`${process.env.REACT_APP_Pet_Backend_Url}/getAllClientInfos/`)
       .then((response) => {
         dispatch(loadAllClientsInfo(response.data));
 
@@ -59,7 +59,7 @@ const PetInfo = () => {
 
   React.useEffect(() => {
     axios
-      .get("http://localhost:5000/getallpets")
+      .get(`${process.env.REACT_APP_Pet_Backend_Url}/getallpets`)
       .then((response) => {
         // setClientsInfo(response.data);
         dispatch(loadAllPetsInfo(response.data));

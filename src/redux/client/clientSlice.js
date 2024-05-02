@@ -20,7 +20,7 @@ export const clientSlice = createSlice({
 
     addNewIdTag: (state, action) => {
         const body = {Tag_ID: action.payload};
-        const response = axios.post("http://localhost:5000/add_tagid/", body)
+        const response = axios.post(`${process.env.REACT_APP_Pet_Backend_Url}/add_tagid/`, body)
         .then((response) => {
           state.idTags.push(response.data)
             if(response.status == "200") {

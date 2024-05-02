@@ -56,7 +56,7 @@ const PetInfo = () => {
 
   React.useEffect(() => {
     axios
-      .get("http://localhost:5000/getAllClientInfos/")
+      .get(`${process.env.REACT_APP_Pet_Backend_Url}/getAllClientInfos/`)
       .then((response) => {
         dispatch(loadAllClientsInfo(response.data));
       })
@@ -70,7 +70,7 @@ const PetInfo = () => {
 
   React.useEffect(() => {
     axios
-      .get("http://localhost:5000/getallpets")
+      .get(`${process.env.REACT_APP_Pet_Backend_Url}/getallpets`)
       .then((response) => {
         // setClientsInfo(response.data);
         dispatch(loadAllPetsInfo(response.data));
@@ -192,7 +192,7 @@ const PetInfo = () => {
       };
 
       axios
-        .put(`http://localhost:5000/assign`, data)
+        .put(`${process.env.REACT_APP_Pet_Backend_Url}/assign`, data)
         .then((res) => {
           // Handle the response data here
           if (res.status == 200) {

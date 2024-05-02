@@ -89,7 +89,7 @@ const RegisterNewClient = () => {
       formData.append("avatar", newClient.avatar);
 
       axios
-        .post("http://localhost:5000/register/", formData, {
+        .post(`${process.env.REACT_APP_Pet_Backend_Url}/register/`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },

@@ -26,7 +26,7 @@ const IdTags = () => {
 
   React.useEffect(() => {
     axios
-      .get("http://localhost:5000/getAllIdTags/")
+      .get(`${process.env.REACT_APP_Pet_Backend_Url}/getAllIdTags/`)
       .then((response) => {
         setAllTagsInfo(response.data);
       })
@@ -47,10 +47,10 @@ const IdTags = () => {
 
   const addTag = () => {
     const body = { Tag_ID: newTagNumber };
-
+    const BaseUrl = process.env.REACT_APP_Pet_Backend_Url;
     // for(var i=0; i < 10; i++ ) {
     const response = axios
-      .post("http://localhost:5000/add_tagid/", body)
+      .post(`${BaseUrl}/add_tagid/`, body)
       .then((response) => {
         if (response.status == 200) {
           console.log("response.data", response.data.tagInfo);

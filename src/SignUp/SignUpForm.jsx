@@ -10,6 +10,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
+const BackendBaseUrl = process.env.REACT_APP_Pet_Backend_Url;
 
 const SignUpForm = () => {
     const navigate = useNavigate();
@@ -38,8 +39,9 @@ const SignUpForm = () => {
     const handleSignUpClick = () => {
         console.log("-----------Sign Up-------------");
         console.log("----------------password---->", password)
+        
         if(password === confirmPassword && isValidEmail && email != "" && password != "" && countryInfo != "" && confirmPassword != ""){
-          axios.post('http://localhost:5000/signup', {
+          axios.post(`${process.env.REACT_APP_Pet_Backend_Url}/signup`, {
             email: email,
             phone: country+countryInfo,
             password: password
