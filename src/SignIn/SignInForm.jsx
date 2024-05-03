@@ -31,7 +31,6 @@ const SignInForm = () => {
       }, [clientPassword]);
 
     const handleSignInClick = () => {
-        console.log("---------Sign In-------------");
         if(isValidEmail && signInEmail != "" && signInPassword != ""){
 
             axios.post(`${process.env.REACT_APP_Pet_Backend_Url}/signin`, {
@@ -39,7 +38,6 @@ const SignInForm = () => {
                 signInPassword: signInPassword,
             })
             .then((response)=>{
-                console.log("response",response)
                 toast.success('Éxito!', {
                     position: "bottom-right",
                     autoClose: 5000,

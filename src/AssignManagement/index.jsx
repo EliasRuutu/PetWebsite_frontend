@@ -50,7 +50,7 @@ const IdTags = () => {
     const BaseUrl = process.env.REACT_APP_Pet_Backend_Url;
     // for(var i=0; i < 10; i++ ) {
     const response = axios
-      .post(`${BaseUrl}/add_tagid/`, body)
+      .post(`${process.env.REACT_APP_Pet_Backend_Url}/add_tagid/`, body)
       .then((response) => {
         if (response.status == 200) {
           console.log("response.data", response.data.tagInfo);

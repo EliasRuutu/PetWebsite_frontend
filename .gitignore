@@ -5,6 +5,7 @@
 /public/assets
 /.pnp
 .pnp.js
+.env
 
 # testing
 /coverage

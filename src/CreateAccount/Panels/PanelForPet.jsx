@@ -3,11 +3,16 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import dayjs from 'dayjs';
 import { toast } from "react-toastify";
 
 import { Input } from "@material-tailwind/react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
+// import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+// import DatePicker from 'react-date-picker';
 
 import TagCard from "../../components/tagCard";
 import DogAvatar from "../../assets/images/avatars/dog-avatar.png";
@@ -28,6 +33,9 @@ const PanelForPet = () => {
 
   const [allTagsInfo, setAllTagsInfo] = React.useState([]);
   const [unassignedTags, setUnassignedTags] = React.useState([]);
+
+  const [value, onChangeDate] = React.useState(new Date());
+
   React.useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_Pet_Backend_Url}/getallpets`)
@@ -177,8 +185,8 @@ const PanelForPet = () => {
   const select_items = ["Him", "Her"];
   return (
     <>
-      <div className="flex flex-row bg-[#FFFFFF] h-full p-6 items-center rounded-0">
-        <div className="grid grid-row-2 w-5/6 px-20 items-center">
+      <div className="flex flex-row items-center justify-center bg-[#FFFFFF] h-full p-6 items-center rounded-0">
+        <div className="grid grid-row-2 w-5/6 items-center">
           <div className="flex flex-row gap-4">
             <div className="flex flex-row items-start w-1/5 overflow-hidden">
               <div className="relative p-4">
@@ -227,9 +235,9 @@ const PanelForPet = () => {
                 </svg>
               </div>
             </div>
-            <div className="flex flex-col justify-between">
+            <div className="flex flex-col grow justify-between">
               <div className="flex flex-row gap-2 justify-between mb-5">
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col grow gap-2">
                   <h1 className="text-[16px] text-[#155263] font-['Poppins']">
                     Name
                   </h1>
@@ -240,7 +248,7 @@ const PanelForPet = () => {
                     onChange={updateClientProfile}
                   />
                 </div>
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col grow gap-2">
                   {/* <h1 className="text-[16px] text-[#155263] font-['Poppins']">
                     Gender
                   </h1>
@@ -281,7 +289,7 @@ const PanelForPet = () => {
                     )}
                   /> */}
                 </div>
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col grow gap-2">
                   <h1 className="text-[16px] text-[#155263] font-['Poppins']">
                     Birthday
                   </h1>
@@ -291,6 +299,9 @@ const PanelForPet = () => {
                     name="birthday"
                     onChange={updateClientProfile}
                   />
+                  {/* <DesktopDatePicker defaultValue={dayjs('2022-04-17')} /> */}
+                  {/* <DatePicker label="Basic date picker" /> */}
+                  {/* <DatePicker onChange={onChangeDate} value={value} /> */}
                 </div>
               </div>
               <div className="flex flex-row justify-between gap-4 mb-5">
@@ -330,11 +341,11 @@ const PanelForPet = () => {
                   <h1 className="text-[16px] text-[#155263] font-['Poppins']">
                     ID Tag
                   </h1>
-                  <div className="flex gap-6 p-2 rounded-md">
+                  <div className="flex gap-6 border border-solid p-2 rounded-md">
                     {idTagNumber ? (
                       <TagCard tagNumber={idTagNumber} imgSrc={QR} />
                     ) : (
-                      <select name="" id="" className="w-32" onChange={(e) => handleTagSelect(e.target.value)}>
+                      <select name="" id="" className="w-32 border-none active:border-none" onChange={(e) => handleTagSelect(e.target.value)}>
                         <option></option>
                         {unassignedTags.length > 0 &&
                           unassignedTags.map((element) => {
