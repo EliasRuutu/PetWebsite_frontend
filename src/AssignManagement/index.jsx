@@ -15,7 +15,7 @@ const IdTags = () => {
   const [isAdded, setAddState] = React.useState(false);
 
   const [currentPage, setCurrentPage] = React.useState(1);
-  const [totalItems, setTotalItems] = React.useState();
+  const [totalItems, setTotalItems] = React.useState(0);
 
   const itemsPerPage = 8;
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -34,31 +34,32 @@ const IdTags = () => {
   }, []);
 
   React.useEffect(() => {
+    let newPetNumber = 1; let tagNumber;
     if (allTagsInfo.length > 0) {
+      console.log("allTagsInfo", allTagsInfo);
       setTotalItems(allTagsInfo.length);
+      newPetNumber = allTagsInfo[allTagsInfo.length-1].Tag_NO + 1;
+    } 
 
-      let petNumber = (allTagsInfo.length + 1).toString().padStart(7, "0");
-
-      setNewTagNumber(`PT${petNumber}`);
-    } else {
-      setNewTagNumber("PT0000001");
-    }
+    tagNumber = newPetNumber.toString().padStart(7, "0");
+    setNewTagNumber(`PT${tagNumber}`);
   }, [allTagsInfo]);
 
   const addTag = () => {
-    const body = { Tag_ID: newTagNumber };
+    const body = { Tag_ID: newTagNumber, Tag_NO: totalItems + 1 };
     const BaseUrl = process.env.REACT_APP_Pet_Backend_Url;
     // for(var i=0; i < 10; i++ ) {
     const response = axios
       .post(`${process.env.REACT_APP_Pet_Backend_Url}/add_tagid/`, body)
       .then((response) => {
         if (response.status == 200) {
-          console.log("response.data", response.data.tagInfo);
+
           setAllTagsInfo([...allTagsInfo, response.data.tagInfo]);
-          console.log("allTagsInfo", allTagsInfo);
+
         }
       });
-    // }
+    let page = Math.ceil(allTagsInfo.length/itemsPerPage);  
+    setCurrentPage(page);
   };
 
   const selectPage = (event, page) => {
