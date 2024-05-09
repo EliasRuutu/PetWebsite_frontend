@@ -16,6 +16,9 @@ export default function LeftSidePanel() {
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+  };
+  
+  const performNavigation = (newValue) => {
     if (newValue === 0) navigator("/idtags");
     if (newValue === 1) navigator("/assignedpetslist");
     if (newValue === 2) navigator("/balanceofclient");
@@ -42,17 +45,24 @@ export default function LeftSidePanel() {
         }}
       >
         <Tab
+          onClick={() => performNavigation(0)}
           icon={<TagIcon />}
           sx={{
               marginLeft: 4,
               justifyContent: "flex-start",
           }}
         />
-        <Tab icon={<PetFootPrintIcon />} sx={{
-              marginLeft: 4,
-              justifyContent: "flex-start",
+        <Tab 
+        onClick={() => performNavigation(1)}
+          
+          icon={<PetFootPrintIcon />} sx={{
+          marginLeft: 4,
+          justifyContent: "flex-start",
           }}/>
-        <Tab icon={<ClientIcon />} sx={{
+        <Tab 
+        onClick={() => performNavigation(2)}
+        
+        icon={<ClientIcon />} sx={{
               marginLeft: 4,
               justifyContent: "flex-start",
           }}/>
