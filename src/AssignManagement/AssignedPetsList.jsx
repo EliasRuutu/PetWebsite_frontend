@@ -25,6 +25,8 @@ const AssignedPetsList = () => {
   const [petsInfo, setPetsInfo] = React.useState([]);
   const [clientsInfo, setClientsInfo] = React.useState([]);
   const [seletedPetId, setSelectedPetId] = React.useState();
+  const [deleteSuccess, setDeleteSuccess] = React.useState(false);
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -54,6 +56,19 @@ const AssignedPetsList = () => {
       });
   }, []);
 
+  React.useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_Pet_Backend_Url}/getallpets`)
+      .then((response) => {
+        // setClientsInfo(response.data);
+        dispatch(loadAllPetsInfo(response.data));
+        setPetsInfo(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [deleteSuccess]);
+
   const allclients = useSelector((state) => state.client.allClientsInfo);
   React.useEffect(() => {
     console.log("allclients", allclients);
@@ -66,7 +81,15 @@ const AssignedPetsList = () => {
 
 
   const deleteHandle = () => {
-    alert(seletedPetId)
+    const endpoint = `${process.env.REACT_APP_Pet_Backend_Url}/deletepet/${seletedPetId}`;
+
+    axios.delete(endpoint).then((res) => {
+      if(res.status == 200) {
+        alert(res.data.message);
+        setDeleteSuccess(!deleteSuccess)
+        setOpenDelete(false);
+      }
+    }).catch();
   }
   const style = {
     backgroundImage: "url(assets/QR_Box.png)",
@@ -132,15 +155,7 @@ const AssignedPetsList = () => {
                 required
               />
             </div>
-            <div className="flex flex-row py-7 w-1/6 justify-end">
-              <button
-                type="submit"
-                class="flex text-sm items-center text-white bottom-2.5 font-['Poppins'] bg-[#F1B21B] rounded-md px-5 hover:bg-white hover:text-[#F1B21B] hover:border hover:border-[#F1B21B]"
-              >
-                AGREGAR
-              </button>
             </div>
-          </div>
         </div>
         <div className="">
           {clientsInfo[0] && clientsInfo[0].length > 0 ? (

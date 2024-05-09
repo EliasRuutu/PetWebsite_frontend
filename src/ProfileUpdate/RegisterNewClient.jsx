@@ -96,9 +96,9 @@ const RegisterNewClient = () => {
         })
         .then((response) => {
           const personalInfo = response.data;
+          alert("successfully registerd");
           navigator("/balanceofclient");
           // dispatch(uploadClientInfo(personalInfo))
-          alert("successfully registerd");
         })
         .catch((error) => {
           console.log(error);

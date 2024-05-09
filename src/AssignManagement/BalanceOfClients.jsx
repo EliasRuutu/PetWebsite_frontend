@@ -59,7 +59,6 @@ const BalanceOfClients = () => {
   const deleteHandle = () => {
     const endpoint = `${process.env.REACT_APP_Pet_Backend_Url}/deleteclient/${clientIdToDelete}`;
   //  const itemName = 'clientIdToDelete';
-  console.log(endpoint)
     axios.delete(endpoint).then((res) => {
       if(res.status == 200) {
         alert(res.data.message);
