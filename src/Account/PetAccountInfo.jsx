@@ -319,14 +319,14 @@ const PetInfo = () => {
               className="text-sm items-center text-[#3D9FAD] text-center w-36 h-11 bottom-2.5 font-['Poppins'] bg-[#FFFFFF] rounded-md px-5  border-2 border-[#3D9FAD] hover:bg-[#3D9FAD] hover:text-white"
               onClick={() => navigator("/assignedpetslist")}
             >
-              VOLVER
+              Back
             </button>
             <button
               type="submit"
               className="text-sm items-center text-[#3D9FAD] text-center w-36 h-11 bottom-2.5 font-['Poppins'] bg-[#FFFFFF] rounded-md px-5  border-2 border-[#3D9FAD] hover:bg-[#3D9FAD] hover:text-white"
               onClick={() => navigator("/")}
             >
-              EDITAR
+              Editor
             </button>
           </div>
         </div>
