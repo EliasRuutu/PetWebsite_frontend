@@ -95,13 +95,23 @@ const RegisterNewClient = () => {
           },
         })
         .then((response) => {
-          const personalInfo = response.data;
-          alert("successfully registerd");
-          navigator("/balanceofclient");
-          // dispatch(uploadClientInfo(personalInfo))
+
+          if(response.status === 200) {
+            const personalInfo = response.data;
+            alert("successfully registerd");
+            navigator("/balanceofclient");
+          }
+
         })
         .catch((error) => {
-          console.log(error);
+          console.log("error", error.response.status)
+          if(error.response.status === 404) {
+            alert("The user has already registered.")
+          } 
+
+          if(error.response.status === 500) {
+            alert("The network error.")
+          } 
         });
     }
   };

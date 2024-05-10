@@ -29,8 +29,11 @@ const PanelForPet = () => {
   const [file, setFile] = useState(DogAvatar);
   const [petsInfo, setPetsInfo] = React.useState([]);
   const [petsNumber, setPetsNumber] = React.useState();
-  const [idTagNumber, setIdTagNumber] = React.useState(urlParams.IdTagNumber);
+  const [idTagNumber, setIdTagNumber] = React.useState();
 
+  if(urlParams.IdTagNumber) {
+    setIdTagNumber(urlParams.IdTagNumber)
+  } 
   const [allTagsInfo, setAllTagsInfo] = React.useState([]);
   const [unassignedTags, setUnassignedTags] = React.useState([]);
 
@@ -101,6 +104,7 @@ const PanelForPet = () => {
 
   const handleTagSelect = (value) => {
     setNewPet({ ...newPet, idTag: value });
+    setIdTagNumber(value);
   }
   const updatePetProfile = () => {
 
@@ -113,8 +117,8 @@ const PanelForPet = () => {
       !newPet.petAvatar
     ) {
       alert("input all the data");
-      console.log(newPet.gender);
     } else {
+      console.log("idTagNumber", idTagNumber)
       const data = {
         Tag_ID: idTagNumber,
         Assigned_Client: urlParams.ProfileID,
@@ -136,18 +140,14 @@ const PanelForPet = () => {
         .catch((error) => {
           // Handle errors here
         });
-
         const formData = new FormData();
         formData.append("Profile_ID", urlParams.ProfileID);
         formData.append("name", newPet.name);
         formData.append("gender", newPet.gender);
         formData.append("birthday", newPet.birthday);
         formData.append("microchip", newPet.microchip);
-        formData.append("specialDCondition", newPet.specialDCondition);
-        
-        if(urlParams.IdTagNumber) formData.append("idTag", idTagNumber)
-        else formData.append("idTag", newPet.idTag);    
-       
+        formData.append("specialDCondition", newPet.specialDCondition);      
+        formData.append("idTag", idTagNumber)
         formData.append("petAvatar", newPet.petAvatar);
 
       axios
