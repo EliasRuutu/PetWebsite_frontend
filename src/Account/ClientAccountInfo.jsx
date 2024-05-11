@@ -75,7 +75,11 @@ const CustomerInfo = () => {
   }
 
   function goToEditPage() {
-    navigate(`/createpetaccount/${urlParam.ProfileID}`);
+    navigate(`/registerNewClient`);
+  }
+
+  function addPetPage() {
+    navigate(`/createpetaccount/${currentClient.Profile_ID}`);
   }
   return (
     <>
@@ -160,7 +164,7 @@ const CustomerInfo = () => {
                   {ownedPets.length > 0 ? (
                     ownedPets.map((element) => <DogCard key={element.id} name={element.name} avatarName={element.petAvatar} gender={element.gender}/>)
                   ) : null}
-                  <button className="view-detail items-center font-bold text-base text-[#FFFFFF] text-center w-36 h-11 bottom-2.5 font-['Poppins'] bg-[#F1B21B] rounded-md px-5   hover:bg-[#FFCA4A] hover:text-[#FFFFFF]" onClick={goToEditPage}>
+                  <button className="view-detail items-center font-bold text-base text-[#FFFFFF] text-center w-36 h-11 bottom-2.5 font-['Poppins'] bg-[#F1B21B] rounded-md px-5   hover:bg-[#FFCA4A] hover:text-[#FFFFFF]" onClick={addPetPage}>
                       ADD A PET
                   </button>
                 </div>

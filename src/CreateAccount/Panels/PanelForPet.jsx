@@ -29,28 +29,25 @@ const PanelForPet = () => {
   const [file, setFile] = useState(DogAvatar);
   const [petsInfo, setPetsInfo] = React.useState([]);
   const [petsNumber, setPetsNumber] = React.useState();
-  const [idTagNumber, setIdTagNumber] = React.useState();
+  const [idTagNumber, setIdTagNumber] = React.useState(urlParams.IdTagNumber);
 
-  if(urlParams.IdTagNumber) {
-    setIdTagNumber(urlParams.IdTagNumber)
-  } 
   const [allTagsInfo, setAllTagsInfo] = React.useState([]);
   const [unassignedTags, setUnassignedTags] = React.useState([]);
 
   const [value, onChangeDate] = React.useState(new Date());
 
-  React.useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_Pet_Backend_Url}/getallpets`)
-      .then((response) => {
-        // setClientsInfo(response.data);
-        dispatch(loadAllPetsInfo(response.data));
-        setPetsInfo(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  const [newPet, setNewPet] = React.useState({
+    name: "",
+    gender: "",
+    birthday: "",
+    microchip: "",
+    specialDCondition: "",
+    petAvatar: "",
+    idTag: "",
+  });
 
+  const [currentPet, setCurrnetPet] = React.useState();
+  React.useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_Pet_Backend_Url}/getAllIdTags/`)
       .then((response) => {
@@ -59,6 +56,17 @@ const PanelForPet = () => {
       .catch((error) => {});
   }, []);
 
+  React.useEffect(() => {
+    if(urlParams.IdTagNumber !== undefined ) {
+      axios
+        .get(`${process.env.REACT_APP_Pet_Backend_Url}/getPetByTag/${urlParams.IdTagNumber}`)
+        .then((response) => {
+          setCurrnetPet(response.data.pet);
+          // setFile
+        })
+        .catch((error) => {});
+    }
+  }, [urlParams.IdTagNumber])
   // React.useEffect(() => {
   //   let petNumber = (petsInfo.length + 1).toString().padStart(7, "0");
   //   setPetsNumber(petNumber);
@@ -76,24 +84,15 @@ const PanelForPet = () => {
 
   React.useEffect(() => {}, [unassignedTags]);
 
-  const [newPet, setNewPet] = React.useState({
-    name: "",
-    gender: "",
-    birthday: "",
-    microchip: "",
-    specialDCondition: "",
-    petAvatar: "",
-    idTag: "",
-  });
-
   function updateClientProfile(e) {
     setNewPet({ ...newPet, [e.target.name]: e.target.value });
+    setCurrnetPet({...currentPet, [e.target.name]: e.target.value })
   }
 
   function handleChange(e) {
-    console.log(e.target.files);
     setFile(URL.createObjectURL(e.target.files[0]));
     setNewPet({ ...newPet, petAvatar: e.target.files[0] });
+    setCurrnetPet({...currentPet, petAvatar: e.target.files[0] })
   }
   const handleUpload = (e) => {
     const input = document.createElement("input");
@@ -107,22 +106,26 @@ const PanelForPet = () => {
     setIdTagNumber(value);
   }
   const updatePetProfile = () => {
-
+    let sendPet = newPet;
+    console.log("before sendPet", sendPet);
+    if(currentPet) {
+      sendPet = currentPet;
+    }
+    console.log("after sendPet", sendPet);
     if (
-      newPet.name.trim() === "" ||
-      newPet.gender.trim() === "" ||
-      newPet.birthday.trim() === "" ||
-      newPet.microchip.trim() === "" ||
-      newPet.specialDCondition.trim() === "" ||
-      !newPet.petAvatar
+      sendPet.name.trim() === "" ||
+      sendPet.gender.trim() === "" ||
+      sendPet.birthday.trim() === "" ||
+      sendPet.microchip.trim() === "" ||
+      sendPet.specialDCondition.trim() === "" ||
+      !sendPet.petAvatar
     ) {
       alert("input all the data");
     } else {
-      console.log("idTagNumber", idTagNumber)
       const data = {
         Tag_ID: idTagNumber,
         Assigned_Client: urlParams.ProfileID,
-        Assigned_Pet: newPet.name
+        Assigned_Pet: sendPet.name
       };
 
       axios
@@ -142,14 +145,13 @@ const PanelForPet = () => {
         });
         const formData = new FormData();
         formData.append("Profile_ID", urlParams.ProfileID);
-        formData.append("name", newPet.name);
-        formData.append("gender", newPet.gender);
-        formData.append("birthday", newPet.birthday);
-        formData.append("microchip", newPet.microchip);
-        formData.append("specialDCondition", newPet.specialDCondition);      
+        formData.append("name", sendPet.name);
+        formData.append("gender", sendPet.gender);
+        formData.append("birthday", sendPet.birthday);
+        formData.append("microchip", sendPet.microchip);
+        formData.append("specialDCondition", sendPet.specialDCondition);      
         formData.append("idTag", idTagNumber)
-        formData.append("petAvatar", newPet.petAvatar);
-
+        formData.append("petAvatar", sendPet.petAvatar);
       axios
         .post(`${process.env.REACT_APP_Pet_Backend_Url}/pet`, formData, {
           headers: {
@@ -169,8 +171,8 @@ const PanelForPet = () => {
           // });
           // dispatch(uploadPetInfo(response.data));
           alert("successfully Pet registerd");
-          if(urlParams.IdTagNumber) navigator(`/assign/${urlParams.IdTagNumber}/${true}`)
-          else navigator(`/petaccountinfo/${urlParams.ProfileID}/${newPet.idTag}`);
+          // if(urlParams.IdTagNumber) navigator(`/assign/${urlParams.IdTagNumber}/${true}`)
+          navigator(`/petaccountinfo/${urlParams.ProfileID}/${idTagNumber}`);
         })
         .catch((error) => {
           console.log(error);
@@ -179,8 +181,8 @@ const PanelForPet = () => {
   };
 
   const backToClientInfo = () => {
-
-    navigator(`/petaccountinfo/${urlParams.ProfileID}/${newPet.idTag}`);
+    if(urlParams.IdTagNumber) navigator(`/petaccountinfo/${urlParams.ProfileID}/${urlParams.IdTagNumber}`);
+    else navigator(`/clientaccountinfo/${urlParams.ProfileID}`);
   };
   const select_items = ["Him", "Her"];
   return (
@@ -195,12 +197,29 @@ const PanelForPet = () => {
                   onChange={handleChange}
                   className="hidden "
                 />
+                {currentPet?.petAvatar && !newPet?.petAvatar ? (
+                <img
+                  src={`/assets/images/pets/${currentPet?.petAvatar}`}
+                  width={400}
+                  height={400}
+                  className="rounded-full"
+                />
+                ) 
+                : 
+                (
                 <img
                   src={file}
                   width={400}
                   height={400}
                   className="rounded-full"
                 />
+                )}
+                {/* <img
+                  src={file}
+                  width={400}
+                  height={400}
+                  className="rounded-full"
+                /> */}
                 <svg
                   width="40"
                   onClick={handleUpload}
@@ -243,6 +262,7 @@ const PanelForPet = () => {
                   </h1>
                   <Input
                     className="p-2 rounded-md bg-[#F8F8F8] indent-1.5"
+                    value={currentPet?.name || ''}
                     placeholder="Tommy"
                     name="name"
                     onChange={updateClientProfile}
@@ -263,6 +283,7 @@ const PanelForPet = () => {
                   </h1>
                   <select
                     className="p-2 rounded-md bg-[#F8F8F8]"
+                    value={currentPet?.gender || ''}
                     name="gender"
                     onChange={updateClientProfile}
                   >
@@ -295,6 +316,7 @@ const PanelForPet = () => {
                   </h1>
                   <Input
                     className="p-2 rounded-md bg-[#F8F8F8] indent-1.5"
+                    value={currentPet?.birthday || ''}
                     placeholder="5 años"
                     name="birthday"
                     onChange={updateClientProfile}
@@ -308,6 +330,7 @@ const PanelForPet = () => {
                 <TextField
                   id="outlined-multiline-static"
                   className="w-1/2"
+                  value={currentPet?.microchip || ''}
                   label="Microchip"
                   multiline
                   rows={4}
@@ -318,6 +341,7 @@ const PanelForPet = () => {
                 <TextField
                   id="outlined-multiline-static"
                   className="w-1/2"
+                  value={currentPet?.specialDCondition || ''}
                   label="Special Conditions"
                   multiline
                   rows={4}
