@@ -14,10 +14,17 @@ import User from "../assets/images/user.svg";
 import PasswordInput from "../components/passwordInput";
 import LeftSidePanel from "../components/LeftSidePanel1";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 const RegisterNewClient = () => {
+  
+  const urlParams = useParams();
+  
+  const navigator = useNavigate();
+  
+  const dispatch = useDispatch();
+
   const {
     register,
     handleSubmit,
@@ -41,15 +48,36 @@ const RegisterNewClient = () => {
     avatar: "",
   });
 
-  const navigator = useNavigate();
-
-  const dispatch = useDispatch();
+  const [clientID, setClientID] = useState(urlParams.ProfileID)
+  const [currentClient, setCurrentClient] = useState({
+    name: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    password: "",
+    address: "",
+    avatar: "",
+  })
 
   const clientPassword = useSelector((state) => state.client.clientPassword);
 
   useEffect(() => {
     setNewClient({ ...newClient, password: clientPassword });
   }, [clientPassword]);
+
+  useEffect(() => {
+    console.log(clientID)
+    axios.get(`${process.env.REACT_APP_Pet_Backend_Url}/getClientByProfileID/${clientID}`)
+    .then((res) => {
+      if(res.status == 200) {
+        console.log(res.data);
+        setCurrentClient(res.data);
+      }
+    })
+    .catch((error) => {
+
+    });
+  }, [clientID])
 
   function updateClientProfile(e) {
     setNewClient({ ...newClient, [e.target.name]: e.target.value });
@@ -189,7 +217,8 @@ const RegisterNewClient = () => {
                   placeholder="Alexandra"
                   name="name"
                   onChange={updateClientProfile}
-                  required
+                  value={currentClient.name || ''}
+                required
                 />
               </div>
               <div className="flex flex-col text-[#155263] gap-2">
@@ -202,7 +231,8 @@ const RegisterNewClient = () => {
                   name="email"
                   onChange={updateClientProfile}
                   required
-                />
+                  value={currentClient.email || ''}
+              />
               </div>
               <div className="flex flex-col text-[#155263] gap-2">
                 <h1 className="text-[16px] text-[#155263] font-['Poppins']">
@@ -293,7 +323,8 @@ const RegisterNewClient = () => {
                   name="phone"
                   onChange={updateClientProfile}
                   required
-                />
+                  value={currentClient.phone || ''}
+              />
 
                 {/* <PhoneInput
                   country={"us"}
@@ -337,7 +368,8 @@ const RegisterNewClient = () => {
               name="address"
               onChange={updateClientProfile}
               required
-            />
+              value={currentClient.address || ''}
+          />
           </div>
           <div className="flex flex-row">
             <div className="grid grid-cols-3 flex-wrap pt-2">
