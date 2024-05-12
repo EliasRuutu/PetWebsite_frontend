@@ -61,18 +61,13 @@ const PanelForPet = () => {
       axios
         .get(`${process.env.REACT_APP_Pet_Backend_Url}/getPetByTag/${urlParams.IdTagNumber}`)
         .then((response) => {
-          setCurrnetPet(response.data.pet);
+          const petInfo = response.data.pet; 
+          setCurrnetPet(petInfo);
           // setFile
         })
         .catch((error) => {});
     }
   }, [urlParams.IdTagNumber])
-  // React.useEffect(() => {
-  //   let petNumber = (petsInfo.length + 1).toString().padStart(7, "0");
-  //   setPetsNumber(petNumber);
-
-  //   setNewPet({ ...newPet, idTag: "PT" + petNumber });
-  // }, [petsInfo]);
 
   React.useEffect(() => {
     let unassignedList = [];
