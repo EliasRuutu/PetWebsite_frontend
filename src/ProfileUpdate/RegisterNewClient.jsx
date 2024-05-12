@@ -14,7 +14,7 @@ import User from "../assets/images/user.svg";
 import PasswordInput from "../components/passwordInput";
 import LeftSidePanel from "../components/LeftSidePanel1";
 import { toast } from "react-toastify";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 const RegisterNewClient = () => {
@@ -36,6 +36,13 @@ const RegisterNewClient = () => {
   const togglePasswordVisibility = () => {
     setIsPasswordVisible((prevState) => !prevState);
   };
+
+  
+  const urlParams = useParams();
+  
+  const navigator = useNavigate();
+  
+  const dispatch = useDispatch();
 
   const [file, setFile] = useState(User);
   const [newClient, setNewClient] = useState({
@@ -64,6 +71,20 @@ const RegisterNewClient = () => {
   useEffect(() => {
     setNewClient({ ...newClient, password: clientPassword });
   }, [clientPassword]);
+
+  useEffect(() => {
+    console.log(clientID)
+    axios.get(`${process.env.REACT_APP_Pet_Backend_Url}/getClientByProfileID/${clientID}`)
+    .then((res) => {
+      if(res.status == 200) {
+        console.log(res.data);
+        setCurrentClient(res.data);
+      }
+    })
+    .catch((error) => {
+
+    });
+  }, [clientID])
 
   useEffect(() => {
     console.log(clientID)
@@ -218,6 +239,7 @@ const RegisterNewClient = () => {
                   name="name"
                   onChange={updateClientProfile}
                   value={currentClient.name || ''}
+                value={currentClient.name || ''}
                 required
                 />
               </div>
@@ -232,6 +254,7 @@ const RegisterNewClient = () => {
                   onChange={updateClientProfile}
                   required
                   value={currentClient.email || ''}
+                value={currentClient.email || ''}
               />
               </div>
               <div className="flex flex-col text-[#155263] gap-2">
@@ -324,6 +347,7 @@ const RegisterNewClient = () => {
                   onChange={updateClientProfile}
                   required
                   value={currentClient.phone || ''}
+                value={currentClient.phone || ''}
               />
 
                 {/* <PhoneInput
@@ -369,6 +393,7 @@ const RegisterNewClient = () => {
               onChange={updateClientProfile}
               required
               value={currentClient.address || ''}
+            value={currentClient.address || ''}
           />
           </div>
           <div className="flex flex-row">
