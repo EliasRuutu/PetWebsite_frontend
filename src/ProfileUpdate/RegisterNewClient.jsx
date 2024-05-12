@@ -14,13 +14,20 @@ import User from "../assets/images/user.svg";
 import PasswordInput from "../components/passwordInput";
 import LeftSidePanel from "../components/LeftSidePanel1";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 // import {showToast} from "../utils/showToast";
 
 // import PhoneInput from "react-phone-input-2";
 // import "react-phone-input-2/lib/style.css";
 
 const RegisterNewClient = () => {
+  
+  const urlParams = useParams();
+  
+  const navigator = useNavigate();
+  
+  const dispatch = useDispatch();
+
   const [file, setFile] = useState(User);
   const [newClient, setNewClient] = useState({
     name: "",
@@ -32,15 +39,36 @@ const RegisterNewClient = () => {
     avatar: "",
   });
 
-  const navigator = useNavigate();
-
-  const dispatch = useDispatch();
+  const [clientID, setClientID] = useState(urlParams.ProfileID)
+  const [currentClient, setCurrentClient] = useState({
+    name: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    password: "",
+    address: "",
+    avatar: "",
+  })
 
   const clientPassword = useSelector((state) => state.client.clientPassword);
 
   useEffect(() => {
     setNewClient({ ...newClient, password: clientPassword });
   }, [clientPassword]);
+
+  useEffect(() => {
+    console.log(clientID)
+    axios.get(`${process.env.REACT_APP_Pet_Backend_Url}/getClientByProfileID/${clientID}`)
+    .then((res) => {
+      if(res.status == 200) {
+        console.log(res.data);
+        setCurrentClient(res.data);
+      }
+    })
+    .catch((error) => {
+
+    });
+  }, [clientID])
 
   function updateClientProfile(e) {
     setNewClient({ ...newClient, [e.target.name]: e.target.value });
@@ -171,6 +199,7 @@ const RegisterNewClient = () => {
                 placeholder="Alexandra"
                 name="name"
                 onChange={updateClientProfile}
+                value={currentClient.name || ''}
                 required
               />
             </div>
@@ -183,6 +212,7 @@ const RegisterNewClient = () => {
                 placeholder="alexandra@gmail.com"
                 name="email"
                 onChange={updateClientProfile}
+                value={currentClient.email || ''}
               />
             </div>
             <div className="flex flex-col text-[#155263] gap-2">
@@ -213,6 +243,7 @@ const RegisterNewClient = () => {
                 placeholder="+58 789-564-52"
                 name="phone"
                 onChange={updateClientProfile}
+                value={currentClient.phone || ''}
               />
 
               {/* <PhoneInput
@@ -237,6 +268,7 @@ const RegisterNewClient = () => {
             className="border rounded-md py-2"
             name="address"
             onChange={updateClientProfile}
+            value={currentClient.address || ''}
           />
         </div>
         <div className="flex flex-row">

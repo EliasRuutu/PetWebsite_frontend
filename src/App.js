@@ -54,7 +54,7 @@ function RouteWrapper() {
         <Route path="/assign/:IdTag/:success?" element={<AssignSetting />} />
         <Route path="balanceofclient" element={<BalanceOfClients />} />
         <Route path="assignedpetslist" element={<AssignedPetsList />} />
-        <Route path="registerNewClient" element={<RegisterNewClient />} />
+        <Route path="registerNewClient/:ProfileID?" element={<RegisterNewClient />} />
         <Route
           path="/clientaccountinfo/:ProfileID"
           element={<ClientAccount />}

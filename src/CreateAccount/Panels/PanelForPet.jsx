@@ -90,6 +90,7 @@ const PanelForPet = () => {
   }
 
   function handleChange(e) {
+    console.log(e.target.files[0]);
     setFile(URL.createObjectURL(e.target.files[0]));
     setNewPet({ ...newPet, petAvatar: e.target.files[0] });
     setCurrnetPet({...currentPet, petAvatar: e.target.files[0] })
@@ -197,14 +198,14 @@ const PanelForPet = () => {
                   onChange={handleChange}
                   className="hidden "
                 />
-                {currentPet?.petAvatar && !newPet?.petAvatar ? (
+                {/* {currentPet?.petAvatar && !newPet?.petAvatar ? ( */}
                 <img
-                  src={`/assets/images/pets/${currentPet?.petAvatar}`}
+                  src={file}
                   width={400}
                   height={400}
                   className="rounded-full"
                 />
-                ) 
+                {/* ) 
                 : 
                 (
                 <img
@@ -213,7 +214,7 @@ const PanelForPet = () => {
                   height={400}
                   className="rounded-full"
                 />
-                )}
+                )} */}
                 {/* <img
                   src={file}
                   width={400}

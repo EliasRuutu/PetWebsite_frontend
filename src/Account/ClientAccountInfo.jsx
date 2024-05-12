@@ -75,7 +75,7 @@ const CustomerInfo = () => {
   }
 
   function goToEditPage() {
-    navigate(`/registerNewClient`);
+    navigate(`/registerNewClient/${currentClient.Profile_ID}`);
   }
 
   function addPetPage() {
