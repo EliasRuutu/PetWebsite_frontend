@@ -1,8 +1,5 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { uploadClientInfo } from "../redux/client/clientSlice";
-
-import { Avatar } from "flowbite-react";
 import axios from "axios";
 
 import { Input } from "@material-tailwind/react";
@@ -11,41 +8,18 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 
 import User from "../assets/images/user.svg";
-import PasswordInput from "../components/passwordInput";
-import LeftSidePanel from "../components/LeftSidePanel1";
-import { toast } from "react-toastify";
-import { useNavigate, useParams, useParams } from "react-router-dom";
-import { useForm } from "react-hook-form";
+import { useNavigate, useParams } from "react-router-dom";
 
 const RegisterNewClient = () => {
-  
   const urlParams = useParams();
-  
-  const navigator = useNavigate();
-  
-  const dispatch = useDispatch();
 
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm();
-  const password = watch("password", "");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const togglePasswordVisibility = () => {
     setIsPasswordVisible((prevState) => !prevState);
   };
-
-  
-  const urlParams = useParams();
-  
   const navigator = useNavigate();
-  
-  const dispatch = useDispatch();
-
   const [file, setFile] = useState(User);
-  const [newClient, setNewClient] = useState({
+  const [clientInfo, setClientInfo] = useState({
     name: "",
     lastName: "",
     email: "",
@@ -54,61 +28,36 @@ const RegisterNewClient = () => {
     address: "",
     avatar: "",
   });
-
-  const [clientID, setClientID] = useState(urlParams.ProfileID)
-  const [currentClient, setCurrentClient] = useState({
-    name: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    password: "",
-    address: "",
-    avatar: "",
-  })
-
-  const clientPassword = useSelector((state) => state.client.clientPassword);
+  const [confirmPassword, setConfirmPassword] = useState();
+  const [clientID, setClientID] = useState("");
 
   useEffect(() => {
-    setNewClient({ ...newClient, password: clientPassword });
-  }, [clientPassword]);
-
-  useEffect(() => {
-    console.log(clientID)
-    axios.get(`${process.env.REACT_APP_Pet_Backend_Url}/getClientByProfileID/${clientID}`)
-    .then((res) => {
-      if(res.status == 200) {
-        console.log(res.data);
-        setCurrentClient(res.data);
-      }
-    })
-    .catch((error) => {
-
-    });
-  }, [clientID])
-
-  useEffect(() => {
-    console.log(clientID)
-    axios.get(`${process.env.REACT_APP_Pet_Backend_Url}/getClientByProfileID/${clientID}`)
-    .then((res) => {
-      if(res.status == 200) {
-        console.log(res.data);
-        setCurrentClient(res.data);
-      }
-    })
-    .catch((error) => {
-
-    });
-  }, [clientID])
+    if (urlParams.ProfileID != undefined) {
+      setClientID(urlParams.ProfileID);
+      axios
+        .get(
+          `${process.env.REACT_APP_Pet_Backend_Url}/getClientByProfileID/${urlParams.ProfileID}`
+        )
+        .then((res) => {
+          if (res.status == 200) {
+            console.log("status", res.status);
+            setClientInfo(res.data);
+          }
+        })
+        .catch((error) => {});
+    }
+  }, [urlParams.ProfileID]);
 
   function updateClientProfile(e) {
-    setNewClient({ ...newClient, [e.target.name]: e.target.value });
+    setClientInfo({ ...clientInfo, [e.target.name]: e.target.value });
   }
 
   function handleChange(e) {
     console.log(e.target.files[0]);
     setFile(URL.createObjectURL(e.target.files[0]));
-    setNewClient({ ...newClient, avatar: e.target.files[0] });
+    setClientInfo({ ...clientInfo, avatar: e.target.files[0] });
   }
+
   const handleUpload = (e) => {
     const input = document.createElement("input");
     input.type = "file";
@@ -117,35 +66,30 @@ const RegisterNewClient = () => {
   };
 
   const saveClientProfile = () => {
-    if (
-      newClient.name.trim() === "" ||
-      newClient.lastName.trim() === "" ||
-      newClient.email.trim() === "" ||
-      newClient.phone.trim() === "" ||
-      newClient.password.trim() === "" ||
-      newClient.address.trim() === ""
+    if (clientInfo.password !== confirmPassword) {
+      setClientInfo({ ...clientInfo, password: "" });
+      setConfirmPassword("");
+      alert("Password does not match");
+    } else if (
+      clientInfo.name.trim() === "" ||
+      clientInfo.lastName.trim() === "" ||
+      clientInfo.email.trim() === "" ||
+      clientInfo.phone.trim() === "" ||
+      clientInfo.password === "" ||
+      clientInfo.address.trim() === "" ||
+      !clientInfo.avatar
     ) {
-      // toast.success("Plese enter the data correctly", {
-      //   position: "bottom-right",
-      //   autoClose: 5000,
-      //   hideProgressBar: false,
-      //   closeOnClick: true,
-      //   pauseOnHover: true,
-      //   draggable: true,
-      //   progress: undefined,
-      //   theme: "light",
-      // });
-      // alert("enter the data");
-      return 0;
+      alert("Please fill out all required fields");
     } else {
       const formData = new FormData();
-      formData.append("name", newClient.name);
-      formData.append("lastName", newClient.lastName);
-      formData.append("email", newClient.email);
-      formData.append("phone", newClient.phone);
-      formData.append("password", newClient.password);
-      formData.append("address", newClient.address);
-      formData.append("avatar", newClient.avatar);
+      formData.append("name", clientInfo.name);
+      formData.append("lastName", clientInfo.lastName);
+      formData.append("email", clientInfo.email);
+      formData.append("phone", clientInfo.phone);
+      formData.append("password", clientInfo.password);
+      formData.append("address", clientInfo.address);
+      formData.append("avatar", clientInfo.avatar);
+      formData.append("clientID", clientID);
 
       axios
         .post(`${process.env.REACT_APP_Pet_Backend_Url}/register/`, formData, {
@@ -156,18 +100,23 @@ const RegisterNewClient = () => {
         .then((response) => {
           if (response.status === 200) {
             const personalInfo = response.data;
-            alert("successfully registerd");
+            alert("hee");
+            // Assuming navigator is a function, you might need to adjust this part
             navigator("/balanceofclient");
+          }
+
+          if (response.status === 202) {
+            alert("Successfully updated");
+            navigator(`/clientaccountinfo/${clientID}`);
           }
         })
         .catch((error) => {
-          console.log("error", error.response.status);
           if (error.response.status === 404) {
             alert("The user has already registered.");
-          }
-
-          if (error.response.status === 500) {
-            alert("The network error.");
+          } else if (error.response.status === 500) {
+            alert("Network error occurred.");
+          } else {
+            console.log("Error:", error);
           }
         });
     }
@@ -182,6 +131,10 @@ const RegisterNewClient = () => {
     // Handle form submission
   };
 
+  const goToBack = () => {
+    if (clientID !== "") navigator(`/clientaccountinfo/${clientID}`);
+    else navigator(`/balanceofclient/`);
+  };
   return (
     <div className="flex w-5/6 h-screen  flex-col border-t-2 mb-3 bg-[#EBFCFF] px-[250px] pt-[30px]">
       <div className="flex mb-[10px]">
@@ -189,7 +142,7 @@ const RegisterNewClient = () => {
           New Client
         </h1>
       </div>
-      <form onSubmit={handleSubmit(onSubmit)} onKeyDown={handleKeyDown}>
+      <form>
         <div className="flex flex-col gap-6 bg-white border rounded-3xl shadow-[0px_2px_0px_1px_rgba(0,0,0,0.3)] border-none p-[40px]">
           <div className="flex flex-row gap-4 justify-between">
             <div className="flex w-1/4 overflow-hidden h-[250px] relative">
@@ -238,9 +191,8 @@ const RegisterNewClient = () => {
                   placeholder="Alexandra"
                   name="name"
                   onChange={updateClientProfile}
-                  value={currentClient.name || ''}
-                value={currentClient.name || ''}
-                required
+                  value={clientInfo?.name || ""}
+                  required
                 />
               </div>
               <div className="flex flex-col text-[#155263] gap-2">
@@ -253,9 +205,9 @@ const RegisterNewClient = () => {
                   name="email"
                   onChange={updateClientProfile}
                   required
-                  value={currentClient.email || ''}
-                value={currentClient.email || ''}
-              />
+                  value={clientInfo?.email || ""}
+                  autoComplete="off"
+                />
               </div>
               <div className="flex flex-col text-[#155263] gap-2">
                 <h1 className="text-[16px] text-[#155263] font-['Poppins']">
@@ -264,14 +216,13 @@ const RegisterNewClient = () => {
                 {/* <PasswordInput /> */}
                 <div className="relative">
                   <Input
-                    {...register("password", {
-                      required: true,
-                      minLength: 5,
-                    })}
                     type={isPasswordVisible ? "text" : "password"}
+                    name="password"
                     placeholder="Password"
-                    // onChange={updateClientProfile}
+                    onChange={updateClientProfile}
+                    value={clientInfo?.password || ""}
                     required
+                    autoComplete="new-password"
                   />
                   <button
                     className="absolute inset-y-0 right-0 flex items-center px-4 text-gray-600"
@@ -315,12 +266,6 @@ const RegisterNewClient = () => {
                     )}
                   </button>
                 </div>
-                {errors?.password?.type === "required" && (
-                  <p>This field is required</p>
-                )}
-                {errors?.password?.type === "minLength" && (
-                  <p>Password must be at least 5 characters.</p>
-                )}
               </div>
             </div>
             <div className="flex flex-col gap-3 w-1/3">
@@ -333,6 +278,7 @@ const RegisterNewClient = () => {
                   placeholder="Gomez"
                   name="lastName"
                   onChange={updateClientProfile}
+                  value={clientInfo?.lastName || ""}
                   required
                 />
               </div>
@@ -346,40 +292,20 @@ const RegisterNewClient = () => {
                   name="phone"
                   onChange={updateClientProfile}
                   required
-                  value={currentClient.phone || ''}
-                value={currentClient.phone || ''}
-              />
-
-                {/* <PhoneInput
-                  country={"us"}
-                  value={12345613}
-                  // onChange={handleOnChange}
-                /> */}
+                  value={clientInfo?.phone || ""}
+                />
               </div>
               <div className="flex flex-col text-[#155263] gap-2">
                 <h1 className="text-[16px] text-[#155263] font-['Poppins']">
                   Confirm Password
                 </h1>
-                {/* <PasswordInput /> */}
                 <Input
-                  {...register("confirmPassword", {
-                    validate: (value) => {
-                      const match = value === password;
-                      if (!match) {
-                        return "Password do not match";
-                      } else {
-                        setNewClient({ ...newClient, password: value });
-                      }
-                    },
-                  })}
                   type="password"
                   placeholder="Confirm Password"
-                  // onChange={updateClientProfile}
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
                   required
                 />
-                {errors?.confirmPassword && (
-                  <p>{errors.confirmPassword.message}</p>
-                )}
               </div>
             </div>
           </div>
@@ -392,13 +318,11 @@ const RegisterNewClient = () => {
               name="address"
               onChange={updateClientProfile}
               required
-              value={currentClient.address || ''}
-            value={currentClient.address || ''}
-          />
+              value={clientInfo?.address || ""}
+            />
           </div>
           <div className="flex flex-row">
             <div className="grid grid-cols-3 flex-wrap pt-2">
-              {/* <CheckboxHorizontalListGroup /> */}
               <FormControlLabel
                 control={<Checkbox defaultChecked />}
                 label="Address"
@@ -411,7 +335,6 @@ const RegisterNewClient = () => {
                 control={<Checkbox defaultChecked />}
                 label="Phone"
               />
-
               <FormControlLabel
                 control={<Checkbox defaultChecked />}
                 label="E-mail"
@@ -421,12 +344,12 @@ const RegisterNewClient = () => {
           <div className="flex flex-row gap-4 justify-end">
             <button
               className=" font-['Poppins'] w-[200px] h-[40px] ml-[6px] font-bold bg-white rounded-md text-[#155263] border border-[#155263] hover:bg-[#155263] hover:text-white transition-colors duration-300 ease-in-out"
-              onClick={() => navigator("/balanceofclient")}
+              onClick={goToBack}
             >
               Back
             </button>
             <button
-              type="submit"
+              type="button"
               className="w-[200px] font-['Poppins'] h-[40px] ml-[6px] font-bold bg-[#F1B21B] hover:bg-white hover:text-[#F1B21B] hover:border hover:border-[#F1B21B] rounded-md text-white transition-colors duration-300 ease-in-out"
               onClick={saveClientProfile}
             >

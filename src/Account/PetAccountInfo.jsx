@@ -118,6 +118,7 @@ const PetInfo = () => {
       setNotifyUpload(true);
     }
   }
+
   const handleUpload = (e) => {
     const input = document.createElement("input");
     input.type = "file";
@@ -313,7 +314,6 @@ const PetInfo = () => {
           <div className="flex flex-row justify-end mt-10 text-base gap-4">
             {/* <MoveBtn name="VOLVER" direction="Back"/>
         <MoveBtn name="EDITAR" direction="Next"/> */}
-
             <button
               type="submit"
               className="text-sm items-center text-[#3D9FAD] text-center w-36 h-11 bottom-2.5 font-['Poppins'] bg-[#FFFFFF] rounded-md px-5  border-2 border-[#3D9FAD] hover:bg-[#3D9FAD] hover:text-white"
@@ -324,7 +324,7 @@ const PetInfo = () => {
             <button
               type="submit"
               className="text-sm items-center text-[#3D9FAD] text-center w-36 h-11 bottom-2.5 font-['Poppins'] bg-[#FFFFFF] rounded-md px-5  border-2 border-[#3D9FAD] hover:bg-[#3D9FAD] hover:text-white"
-              onClick={() => navigator(`/createpetaccount/${currentClient.Profile_ID}/${idTag}`)}
+              onClick={() => navigator(`/createpetaccount/${profileID}/${idTag}`)}
             >
               Editor
             </button>
