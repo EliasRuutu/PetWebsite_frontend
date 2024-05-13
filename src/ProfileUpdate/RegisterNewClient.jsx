@@ -100,7 +100,6 @@ const RegisterNewClient = () => {
         .then((response) => {
           if (response.status === 200) {
             const personalInfo = response.data;
-            alert("hee");
             // Assuming navigator is a function, you might need to adjust this part
             navigator("/balanceofclient");
           }
@@ -343,6 +342,7 @@ const RegisterNewClient = () => {
           </div>
           <div className="flex flex-row gap-4 justify-end">
             <button
+              type="button"
               className=" font-['Poppins'] w-[200px] h-[40px] ml-[6px] font-bold bg-white rounded-md text-[#155263] border border-[#155263] hover:bg-[#155263] hover:text-white transition-colors duration-300 ease-in-out"
               onClick={goToBack}
             >

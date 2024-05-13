@@ -1,41 +1,24 @@
 import * as React from "react";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import dayjs from "dayjs";
-import { toast } from "react-toastify";
 
 import { Input } from "@material-tailwind/react";
 import TextField from "@mui/material/TextField";
-import Autocomplete from "@mui/material/Autocomplete";
-// import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
-// import DatePicker from 'react-date-picker';
 
 import TagCard from "../../components/tagCard";
 import DogAvatar from "../../assets/images/avatars/dog-avatar.png";
 import QR from "../../assets/images/QR.svg";
-import { loadAllPetsInfo, uploadPetInfo } from "../../redux/client/clientSlice";
 
 const PanelForPet = () => {
   const navigator = useNavigate();
 
   const urlParams = useParams();
 
-  const dispatch = useDispatch();
-
   const [file, setFile] = useState(DogAvatar);
-  const [petsInfo, setPetsInfo] = React.useState([]);
-  const [petsNumber, setPetsNumber] = React.useState();
   const [idTagNumber, setIdTagNumber] = React.useState(urlParams.IdTagNumber);
-
   const [allTagsInfo, setAllTagsInfo] = React.useState([]);
   const [unassignedTags, setUnassignedTags] = React.useState([]);
-
-  const [value, onChangeDate] = React.useState(new Date());
-
   const [newPet, setNewPet] = React.useState({
     name: "",
     gender: "",
@@ -128,17 +111,12 @@ const PanelForPet = () => {
       axios
         .put(`${process.env.REACT_APP_Pet_Backend_Url}/assign`, data)
         .then((res) => {
-          // Handle the response data here
           if (res.status == 200) {
-            // alert(res.data.message);
-            // const assignedtagInfo = res.data.tagInfo;
-            // setIdTagInfo(assignedtagInfo);
-            // setAssignedClientID(assignedtagInfo.Assigned_Client);
+            
           }
-          // setAssignMark(true);
         })
         .catch((error) => {
-          // Handle errors here
+
         });
       const formData = new FormData();
       formData.append("Profile_ID", urlParams.ProfileID);
@@ -156,19 +134,7 @@ const PanelForPet = () => {
           },
         })
         .then((response) => {
-          // toast.error("Plese enter the data correctly", {
-          //   position: "bottom-right",
-          //   autoClose: 1,
-          //   hideProgressBar: false,
-          //   closeOnClick: true,
-          //   pauseOnHover: true,
-          //   draggable: true,
-          //   progress: undefined,
-          //   theme: "light",
-          // });
-          // dispatch(uploadPetInfo(response.data));
           alert("successfully Pet registerd");
-          // if(urlParams.IdTagNumber) navigator(`/assign/${urlParams.IdTagNumber}/${true}`)
           navigator(`/petaccountinfo/${urlParams.ProfileID}/${idTagNumber}`);
         })
         .catch((error) => {
@@ -184,7 +150,6 @@ const PanelForPet = () => {
       );
     else navigator(`/clientaccountinfo/${urlParams.ProfileID}`);
   };
-  const select_items = ["Him", "Her"];
   return (
     <>
       <div className="flex flex-row items-center justify-center bg-[#FFFFFF] h-full p-6 items-center rounded-0">
@@ -196,32 +161,21 @@ const PanelForPet = () => {
                   <input
                     type="file"
                     onChange={handleChange}
+                    name="file"
                     className="hidden "
-                  />
-                  {/* {currentPet?.petAvatar && !newPet?.petAvatar ? ( */}
-                  <img
-                    src={file}
-                    width={400}
-                    height={400}
-                    className="rounded-full"
                     required
                   />
-                  {/* ) 
-                : 
-                (
-                <img
-                  src={file}
-                  width={400}
-                  height={400}
-                  className="rounded-full"
-                />
-                )} */}
-                  {/* <img
-                  src={file}
-                  width={400}
-                  height={400}
-                  className="rounded-full"
-                /> */}
+                  {file ? (
+                    <img
+                      src={file}
+                      width={400}
+                      height={400}
+                      className="rounded-full"
+                      alt="Uploaded preview"
+                    />
+                  ) : (
+                    <p>Please upload a file to view the preview.</p>
+                  )}
                   <svg
                     width="40"
                     onClick={handleUpload}
@@ -272,15 +226,6 @@ const PanelForPet = () => {
                     />
                   </div>
                   <div className="flex flex-col grow gap-2">
-                    {/* <h1 className="text-[16px] text-[#155263] font-['Poppins']">
-                    Gender
-                  </h1>
-                  <Input
-                    className="p-2 rounded-md bg-[#F8F8F8] indent-1.5"
-                    placeholder="Macho"
-                    name="gender"
-                    onChange={updateClientProfile}
-                  /> */}
                     <h1 className="text-[16px] text-[#155263] font-['Poppins']">
                       Gender
                     </h1>
@@ -295,24 +240,6 @@ const PanelForPet = () => {
                       <option>Him</option>
                       <option>Her</option>
                     </select>
-                    {/* <Autocomplete
-                    disablePortal
-                    id="combo-box-demo"
-                    options={select_items}
-                    sx={{ width: 150}}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        className="p-2 rounded-md bg-[#F8F8F8]"
-                        label=""
-                        onChange={updateClientProfile}
-                        InputProps={{
-                          ...params.InputProps,
-                          style: { height: '40px', textAlign: "center" } // Custom styles for the input
-                        }}
-                      />
-                    )}
-                  /> */}
                   </div>
                   <div className="flex flex-col grow gap-2">
                     <h1 className="text-[16px] text-[#155263] font-['Poppins']">
@@ -326,9 +253,6 @@ const PanelForPet = () => {
                       onChange={updateClientProfile}
                       required
                     />
-                    {/* <DesktopDatePicker defaultValue={dayjs('2022-04-17')} /> */}
-                    {/* <DatePicker label="Basic date picker" /> */}
-                    {/* <DatePicker onChange={onChangeDate} value={value} /> */}
                   </div>
                 </div>
                 <div className="flex flex-row justify-between gap-4 mb-5">
@@ -358,16 +282,6 @@ const PanelForPet = () => {
                   />
                 </div>
                 <div className="flex flex-row">
-                  {/* <Autocomplete
-                disablePortal
-                id="combo-box-demo"
-                options={select_items}
-                sx={{ width: 300 }}
-                renderInput={(params) => (
-                  <TextField {...params} label="Id tag" 
-                  onChange = {  updateClientProfile }/>
-                )}
-              /> */}
                   <div className="flex flex-col gap-2">
                     <h1 className="text-[16px] text-[#155263] font-['Poppins']">
                       ID Tag
