@@ -9,9 +9,8 @@ import {
 import axios from "axios";
 
 import ClientContactCard from "../components/ClientContactCard.jsx";
-import "../assets/css/component.css";
 import QRcodeGenerater from "../components/QRgenerator";
-
+import "../assets/css/component.css";
 import petImage from "../assets/images/avatars/Rectangle 4290.png"; // Import the image file
 import uploadQR from "../assets/images/backgrounds/uploadQR.png";
 import LeftSidePanel from "../components/LeftSidePanel1.jsx";
@@ -253,13 +252,13 @@ const PetInfo = () => {
                   {idTag && currentPet ? (
                     <>
                       <div className="flex flex-row w-full h-4/5 mt-10">
-                        <div className="w-1/5">
+                        <div className="w-1/5 ">
                           <img
+                            className="w-30 h-30 border-black rounded-lg border-1"
                             src={`/assets/images/pets/${
                               currentPet && currentPet.petAvatar
                             }`}
                             alt=""
-                            className=""
                           />
                         </div>
                         <div className="w-4/5 ml-10">

@@ -11,7 +11,7 @@ const DogCard = (props) => {
       <div className="flex flex-col justify-center rounded-lg items-center h-44 w-40 bg-[#EBFCFF] mx-5">
         <img className="object-cover w-28 h-28" src={`/assets/images/pets/${props.avatarName}`} ></img>
         <div className="flex flex-row justify-between items-center gap-8 text-left">
-          <div class="name-dog">
+          <div className="name-dog">
             <span className="text-md font-bold text-[#155263]"> {props.name} </span> <br />
             <span className="text-[#3D9FAD]"> {props.gender} </span>
           </div>

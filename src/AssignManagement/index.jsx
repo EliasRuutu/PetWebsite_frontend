@@ -110,7 +110,7 @@ const IdTags = () => {
             <div className="flex flex-row py-7 w-1/6 justify-end">
               <button
                 type="submit"
-                class="flex text-sm items-center text-white bottom-2.5 font-['Poppins'] bg-[#F1B21B] rounded-md px-2 hover:bg-white hover:text-[#F1B21B] hover:border hover:border-[#F1B21B]"
+                className="flex text-sm items-center text-white bottom-2.5 font-['Poppins'] bg-[#F1B21B] rounded-md px-2 hover:bg-white hover:text-[#F1B21B] hover:border hover:border-[#F1B21B]"
                 onClick={addTag}
               >
                 ADD ID TAGS

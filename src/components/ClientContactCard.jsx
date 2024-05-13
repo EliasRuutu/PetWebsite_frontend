@@ -17,8 +17,8 @@ const ClientContactCard = (props) => {
   return (
     <>
       <div className="flex flex-row w-full h-24 px-4 py-3 bg-[#EBFCFF] hover:cursor-pointer" onClick={showClientInfo}>
-        <div className="w-20 bg-cover h-20 bg-cover">
-          <img src={`/assets/images/clients/${currentInfo && currentInfo.avatarName}`} alt="" />
+        <div className="bg-cover">
+          <img className="w-20 h-20 border-1 rounded-lg" src={`/assets/images/clients/${currentInfo && currentInfo.avatarName}`} alt="" />
         </div>
         <div className="w-2/3 ml-5">
           <p className="client-name title-info">{currentInfo && currentInfo.name}</p>

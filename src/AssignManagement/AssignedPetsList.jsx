@@ -24,14 +24,14 @@ const AssignedPetsList = () => {
   const [open_delete, setOpenDelete] = React.useState(false);
   const [petsInfo, setPetsInfo] = React.useState([]);
   const [clientsInfo, setClientsInfo] = React.useState([]);
-  const [seletedPetId, setSelectedPetId] = React.useState();
+  const [seletedPet, setSelectedPet] = React.useState();
   const [deleteSuccess, setDeleteSuccess] = React.useState(false);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const openModal = (id) => {
-    setSelectedPetId(id);
+  const openModal = (pet) => {
+    setSelectedPet(pet);
     setOpenDelete(true);
   }
   React.useEffect(() => {
@@ -56,18 +56,18 @@ const AssignedPetsList = () => {
       });
   }, []);
 
-  React.useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_Pet_Backend_Url}/getallpets`)
-      .then((response) => {
-        // setClientsInfo(response.data);
-        dispatch(loadAllPetsInfo(response.data));
-        setPetsInfo(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, [deleteSuccess]);
+  // React.useEffect(() => {
+  //   axios
+  //     .get(`${process.env.REACT_APP_Pet_Backend_Url}/getallpets`)
+  //     .then((response) => {
+  //       // setClientsInfo(response.data);
+  //       dispatch(loadAllPetsInfo(response.data));
+  //       setPetsInfo(response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // }, [deleteSuccess]);
 
   const allclients = useSelector((state) => state.client.allClientsInfo);
   React.useEffect(() => {
@@ -81,12 +81,16 @@ const AssignedPetsList = () => {
 
 
   const deleteHandle = () => {
-    const endpoint = `${process.env.REACT_APP_Pet_Backend_Url}/deletepet/${seletedPetId}`;
+
+    console.log(seletedPet.Profile_ID);
+    const endpoint = `${process.env.REACT_APP_Pet_Backend_Url}/deletepet/${seletedPet.Profile_ID}/${seletedPet.idTag}`;
 
     axios.delete(endpoint).then((res) => {
       if(res.status == 200) {
         alert(res.data.message);
-        setDeleteSuccess(!deleteSuccess)
+        // setDeleteSuccess(!deleteSuccess)
+    const endpoint = `${process.env.REACT_APP_Pet_Backend_Url}/deletepet/${seletedPet.Profile_ID}`;
+        setPetsInfo((prev) => prev.filter(one => one.Profile_ID === seletedPet.Profile_ID));
         setOpenDelete(false);
       }
     }).catch();
@@ -161,7 +165,7 @@ const AssignedPetsList = () => {
           {clientsInfo[0] && clientsInfo[0].length > 0 ? (
             petsInfo.map((pet) => (
               <PetsCard
-                key={pet.id}
+                key={pet.idTag}
                 petsInfo={pet}
                 handleOpen={openModal}
                 clientsInfo={clientsInfo}

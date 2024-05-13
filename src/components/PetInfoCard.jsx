@@ -81,7 +81,7 @@ const PetInfoCard = (props) => {
           >
             View Details
           </button>
-          <button className="delete-card text-sm items-center text-[#155263] text-center w-36 h-11 bottom-2.5 font-['Poppins'] bg-[#FFFFFF] rounded-md px-5  border-2 border-[#155263] hover:bg-[#155263] hover:text-[#FFFFFF]" onClick={() => {props.handleOpen(petOwnerID)}}>
+          <button className="delete-card text-sm items-center text-[#155263] text-center w-36 h-11 bottom-2.5 font-['Poppins'] bg-[#FFFFFF] rounded-md px-5  border-2 border-[#155263] hover:bg-[#155263] hover:text-[#FFFFFF]" onClick={() => {props.handleOpen(petInfo)}}>
             Delete
           </button>
         </div>

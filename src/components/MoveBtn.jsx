@@ -19,7 +19,7 @@ const MoveBtn = (props) => {
     )}
     {/* <button
           type="submit"
-          class="text-sm items-center text-black text-center w-36 h-11 bottom-2.5 font-['Poppins'] bg-[#FFFFFF] rounded-md px-5  border-2 border-[#155263]"
+          className="text-sm items-center text-black text-center w-36 h-11 bottom-2.5 font-['Poppins'] bg-[#FFFFFF] rounded-md px-5  border-2 border-[#155263]"
         >
           VOLVER
         </button> */}

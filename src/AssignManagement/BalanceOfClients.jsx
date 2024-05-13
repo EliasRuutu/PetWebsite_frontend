@@ -15,7 +15,7 @@ const BalanceOfClients = () => {
 
   const [open, setOpen] = React.useState(false);
   const [clientsInfo, setClientsInfo] = React.useState([]);
-  const [clientIdToDelete, setClientIdToDelete] = React.useState("");
+  const [clientIdToDelete, setClientIdToDelete] = React.useState();
   const [deleteSuccess, setDeleteSuccess] = React.useState(false);
   const openDeleteModal = (id) =>{
     setOpen(true);
@@ -34,16 +34,19 @@ const BalanceOfClients = () => {
       .catch((error) => {});
   }, []);
 
-  React.useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_Pet_Backend_Url}/getAllClientInfos/`)
-      .then((response) => {
-        // setClientsInfo(response.data);
-        dispatch(loadAllClientsInfo(response.data));
-        setClientsInfo(response.data);
-      })
-      .catch((error) => {});
-  }, [deleteSuccess]);
+  // React.useEffect(() => {
+  //   if(deleteSuccess === true) {
+  //     axios
+  //       .get(`${process.env.REACT_APP_Pet_Backend_Url}/getAllClientInfos/`)
+  //       .then((response) => {
+  //         // setClientsInfo(response.data);
+  //         // dispatch(loadAllClientsInfo(response.data));
+  //         // setClientsInfo(null);
+  //         setClientsInfo(response.data);
+  //       })
+  //       .catch((error) => {});
+  //   }
+  // }, [deleteSuccess]);
 
   const style = {
     position: "absolute",
@@ -61,9 +64,8 @@ const BalanceOfClients = () => {
   //  const itemName = 'clientIdToDelete';
     axios.delete(endpoint).then((res) => {
       console.log("res--------->", res);
-      if(res.status == 200) {
-        alert(res.data.message);
-        setDeleteSuccess(!deleteSuccess)
+      if(res.status === 200) {
+        setClientsInfo(prev => prev.filter(one => one.Profile_ID !== clientIdToDelete))
       }
     }).catch((error) => {
       console.log("error---->", error)
@@ -71,8 +73,6 @@ const BalanceOfClients = () => {
     setOpen(false);
   }
   return (
-    // <div className="w-full flex top-10">
-    //   <LeftSidePanel />
       <div className="flex w-5/6 h-screen  flex-col border-t-2 px-20 mb-3">
         <div className="flex flex-row">
           <h1 className="title-info font-['Poppins'] py-7 text-[#155263] text-2xl font-bold w-1/2">
@@ -114,7 +114,7 @@ const BalanceOfClients = () => {
             <div className="flex flex-row py-7 w-1/6 justify-end">
               <button
                 type="submit"
-                class="flex font-bold text-sm items-center text-white bottom-2.5 font-['Poppins'] bg-[#F1B21B] rounded-md px-5 hover:bg-white hover:text-[#F1B21B] hover:border hover:border-[#F1B21B]"
+                className="flex font-bold text-sm items-center text-white bottom-2.5 font-['Poppins'] bg-[#F1B21B] rounded-md px-5 hover:bg-white hover:text-[#F1B21B] hover:border hover:border-[#F1B21B]"
                 onClick={() => navigator("/registerNewClient")}
               >
                 New Client
@@ -126,7 +126,7 @@ const BalanceOfClients = () => {
           {clientsInfo && clientsInfo.length > 0 ? (
             clientsInfo.map((client) => (
               <ClientCard1
-                key={client.id}
+                key={client.Profile_ID}
                 deleteInfo={openDeleteModal}
                 clientInfo={client}
               />

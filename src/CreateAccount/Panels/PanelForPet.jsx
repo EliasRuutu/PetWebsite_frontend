@@ -5,6 +5,7 @@ import axios from "axios";
 
 import { Input } from "@material-tailwind/react";
 import TextField from "@mui/material/TextField";
+import Resizer from "react-image-file-resizer";
 
 import TagCard from "../../components/tagCard";
 import DogAvatar from "../../assets/images/avatars/dog-avatar.png";
@@ -56,7 +57,7 @@ const PanelForPet = () => {
   React.useEffect(() => {
     let unassignedList = [];
     allTagsInfo.forEach((tag) => {
-      if (tag.IsAssigned == false) unassignedList.push(tag);
+      if (tag.IsAssigned === false) unassignedList.push(tag);
     });
     setUnassignedTags(unassignedList);
   }, [allTagsInfo]);
@@ -73,6 +74,7 @@ const PanelForPet = () => {
     setFile(URL.createObjectURL(e.target.files[0]));
     setNewPet({ ...newPet, petAvatar: e.target.files[0] });
     setCurrnetPet({ ...currentPet, petAvatar: e.target.files[0] });
+    
   }
   const handleUpload = (e) => {
     const input = document.createElement("input");
@@ -157,7 +159,7 @@ const PanelForPet = () => {
           <form>
             <div className="flex flex-row gap-4">
               <div className="flex flex-row items-start w-1/5 overflow-hidden">
-                <div className="relative p-4">
+                <div className="relative p-4 bg-cover">
                   <input
                     type="file"
                     onChange={handleChange}
