@@ -51,7 +51,7 @@ function RouteWrapper() {
         <Route path="/" element={<SignInForm />} />
         <Route path="/signup" element={<SignUpForm />} />
         <Route path="/idtags" element={<IdTagsList />} />
-        <Route path="/assign/:IdTag/:success?" element={<AssignSetting />} />
+        <Route path="/assign/:IdTag/:clientid?" element={<AssignSetting />} />
         <Route path="balanceofclient" element={<BalanceOfClients />} />
         <Route path="assignedpetslist" element={<AssignedPetsList />} />
         <Route path="registerNewClient/:ProfileID?" element={<RegisterNewClient />} />

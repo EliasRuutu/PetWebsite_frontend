@@ -162,7 +162,7 @@ const CustomerInfo = () => {
                 <hr />
                 <div className="flex flex-row items-center flex-wrap p-4">
                   {ownedPets.length > 0 ? (
-                    ownedPets.map((element) => <DogCard key={element.id} name={element.name} avatarName={element.petAvatar} gender={element.gender}/>)
+                    ownedPets.map((element) => <DogCard key={element._id} name={element.name} avatarName={element.petAvatar} gender={element.gender}/>)
                   ) : null}
                   <button className="view-detail items-center font-bold text-base text-[#FFFFFF] text-center w-36 h-11 bottom-2.5 font-['Poppins'] bg-[#F1B21B] rounded-md px-5   hover:bg-[#FFCA4A] hover:text-[#FFFFFF]" onClick={addPetPage}>
                       ADD A PET

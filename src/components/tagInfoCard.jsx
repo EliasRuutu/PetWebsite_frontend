@@ -34,9 +34,13 @@ const TagInfoCard = (props) => {
                   Details
                 </button>
               ) : (
+                // <button
+                //   className="font-['Poppins'] text-[#3D9FAD] border border-[#3D9FAD] hover:bg-[#3D9FAD] hover:text-white py-1 px-6 rounded-md"
+                //   onClick={() => navigator(`/petaccountinfo/${props.assigned_Client}/${props.tagNumber}`)}
+                // >
                 <button
                   className="font-['Poppins'] text-[#3D9FAD] border border-[#3D9FAD] hover:bg-[#3D9FAD] hover:text-white py-1 px-6 rounded-md"
-                  onClick={() => navigator(`/petaccountinfo/${props.assigned_Client}/${props.tagNumber}`)}
+                  onClick={() => navigator(`/assign/${props.tagNumber}/${props.assigned_Client}`)}
                 >
                   Details
                 </button>
