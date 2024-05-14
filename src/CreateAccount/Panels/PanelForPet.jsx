@@ -5,9 +5,8 @@ import axios from "axios";
 
 import { Input } from "@material-tailwind/react";
 import TextField from "@mui/material/TextField";
-import Resizer from "react-image-file-resizer";
-
 import TagCard from "../../components/tagCard";
+import BirthdayCalendar from "../../components/BasicDatePicker";
 import DogAvatar from "../../assets/images/avatars/dog-avatar.png";
 import QR from "../../assets/images/QR.svg";
 
@@ -20,6 +19,7 @@ const PanelForPet = () => {
   const [idTagNumber, setIdTagNumber] = React.useState(urlParams.IdTagNumber);
   const [allTagsInfo, setAllTagsInfo] = React.useState([]);
   const [unassignedTags, setUnassignedTags] = React.useState([]);
+  const [selectedDate, setSelectedDate] =  React.useState(null);
   const [newPet, setNewPet] = React.useState({
     name: "",
     gender: "",
@@ -27,7 +27,6 @@ const PanelForPet = () => {
     microchip: "",
     specialDCondition: "",
     petAvatar: "",
-    idTag: "",
   });
 
   const [currentPet, setCurrentPet] = React.useState();
@@ -41,14 +40,18 @@ const PanelForPet = () => {
   }, []);
 
   React.useEffect(() => {
+    console.log("idTagNumber", idTagNumber)
     if (urlParams.IdTagNumber !== undefined) {
       axios
         .get(
           `${process.env.REACT_APP_Pet_Backend_Url}/getPetByTag/${urlParams.IdTagNumber}`
         )
         .then((response) => {
+
           const petInfo = response.data.pet;
           setCurrentPet(petInfo);
+          setNewPet(petInfo)
+          setSelectedDate(petInfo.birthday)
         })
         .catch((error) => {});
     }
@@ -75,6 +78,14 @@ const PanelForPet = () => {
     setNewPet({ ...newPet, petAvatar: e.target.files[0] });
     setCurrentPet({ ...currentPet, petAvatar: e.target.files[0]});
   }
+
+  function handleDateChange(newDate) {
+    console.log("parent:", newDate)
+    setSelectedDate(newDate);
+    setNewPet({ ...newPet, birthday: newDate });
+    setCurrentPet({ ...currentPet, birthday: newDate });
+
+  }
   const handleUpload = (e) => {
     const input = document.createElement("input");
     input.type = "file";
@@ -93,8 +104,7 @@ const PanelForPet = () => {
     if (currentPet) {
       sendPet = currentPet;
     }
-    console.log("after sendPet", sendPet.idTag);
-    console.log("after current", currentPet);
+    console.log("after newPet", newPet);
 
     if (
       sendPet.name &&
@@ -102,8 +112,8 @@ const PanelForPet = () => {
       sendPet.birthday &&
       sendPet.microchip &&
       sendPet.specialDCondition &&
-      sendPet.petAvatar &&
-      sendPet.idTag
+      sendPet.petAvatar
+      // sendPet.idTag
     ) {
       const data = {
         Tag_ID: idTagNumber,
@@ -245,14 +255,15 @@ const PanelForPet = () => {
                     <h1 className="text-[16px] text-[#155263] font-['Poppins']">
                       Birthday
                     </h1>
-                    <Input
+                    {/* <Input
                       className="p-2 rounded-md bg-[#F8F8F8] indent-1.5"
                       value={currentPet?.birthday || ""}
                       placeholder="5 años"
                       name="birthday"
                       onChange={updateClientProfile}
                       required
-                    />
+                    /> */}
+                    <BirthdayCalendar className="pt-0" selectedDate={selectedDate} onChange={handleDateChange}/>
                   </div>
                 </div>
                 <div className="flex flex-row justify-between gap-4 mb-5">

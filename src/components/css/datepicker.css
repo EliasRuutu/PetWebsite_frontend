@@ -1,0 +1,13 @@
+.datepicker-container {
+    width: 100%;
+    /*  */
+    
+}
+
+.datepicker-container > div {
+    gap: 0;
+    transform-origin: top left;
+    transform: scale(0.75);
+    padding-top: 0%;
+    width: 100%;
+}

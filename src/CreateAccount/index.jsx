@@ -1,8 +1,4 @@
 import '../assets/css/component.css'
-import LeftSidePanel from '../Layout/LeftSidePanel';
-// import profileBackground from "../assests/images/backgrounds/profile_background.png"
- import CreateTapPanel from './CreateTapPanel'
-import { useNavigate } from 'react-router-dom';
 import PanelForPet from './Panels/PanelForPet';
 
 const CreatePetAccount = () => {
