@@ -30,7 +30,7 @@ const PanelForPet = () => {
     idTag: "",
   });
 
-  const [currentPet, setCurrnetPet] = React.useState();
+  const [currentPet, setCurrentPet] = React.useState();
   React.useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_Pet_Backend_Url}/getAllIdTags/`)
@@ -48,7 +48,7 @@ const PanelForPet = () => {
         )
         .then((response) => {
           const petInfo = response.data.pet;
-          setCurrnetPet(petInfo);
+          setCurrentPet(petInfo);
         })
         .catch((error) => {});
     }
@@ -66,15 +66,14 @@ const PanelForPet = () => {
 
   function updateClientProfile(e) {
     setNewPet({ ...newPet, [e.target.name]: e.target.value });
-    setCurrnetPet({ ...currentPet, [e.target.name]: e.target.value });
+    setCurrentPet({ ...currentPet, [e.target.name]: e.target.value });
   }
 
   function handleChange(e) {
     console.log(e.target.files[0]);
     setFile(URL.createObjectURL(e.target.files[0]));
     setNewPet({ ...newPet, petAvatar: e.target.files[0] });
-    setCurrnetPet({ ...currentPet, petAvatar: e.target.files[0] });
-    
+    setCurrentPet({ ...currentPet, petAvatar: e.target.files[0]});
   }
   const handleUpload = (e) => {
     const input = document.createElement("input");
@@ -85,6 +84,7 @@ const PanelForPet = () => {
 
   const handleTagSelect = (value) => {
     setNewPet({ ...newPet, idTag: value });
+    setCurrentPet({ ...currentPet, idTag: value });
     setIdTagNumber(value);
   };
   const updatePetProfile = () => {
@@ -93,17 +93,18 @@ const PanelForPet = () => {
     if (currentPet) {
       sendPet = currentPet;
     }
-    console.log("after sendPet", sendPet);
+    console.log("after sendPet", sendPet.idTag);
+    console.log("after current", currentPet);
+
     if (
-      sendPet.name.trim() === "" ||
-      sendPet.gender.trim() === "" ||
-      sendPet.birthday.trim() === "" ||
-      sendPet.microchip.trim() === "" ||
-      sendPet.specialDCondition.trim() === "" ||
-      !sendPet.petAvatar
+      sendPet.name &&
+      sendPet.gender &&
+      sendPet.birthday &&
+      sendPet.microchip &&
+      sendPet.specialDCondition &&
+      sendPet.petAvatar &&
+      sendPet.idTag
     ) {
-      alert("input all the data");
-    } else {
       const data = {
         Tag_ID: idTagNumber,
         Assigned_Client: urlParams.ProfileID,
@@ -114,12 +115,9 @@ const PanelForPet = () => {
         .put(`${process.env.REACT_APP_Pet_Backend_Url}/assign`, data)
         .then((res) => {
           if (res.status == 200) {
-            
           }
         })
-        .catch((error) => {
-
-        });
+        .catch((error) => {});
       const formData = new FormData();
       formData.append("Profile_ID", urlParams.ProfileID);
       formData.append("name", sendPet.name);
@@ -297,6 +295,7 @@ const PanelForPet = () => {
                           id=""
                           className="w-32 border-none active:border-none"
                           onChange={(e) => handleTagSelect(e.target.value)}
+                          required
                         >
                           <option></option>
                           {unassignedTags.length > 0 &&

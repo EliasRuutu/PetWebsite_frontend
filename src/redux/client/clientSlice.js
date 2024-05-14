@@ -11,11 +11,16 @@ export const clientSlice = createSlice({
     avatarInfo: {},
     allClientsInfo: [],
     allPetsInfo: [],
+    tabValue: 0,
   },
   reducers: {
     setPanelActiveState: (state, action) => {
       state.panelActiveState.length = 0;
       state.panelActiveState.push(action.payload);
+    },
+
+    setTabValue: (state, action) => {
+      state.tabValue = action.payload;
     },
 
     addNewIdTag: (state, action) => {

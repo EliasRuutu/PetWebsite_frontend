@@ -89,8 +89,9 @@ const AssignedPetsList = () => {
       if(res.status == 200) {
         alert(res.data.message);
         // setDeleteSuccess(!deleteSuccess)
-    const endpoint = `${process.env.REACT_APP_Pet_Backend_Url}/deletepet/${seletedPet.Profile_ID}`;
-        setPetsInfo((prev) => prev.filter(one => one.Profile_ID === seletedPet.Profile_ID));
+        console.log(petsInfo.Profile_ID, " ", seletedPet.Profile_ID)
+        console.log(petsInfo)
+        setPetsInfo((prev) => prev.filter(one => one.idTag !== seletedPet.idTag));
         setOpenDelete(false);
       }
     }).catch();
