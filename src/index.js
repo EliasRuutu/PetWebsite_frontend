@@ -4,15 +4,34 @@ import './index.css';
 import App from './App';
 import store from './store'
 import { Provider, useDispatch } from 'react-redux'
+import { SnackbarProvider, useSnackbar } from 'notistack'
+import styled from 'styled-components';
+import { MaterialDesignContent } from 'notistack'
 import { loadAllClientsInfo } from './redux/client/clientSlice';
 import reportWebVitals from './reportWebVitals';
 import axios from "axios";
 const root = ReactDOM.createRoot(document.getElementById('root'));
+const StyledMaterialDesignContent = styled(MaterialDesignContent)(() => ({
+  '&.notistack-MuiContent-success': {
+    backgroundColor: '#2D7738',
+  },
+  '&.notistack-MuiContent-error': {
+    backgroundColor: '#970C0C',
+  },
+}));
 
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <SnackbarProvider
+       autoHideDuration={1500}
+       Components={{
+        success: StyledMaterialDesignContent,
+        error: StyledMaterialDesignContent,
+      }}
+      >
+        <App />
+      </SnackbarProvider>
     </Provider>
   </React.StrictMode>
 );

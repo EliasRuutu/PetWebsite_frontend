@@ -34,14 +34,12 @@ const IdTags = () => {
   }, []);
 
   React.useEffect(() => {
-    let newPetNumber = 1; let tagNumber;
+     let newPetNumber;
     if (allTagsInfo.length > 0) {
-      console.log("allTagsInfo", allTagsInfo);
       setTotalItems(allTagsInfo.length);
       newPetNumber = allTagsInfo[allTagsInfo.length-1].Tag_NO + 1;
-    } 
-
-    tagNumber = newPetNumber.toString().padStart(7, "0");
+    } else newPetNumber = 1;
+    let tagNumber = newPetNumber.toString().padStart(7, "0");
     setNewTagNumber(`PT${tagNumber}`);
   }, [allTagsInfo]);
 
@@ -53,9 +51,7 @@ const IdTags = () => {
       .post(`${process.env.REACT_APP_Pet_Backend_Url}/add_tagid/`, body)
       .then((response) => {
         if (response.status == 200) {
-
           setAllTagsInfo([...allTagsInfo, response.data.tagInfo]);
-
         }
       });
     let page = Math.ceil(allTagsInfo.length/itemsPerPage);  

@@ -9,11 +9,13 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
+import { useSnackbar } from "notistack";
 
 const BackendBaseUrl = process.env.REACT_APP_Pet_Backend_Url;
 
 const SignUpForm = () => {
     const navigate = useNavigate();
+    const { enqueueSnackbar } = useSnackbar();
     const clientPassword = useSelector((state) => state.client.clientPassword);
 
     const handleIniciaClick = () => {
@@ -37,8 +39,17 @@ const SignUpForm = () => {
     }
 
     const handleSignUpClick = () => {
-        console.log("-----------Sign Up-------------");
-        console.log("----------------password---->", password)
+        if(password !== confirmPassword) {
+            enqueueSnackbar("The password is not matched.", {
+                variant: "error",
+                anchorOrigin: {
+                  vertical: "bottom",
+                  horizontal: "right",
+                },
+              });
+            setPassword("");
+            setConfirmPassword("");
+        }
         
         if(password === confirmPassword && isValidEmail && email != "" && password != "" && countryInfo != "" && confirmPassword != ""){
           axios.post(`${process.env.REACT_APP_Pet_Backend_Url}/signup`, {
@@ -47,74 +58,24 @@ const SignUpForm = () => {
             password: password
           })
             .then((response) => {
-                toast.success('Éxito!', {
-                    position: "bottom-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
-                });
+                enqueueSnackbar("Successfully signed up!", {
+                    variant: "success",
+                    anchorOrigin: {
+                      vertical: "bottom",
+                      horizontal: "right",
+                    },
+                  });
                 window.location.href = "/";
             });
-        }
+        } 
         else if(email == "" && password == "" && countryInfo == "" && confirmPassword == "") {
-            toast.error('Por favor ingrese su información.', {
-                position: "bottom-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-            });
-        }else if(email == "") {
-            toast.error('Por favor ingrese su correo electrónico.', {
-                position: "bottom-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-            });
-        }else if(password == "") {
-            toast.error('Por favor ingrese su contraseña.', {
-                position: "bottom-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-            });
-        }else if(countryInfo == "") {
-            toast.error('Por favor ingrese su número de teléfono.', {
-                position: "bottom-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-            });
-        }else if(confirmPassword == "") {
-            toast.error('Por favor ingrese su contraseña de confirmación.', {
-                position: "bottom-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-            });
+            enqueueSnackbar("Please enter all the data.", {
+                variant: "error",
+                anchorOrigin: {
+                  vertical: "bottom",
+                  horizontal: "right",
+                },
+              });
         }
     }
 

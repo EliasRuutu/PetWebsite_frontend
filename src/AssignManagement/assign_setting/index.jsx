@@ -20,18 +20,18 @@ import ClientContactCard from "../../components/ClientContactCard.jsx";
 import LeftSidePanel from "../../components/LeftSidePanel1.jsx";
 import ClientNameCard from "../../components/clientNameCard";
 import AddNewClientCard from "../../components/addNewClientCard";
+import { useSnackbar } from "notistack";
 
 const PetInfo = () => {
   const urlParam = useParams();
+  const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
 
   const [file, setFile] = useState(uploadQR);
   const [isUploaded, setNotifyUpload] = useState(false);
   const [profileID, setProfileID] = useState(urlParam.ProfileID);
-  // const [clientsInfo, setClientsInfo] = useState([]);
   const [currentClient, setCurrentClient] = useState();
 
-  // const [petsInfo, setPetsInfo] = React.useState([]);
   const [idTagNumber, setIdTagNumber] = React.useState(urlParam.IdTag);
   const [idTagInfo, setIdTagInfo] = React.useState();
   const [currentPet, setCurrentPet] = useState();
@@ -70,18 +70,6 @@ const PetInfo = () => {
     }
   }, []);
 
-  // React.useEffect(() => {
-  //   axios
-  //     .get(`${process.env.REACT_APP_Pet_Backend_Url}/getallpets`)
-  //     .then((response) => {
-  //       // setClientsInfo(response.data);
-  //       dispatch(loadAllPetsInfo(response.data));
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // }, []);
-
   const allClients = useSelector((state) => state.client.allClientsInfo);
 
   React.useEffect(() => {
@@ -96,38 +84,56 @@ const PetInfo = () => {
     console.log("allclients, ", allClients);
   }, [allClients]);
 
-  // React.useEffect(() => {
-  //   if (petsInfo.length > 0) {
-  //     petsInfo.forEach((element) => {
-  //       if (element.idTag == idTagNumber) {
-  //         console.log("element", element);
-  //         setCurrentPet(element);
-  //       }
-  //     });
-  //   }
-  // }, [petsInfo]);
   React.useEffect(() => {
     if (allClients.length > 0) {
-      if (assignedClientID) {
+      console.log("assignedClientID", assignedClientID)
+      if (assignedClientID !== undefined && assignedClientID !== null) {
         axios
           .get(
             `${process.env.REACT_APP_Pet_Backend_Url}/getTag/${assignedClientID}/${idTagNumber}`
           )
           .then((res) => {
             console.log("ressss", res.data);
+            console.log(res.status);
             if (res.status === 200) {
+              // enqueueSnackbar("This client already assigned!", {
+              //   variant: "info",
+              //   anchorOrigin: {
+              //     vertical: "bottom",
+              //     horizontal: "right",
+              //   },
+              // });
+
               setIdTagInfo(res.data);
               setAssignMark(true);
-              console.log(res.data.Assigned_Pet)
+              console.log(res.data.Assigned_Pet);
 
-              if (res.data.Assigned_Pet !== null && res.data.Assigned_Pet !== undefined){
-                console.log("is assigned?",res.data.Assigned_Pet)
+              if (
+                res.data.Assigned_Pet !== null &&
+                res.data.Assigned_Pet !== undefined
+              ) {
+                console.log("is assigned?", res.data.Assigned_Pet);
                 setPetAssigned(true);
-              } 
+              }
             }
           })
           .catch((err) => {
-            if (err.status === 500) console.log(err);
+            if (err.status === 404)
+              enqueueSnackbar("Not assigned", {
+                variant: "error",
+                anchorOrigin: {
+                  vertical: "bottom",
+                  horizontal: "right",
+                },
+              });
+            if (err.status === 500)
+              enqueueSnackbar("Network error", {
+                variant: "error",
+                anchorOrigin: {
+                  vertical: "bottom",
+                  horizontal: "right",
+                },
+              });
           });
       }
 
@@ -221,6 +227,13 @@ const PetInfo = () => {
             const assignedtagInfo = res.data.tagInfo;
             setIdTagInfo(assignedtagInfo);
             setAssignedClientID(assignedtagInfo.Assigned_Client);
+            enqueueSnackbar("This client already assigned!", {
+              variant: "success",
+              anchorOrigin: {
+                vertical: "bottom",
+                horizontal: "right",
+              },
+            });
           }
           setAssignMark(true);
           setOpen(false);

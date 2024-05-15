@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useSnackbar } from "notistack";
+
 import axios from "axios";
 
 import { Input } from "@material-tailwind/react";
@@ -12,6 +14,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 const RegisterNewClient = () => {
   const urlParams = useParams();
+  const { enqueueSnackbar } = useSnackbar();
 
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const togglePasswordVisibility = () => {
@@ -79,7 +82,13 @@ const RegisterNewClient = () => {
       clientInfo.address.trim() === "" ||
       !clientInfo.avatar
     ) {
-      alert("Please fill out all required fields");
+      enqueueSnackbar("Please fill out all required fields", {
+        variant: "error",
+        anchorOrigin: {
+          vertical: "bottom",
+          horizontal: "right",
+        },
+      });
     } else {
       const formData = new FormData();
       formData.append("name", clientInfo.name);
@@ -101,11 +110,24 @@ const RegisterNewClient = () => {
           if (response.status === 200) {
             const personalInfo = response.data;
             // Assuming navigator is a function, you might need to adjust this part
+            enqueueSnackbar("Successfully registered!", {
+              variant: "success",
+              anchorOrigin: {
+                vertical: "bottom",
+                horizontal: "right",
+              },
+            });
             navigator("/balanceofclient");
           }
 
           if (response.status === 202) {
-            alert("Successfully updated");
+            enqueueSnackbar("Successfully updated!", {
+              variant: "success",
+              anchorOrigin: {
+                vertical: "bottom",
+                horizontal: "right",
+              },
+            });
             navigator(`/clientaccountinfo/${clientID}`);
           }
         })

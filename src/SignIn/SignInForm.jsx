@@ -8,9 +8,11 @@ import 'react-toastify/dist/ReactToastify.css'
 
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
+import { useSnackbar } from "notistack";
 
 const SignInForm = () => {
     const navigate = useNavigate();
+    const { enqueueSnackbar } = useSnackbar()
     const handleSignUpClick = () => {
         window.scrollTo(0,0);
         navigate("/signup");
@@ -38,16 +40,13 @@ const SignInForm = () => {
                 signInPassword: signInPassword,
             })
             .then((response)=>{
-                toast.success('Éxito!', {
-                    position: "bottom-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
-                });
+                enqueueSnackbar("Successfully logged in!", {
+                    variant: "success",
+                    anchorOrigin: {
+                      vertical: "bottom",
+                      horizontal: "right",
+                    },
+                  });
                 window.location.href = "/idtags"
             })
             .catch((error) => {

@@ -1,6 +1,9 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 export default function ConfirmPasswordInput({sendConfirmPasswordToParent}) {
+  const clientPassword = useSelector((state) => state.client.clientPassword);
+
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState("");
   sendConfirmPasswordToParent(confirmPassword);

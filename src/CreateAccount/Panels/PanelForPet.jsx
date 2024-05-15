@@ -7,12 +7,13 @@ import { Input } from "@material-tailwind/react";
 import TextField from "@mui/material/TextField";
 import TagCard from "../../components/tagCard";
 import BirthdayCalendar from "../../components/BasicDatePicker";
+import { useSnackbar } from "notistack";
 import DogAvatar from "../../assets/images/avatars/dog-avatar.png";
 import QR from "../../assets/images/QR.svg";
 
 const PanelForPet = () => {
   const navigator = useNavigate();
-
+  const { enqueueSnackbar } = useSnackbar();
   const urlParams = useParams();
 
   const [file, setFile] = useState(DogAvatar);
@@ -143,8 +144,27 @@ const PanelForPet = () => {
             "Content-Type": "multipart/form-data",
           },
         })
-        .then((response) => {
-          alert("successfully Pet registerd");
+        .then((res) => {
+          if(res.status === 200) {
+            enqueueSnackbar("Successfully Pet Registered!", {
+              variant: "success",
+              anchorOrigin: {
+                vertical: "bottom",
+                horizontal: "right",
+              },
+            });
+          }
+          
+          if(res.status === 202) {
+            enqueueSnackbar("Successfully Pet Updated!", {
+              variant: "success",
+              anchorOrigin: {
+                vertical: "bottom",
+                horizontal: "right",
+              },
+            });
+          }
+
           navigator(`/petaccountinfo/${urlParams.ProfileID}/${idTagNumber}`);
         })
         .catch((error) => {
