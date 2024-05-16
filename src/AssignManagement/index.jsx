@@ -36,8 +36,11 @@ const IdTags = () => {
   React.useEffect(() => {
      let newPetNumber;
     if (allTagsInfo.length > 0) {
+
       setTotalItems(allTagsInfo.length);
+      
       newPetNumber = allTagsInfo[allTagsInfo.length-1].Tag_NO + 1;
+    
     } else newPetNumber = 1;
     let tagNumber = newPetNumber.toString().padStart(7, "0");
     setNewTagNumber(`PT${tagNumber}`);

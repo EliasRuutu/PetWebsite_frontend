@@ -3,50 +3,59 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import Typography from "@mui/material/Typography";
-import dogAvatar from "../assets/images/avatars//Group 385.png";
 import ClientCard1 from "../components/ClientCard";
-import LeftSidePanel from "../Layout/LeftSidePanel";
+import { Pagination } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { loadAllClientsInfo } from "./../redux/client/clientSlice";
-const BalanceOfClients = () => {
-  let navigator = useNavigate();
-  const dispatch = useDispatch();
 
+const BalanceOfClients = () => {
   const [open, setOpen] = React.useState(false);
-  const [clientsInfo, setClientsInfo] = React.useState([]);
+  const [totalClients, setTotalClients] = React.useState([]);
   const [clientIdToDelete, setClientIdToDelete] = React.useState();
-  const [deleteSuccess, setDeleteSuccess] = React.useState(false);
+  const [totalClientsNumber, setTotalClientsNumber] = React.useState();
+  const [currentPage, setCurrentPage] = React.useState(1);
+
+  const itemsPerPage = 8;
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const lastIndex = Math.min(startIndex + itemsPerPage, totalClientsNumber);
+  const totalPages = Math.ceil(totalClientsNumber/itemsPerPage);
+  const currentItems = totalClients.slice(startIndex, lastIndex);
+
+  const navigator = useNavigate();
+  
+  const dispatch = useDispatch();
+  
+  const handleClose = () => setOpen(false);
   const openDeleteModal = (id) =>{
     setOpen(true);
     setClientIdToDelete(id)
   } 
-  const handleClose = () => setOpen(false);
 
   React.useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_Pet_Backend_Url}/getAllClientInfos/`)
       .then((response) => {
-        // setClientsInfo(response.data);
         dispatch(loadAllClientsInfo(response.data));
-        setClientsInfo(response.data);
+        setTotalClients(response.data);
+        setTotalClientsNumber(response.data.length)
       })
       .catch((error) => {});
   }, []);
 
-  // React.useEffect(() => {
-  //   if(deleteSuccess === true) {
-  //     axios
-  //       .get(`${process.env.REACT_APP_Pet_Backend_Url}/getAllClientInfos/`)
-  //       .then((response) => {
-  //         // setClientsInfo(response.data);
-  //         // dispatch(loadAllClientsInfo(response.data));
-  //         // setClientsInfo(null);
-  //         setClientsInfo(response.data);
-  //       })
-  //       .catch((error) => {});
-  //   }
-  // }, [deleteSuccess]);
+  const deleteHandle = () => {
+    const endpoint = `${process.env.REACT_APP_Pet_Backend_Url}/deleteclient/${clientIdToDelete}`;
+    axios.delete(endpoint).then((res) => {
+      if(res.status === 200) {
+        setTotalClients(prev => prev.filter(one => one.Profile_ID !== clientIdToDelete))
+      }
+    }).catch((error) => {
+    });
+    setOpen(false);
+  }
+
+  const selectPage = (event, page) => {
+    setCurrentPage(page);
+  }
 
   const style = {
     position: "absolute",
@@ -58,20 +67,7 @@ const BalanceOfClients = () => {
     boxShadow: 24,
     p: 4,
   };
-  
-  const deleteHandle = () => {
-    const endpoint = `${process.env.REACT_APP_Pet_Backend_Url}/deleteclient/${clientIdToDelete}`;
-  //  const itemName = 'clientIdToDelete';
-    axios.delete(endpoint).then((res) => {
-      console.log("res--------->", res);
-      if(res.status === 200) {
-        setClientsInfo(prev => prev.filter(one => one.Profile_ID !== clientIdToDelete))
-      }
-    }).catch((error) => {
-      console.log("error---->", error)
-    });
-    setOpen(false);
-  }
+
   return (
       <div className="flex w-5/6 h-screen  flex-col border-t-2 px-20 mb-3">
         <div className="flex flex-row">
@@ -123,8 +119,8 @@ const BalanceOfClients = () => {
           </div>
         </div>
         <div className="">
-          {clientsInfo && clientsInfo.length > 0 ? (
-            clientsInfo.map((client) => (
+          {currentItems && currentItems.length > 0 ? (
+            currentItems.map((client) => (
               <ClientCard1
                 key={client.Profile_ID}
                 deleteInfo={openDeleteModal}
@@ -133,6 +129,22 @@ const BalanceOfClients = () => {
             ))
           ) : (
             <div className="bg-red-300 text-white pt-5 text-lg font-bold text-center h-16">No Data</div>
+          )}
+        </div>
+        <div className="flex items-end justify-end">
+          {totalPages > 1 && (
+            <Pagination
+              count={totalPages}
+              page={currentPage}
+              onChange={selectPage}
+              shape="rounded"
+              sx={{
+                '& .Mui-selected': {
+                  color: 'white',
+                  backgroundColor: '#3D9FAD',
+                },
+              }}
+            />
           )}
         </div>
         <Modal
@@ -216,7 +228,6 @@ const BalanceOfClients = () => {
           </Box>
         </Modal>
       </div>
-    // </div>
   );
 };
 

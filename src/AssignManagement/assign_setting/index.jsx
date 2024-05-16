@@ -227,7 +227,7 @@ const PetInfo = () => {
             const assignedtagInfo = res.data.tagInfo;
             setIdTagInfo(assignedtagInfo);
             setAssignedClientID(assignedtagInfo.Assigned_Client);
-            enqueueSnackbar("This client already assigned!", {
+            enqueueSnackbar("This client assigned!", {
               variant: "success",
               anchorOrigin: {
                 vertical: "bottom",
