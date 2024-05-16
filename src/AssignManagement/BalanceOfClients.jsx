@@ -7,6 +7,7 @@ import ClientCard1 from "../components/ClientCard";
 import { Pagination } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { loadAllClientsInfo } from "./../redux/client/clientSlice";
+import { useSnackbar } from "notistack";
 
 const BalanceOfClients = () => {
   const [open, setOpen] = React.useState(false);
@@ -24,12 +25,14 @@ const BalanceOfClients = () => {
   const filteredItems = totalClients.filter(client =>
     client.name.toLowerCase().includes(searchIndex.toLowerCase())
   );
-  // console.log("totalClients", totalClients[0].name.toLowerCase().includes(searchIndex.toLowerCase()))
+
   const currentItems = filteredItems.slice(startIndex, lastIndex);
 
   const navigator = useNavigate();
   
   const dispatch = useDispatch();
+  
+  const { enqueueSnackbar } = useSnackbar();
   
   const handleClose = () => setOpen(false);
   const openDeleteModal = (id) =>{
@@ -52,15 +55,17 @@ const BalanceOfClients = () => {
     setTotalClientsNumber(filteredItems.length);
   }, [filteredItems]);
 
-  // React.useEffect(() => {
-  //   const searchedItems = totalClients.filter((client) => client.name.includes(searchIndex));
-  //   setTotalClients(searchedItems);
-  // }, [searchIndex])
-
   const deleteHandle = () => {
     const endpoint = `${process.env.REACT_APP_Pet_Backend_Url}/deleteclient/${clientIdToDelete}`;
     axios.delete(endpoint).then((res) => {
       if(res.status === 200) {
+        enqueueSnackbar("Successfully deleted!", {
+          variant: "success",
+          anchorOrigin: {
+            vertical: "bottom",
+            horizontal: "right",
+          },
+        });
         setTotalClients(prev => prev.filter(one => one.Profile_ID !== clientIdToDelete))
       }
     }).catch((error) => {

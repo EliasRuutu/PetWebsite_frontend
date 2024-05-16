@@ -10,6 +10,7 @@ import {
   loadAllPetsInfo,
 } from "../redux/client/clientSlice";
 import PetsCard from "../components/PetInfoCard";
+import { useSnackbar } from "notistack";
 
 const AssignedPetsList = () => {
   const [open, setOpen] = React.useState(false);
@@ -34,6 +35,7 @@ const AssignedPetsList = () => {
 
   const navigator = useNavigate();
   const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -84,7 +86,13 @@ const AssignedPetsList = () => {
 
     axios.delete(endpoint).then((res) => {
       if(res.status == 200) {
-        alert(res.data.message);
+        enqueueSnackbar("Successfully deleted!", {
+          variant: "success",
+          anchorOrigin: {
+            vertical: "bottom",
+            horizontal: "right",
+          },
+        });
         setTotalPets((prev) => prev.filter(one => one.idTag !== seletedPet.idTag));
         setOpenDelete(false);
       }
