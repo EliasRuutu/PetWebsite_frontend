@@ -11,9 +11,7 @@ import axios from "axios";
 import ClientContactCard from "../components/ClientContactCard.jsx";
 import QRcodeGenerater from "../components/QRgenerator";
 import "../assets/css/component.css";
-import petImage from "../assets/images/avatars/Rectangle 4290.png"; // Import the image file
 import uploadQR from "../assets/images/backgrounds/uploadQR.png";
-import LeftSidePanel from "../components/LeftSidePanel1.jsx";
 
 const PetInfo = () => {
   const urlParam = useParams();
@@ -22,7 +20,6 @@ const PetInfo = () => {
   const [file, setFile] = useState(uploadQR);
   const [isUploaded, setNotifyUpload] = useState(false);
   const [profileID, setProfileID] = useState(urlParam.ProfileID);
-  const [clientsInfo, setClientsInfo] = useState([]);
   const [currentClient, setCurrentClient] = useState();
 
   const [petsInfo, setPetsInfo] = React.useState([]);
@@ -40,16 +37,6 @@ const PetInfo = () => {
       .get(`${process.env.REACT_APP_Pet_Backend_Url}/getAllClientInfos/`)
       .then((response) => {
         dispatch(loadAllClientsInfo(response.data));
-
-        // const qrInfo = {
-        //   idTag: idTag,
-        //   clientName:  currentClient.name + " " + currentClient.lastName,
-        //   clientEmail: currentClient.email,
-
-        //   petName: currentPet.name,
-        //   petGender: currentPet.gender,
-        //   petBirthday: currentPet.birthday,
-        // }
         const qrInfo = "";
         setQRInfo(qrInfo);
       })
@@ -60,7 +47,6 @@ const PetInfo = () => {
     axios
       .get(`${process.env.REACT_APP_Pet_Backend_Url}/getallpets`)
       .then((response) => {
-        // setClientsInfo(response.data);
         dispatch(loadAllPetsInfo(response.data));
         setPetsInfo(response.data);
       })
@@ -70,11 +56,6 @@ const PetInfo = () => {
   }, []);
 
   const allClients = useSelector((state) => state.client.allClientsInfo);
-
-  // React.useEffect(() => {
-  //   console.log("allclients", allClients)
-  //   setClientsInfo(allClients)
-  // },[allClients])
 
   React.useEffect(() => {
     if (allClients.length > 0) {
@@ -311,8 +292,6 @@ const PetInfo = () => {
             </div>
           </div>
           <div className="flex flex-row justify-end mt-10 text-base gap-4">
-            {/* <MoveBtn name="VOLVER" direction="Back"/>
-        <MoveBtn name="EDITAR" direction="Next"/> */}
             <button
               type="submit"
               className="text-sm items-center text-[#3D9FAD] text-center w-36 h-11 bottom-2.5 font-['Poppins'] bg-[#FFFFFF] rounded-md px-5  border-2 border-[#3D9FAD] hover:bg-[#3D9FAD] hover:text-white"
