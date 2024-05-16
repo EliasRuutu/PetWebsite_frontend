@@ -14,12 +14,18 @@ const BalanceOfClients = () => {
   const [clientIdToDelete, setClientIdToDelete] = React.useState();
   const [totalClientsNumber, setTotalClientsNumber] = React.useState();
   const [currentPage, setCurrentPage] = React.useState(1);
+  const [searchIndex, setSearchIndex] = React.useState('');
 
   const itemsPerPage = 8;
   const startIndex = (currentPage - 1) * itemsPerPage;
   const lastIndex = Math.min(startIndex + itemsPerPage, totalClientsNumber);
   const totalPages = Math.ceil(totalClientsNumber/itemsPerPage);
-  const currentItems = totalClients.slice(startIndex, lastIndex);
+
+  const filteredItems = totalClients.filter(client =>
+    client.name.toLowerCase().includes(searchIndex.toLowerCase())
+  );
+  // console.log("totalClients", totalClients[0].name.toLowerCase().includes(searchIndex.toLowerCase()))
+  const currentItems = filteredItems.slice(startIndex, lastIndex);
 
   const navigator = useNavigate();
   
@@ -42,6 +48,15 @@ const BalanceOfClients = () => {
       .catch((error) => {});
   }, []);
 
+  React.useEffect(() => {
+    setTotalClientsNumber(filteredItems.length);
+  }, [filteredItems]);
+
+  // React.useEffect(() => {
+  //   const searchedItems = totalClients.filter((client) => client.name.includes(searchIndex));
+  //   setTotalClients(searchedItems);
+  // }, [searchIndex])
+
   const deleteHandle = () => {
     const endpoint = `${process.env.REACT_APP_Pet_Backend_Url}/deleteclient/${clientIdToDelete}`;
     axios.delete(endpoint).then((res) => {
@@ -51,6 +66,11 @@ const BalanceOfClients = () => {
     }).catch((error) => {
     });
     setOpen(false);
+  }
+
+  const handleSearch = (event) => {
+    setSearchIndex(event.target.value);
+    setCurrentPage(1);
   }
 
   const selectPage = (event, page) => {
@@ -104,7 +124,8 @@ const BalanceOfClients = () => {
                 id="default-search"
                 className="block w-full px-4 py-2 ps-10 text-sm text-gray-900 rounded-lg bg-gray-50 focus:ring-blue-500 dark:bg-[#F8F8F8] dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 "
                 placeholder="Buscar..."
-                required
+                value={searchIndex}
+                onChange={handleSearch}
               />
             </div>
             <div className="flex flex-row py-7 w-1/6 justify-end">
@@ -141,7 +162,7 @@ const BalanceOfClients = () => {
               sx={{
                 '& .Mui-selected': {
                   color: 'white',
-                  backgroundColor: '#3D9FAD',
+                  backgroundColor: '#3d9fad',
                 },
               }}
             />

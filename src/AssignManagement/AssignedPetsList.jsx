@@ -19,13 +19,18 @@ const AssignedPetsList = () => {
   const [seletedPet, setSelectedPet] = React.useState();
   const [currentPage, setCurrentPage] = React.useState(1);
   const [totalPetsNumber, setTotalPetsNumber] = React.useState();
+  const [searchIndex, setSearchIndex] = React.useState('');
 
   const itemsPerPage = 8;
   const startIndex = (currentPage - 1) * itemsPerPage;
   const lastIndex = Math.min(startIndex + itemsPerPage, totalPetsNumber);
   const totalPages = Math.ceil(totalPetsNumber/itemsPerPage);
 
-  const currentItems = totalPets.slice(startIndex, lastIndex);
+  const filteredItems = totalPets.filter(pet =>
+    pet.name.toLowerCase().includes(searchIndex.toLowerCase())
+  );
+  console.log("totalPets", totalPets)
+  const currentItems = filteredItems.slice(startIndex, lastIndex);
 
   const navigator = useNavigate();
   const dispatch = useDispatch();
@@ -70,6 +75,9 @@ const AssignedPetsList = () => {
   React.useEffect(() => {
   }, [clientsInfo]);
 
+  React.useEffect(() => {
+    setTotalPetsNumber(filteredItems.length)
+  }, [filteredItems])
   const deleteHandle = () => {
     console.log(seletedPet.Profile_ID);
     const endpoint = `${process.env.REACT_APP_Pet_Backend_Url}/deletepet/${seletedPet.Profile_ID}/${seletedPet.idTag}`;
@@ -83,6 +91,10 @@ const AssignedPetsList = () => {
     }).catch();
   }
 
+  const handleSearch = (event) =>{
+    setSearchIndex(event.target.value);
+    setCurrentPage(1);
+  }
   const selectPage = (event, page) => {
     setCurrentPage(page);
   }
@@ -134,7 +146,8 @@ const AssignedPetsList = () => {
                 id="default-search"
                 className="block w-full px-4 py-2 ps-10 text-sm text-gray-900 rounded-lg bg-gray-50 focus:ring-blue-500 dark:bg-[#F8F8F8] dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 "
                 placeholder="Buscar..."
-                required
+                value={searchIndex}
+                onChange={handleSearch}
               />
             </div>
             </div>
@@ -164,7 +177,7 @@ const AssignedPetsList = () => {
               sx={{
                 '& .Mui-selected': {
                   color: 'white',
-                  backgroundColor: '#3D9FAD',
+                  backgroundColor: '#3d9fad',
                 },
               }}
             />

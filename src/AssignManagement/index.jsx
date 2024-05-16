@@ -9,20 +9,23 @@ import { useDispatch, useSelector } from "react-redux";
 import { Pagination } from "@mui/material";
 
 const IdTags = () => {
-  const dispatch = useDispatch();
   const [allTagsInfo, setAllTagsInfo] = React.useState([]);
   const [newTagNumber, setNewTagNumber] = React.useState();
-  const [isAdded, setAddState] = React.useState(false);
-
   const [currentPage, setCurrentPage] = React.useState(1);
-  const [totalItems, setTotalItems] = React.useState(0);
+  const [totalTagsNumber, setTotalTagsNumber] = React.useState(0);
+  const [searchIndex, setSearchIndex] = React.useState('');
 
   const itemsPerPage = 8;
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const lastIndex = Math.min(startIndex + itemsPerPage, totalItems);
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const lastIndex = Math.min(startIndex + itemsPerPage, totalTagsNumber);
+  const totalPages = Math.ceil(totalTagsNumber / itemsPerPage);
 
-  const currentItems = allTagsInfo.slice(startIndex, lastIndex);
+  const filteredItems = allTagsInfo.filter(tag =>
+    tag.Tag_ID.toLowerCase().includes(searchIndex.toLowerCase())
+  );
+  const currentItems = filteredItems.slice(startIndex, lastIndex);
+
+  const dispatch = useDispatch();
 
   React.useEffect(() => {
     axios
@@ -37,7 +40,7 @@ const IdTags = () => {
      let newPetNumber;
     if (allTagsInfo.length > 0) {
 
-      setTotalItems(allTagsInfo.length);
+      setTotalTagsNumber(allTagsInfo.length);
       
       newPetNumber = allTagsInfo[allTagsInfo.length-1].Tag_NO + 1;
     
@@ -46,11 +49,13 @@ const IdTags = () => {
     setNewTagNumber(`PT${tagNumber}`);
   }, [allTagsInfo]);
 
+  React.useEffect(() => {
+    // set
+  }, [filteredItems])
+
   const addTag = () => {
-    const body = { Tag_ID: newTagNumber, Tag_NO: totalItems + 1 };
-    const BaseUrl = process.env.REACT_APP_Pet_Backend_Url;
-    // for(var i=0; i < 10; i++ ) {
-    const response = axios
+    const body = { Tag_ID: newTagNumber, Tag_NO: totalTagsNumber + 1 };
+    axios
       .post(`${process.env.REACT_APP_Pet_Backend_Url}/add_tagid/`, body)
       .then((response) => {
         if (response.status == 200) {
@@ -61,6 +66,9 @@ const IdTags = () => {
     setCurrentPage(page);
   };
 
+  const handleSearch = (event) => {
+    setSearchIndex(event.target.value)
+  }
   const selectPage = (event, page) => {
     setCurrentPage(page);
   };
@@ -103,7 +111,8 @@ const IdTags = () => {
                 id="default-search"
                 className="block w-full px-4 py-2 ps-10 text-sm text-gray-900 rounded-l-lg bg-gray-50 focus:ring-blue-500 dark:bg-[#F8F8F8] dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 "
                 placeholder="Buscar..."
-                required
+                value={searchIndex}
+                onChange={handleSearch}
               />
             </div>
             <div className="flex flex-row py-7 w-1/6 justify-end">
@@ -138,7 +147,7 @@ const IdTags = () => {
               sx={{
                 '& .Mui-selected': {
                   color: 'white',
-                  backgroundColor: '#3D9FAD',
+                  backgroundColor: '#3d9fad',
                 },
               }}
             />
