@@ -2,7 +2,6 @@ import * as React from "react";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-
 import { Input } from "@material-tailwind/react";
 import TextField from "@mui/material/TextField";
 import TagCard from "../../components/tagCard";
@@ -10,6 +9,7 @@ import BirthdayCalendar from "../../components/BasicDatePicker";
 import { useSnackbar } from "notistack";
 import DogAvatar from "../../assets/images/avatars/dog-avatar.png";
 import QR from "../../assets/images/QR.svg";
+import AddIcon from '@mui/icons-material/Add';
 
 const PanelForPet = () => {
   const navigator = useNavigate();
@@ -20,7 +20,7 @@ const PanelForPet = () => {
   const [idTagNumber, setIdTagNumber] = React.useState(urlParams.IdTagNumber);
   const [allTagsInfo, setAllTagsInfo] = React.useState([]);
   const [unassignedTags, setUnassignedTags] = React.useState([]);
-  const [selectedDate, setSelectedDate] =  React.useState(null);
+  const [selectedDate, setSelectedDate] = React.useState(null);
   const [newPet, setNewPet] = React.useState({
     name: "",
     gender: "",
@@ -38,36 +38,40 @@ const PanelForPet = () => {
         setAllTagsInfo(response.data);
       })
       .catch((error) => {});
+      
   }, []);
 
   React.useEffect(() => {
-    console.log("idTagNumber", idTagNumber)
+    console.log("idTagNumber", idTagNumber);
     if (urlParams.IdTagNumber !== undefined) {
       axios
         .get(
           `${process.env.REACT_APP_Pet_Backend_Url}/getPetByTag/${urlParams.IdTagNumber}`
         )
         .then((response) => {
-
           const petInfo = response.data.pet;
           setCurrentPet(petInfo);
-          setNewPet(petInfo)
-          setSelectedDate(petInfo.birthday)
+          setNewPet(petInfo);
+          setSelectedDate(petInfo.birthday);
         })
         .catch((error) => {});
     }
   }, [urlParams.IdTagNumber]);
 
   React.useEffect(() => {
-    let unassignedList = [];
-    allTagsInfo.forEach((tag) => {
-      if (tag.IsAssigned === false) unassignedList.push(tag);
-    });
+    let unassignedList = allTagsInfo.filter((tag) => !tag.IsAssigned);
+    // if(unassignedList.length === 0) {
+    //   enqueueSnackbar("No assign tag!", {
+    //     variant: "warning",
+    //     anchorOrigin: {
+    //       vertical: "bottom",
+    //       horizontal: "right",
+    //     },
+    //   });
+    // } 
     setUnassignedTags(unassignedList);
   }, [allTagsInfo]);
-
-  React.useEffect(() => {}, [unassignedTags]);
-
+  
   function updateClientProfile(e) {
     setNewPet({ ...newPet, [e.target.name]: e.target.value });
     setCurrentPet({ ...currentPet, [e.target.name]: e.target.value });
@@ -77,15 +81,14 @@ const PanelForPet = () => {
     console.log(e.target.files[0]);
     setFile(URL.createObjectURL(e.target.files[0]));
     setNewPet({ ...newPet, petAvatar: e.target.files[0] });
-    setCurrentPet({ ...currentPet, petAvatar: e.target.files[0]});
+    setCurrentPet({ ...currentPet, petAvatar: e.target.files[0] });
   }
 
   function handleDateChange(newDate) {
-    console.log("parent:", newDate)
+    console.log("parent:", newDate);
     setSelectedDate(newDate);
     setNewPet({ ...newPet, birthday: newDate });
     setCurrentPet({ ...currentPet, birthday: newDate });
-
   }
   const handleUpload = (e) => {
     const input = document.createElement("input");
@@ -145,7 +148,7 @@ const PanelForPet = () => {
           },
         })
         .then((res) => {
-          if(res.status === 200) {
+          if (res.status === 200) {
             enqueueSnackbar("Successfully Pet Registered!", {
               variant: "success",
               anchorOrigin: {
@@ -154,8 +157,8 @@ const PanelForPet = () => {
               },
             });
           }
-          
-          if(res.status === 202) {
+
+          if (res.status === 202) {
             enqueueSnackbar("Successfully Pet Updated!", {
               variant: "success",
               anchorOrigin: {
@@ -283,7 +286,11 @@ const PanelForPet = () => {
                       onChange={updateClientProfile}
                       required
                     /> */}
-                    <BirthdayCalendar className="pt-0" selectedDate={selectedDate} onChange={handleDateChange}/>
+                    <BirthdayCalendar
+                      className="pt-0"
+                      selectedDate={selectedDate}
+                      onChange={handleDateChange}
+                    />
                   </div>
                 </div>
                 <div className="flex flex-row justify-between gap-4 mb-5">
@@ -320,7 +327,7 @@ const PanelForPet = () => {
                     <div className="flex gap-6 border border-solid p-2 rounded-md">
                       {idTagNumber ? (
                         <TagCard tagNumber={idTagNumber} imgSrc={QR} />
-                      ) : (
+                      ) : unassignedTags.length > 0 ? (
                         <select
                           name=""
                           id=""
@@ -329,18 +336,14 @@ const PanelForPet = () => {
                           required
                         >
                           <option></option>
-                          {unassignedTags.length > 0 &&
-                            unassignedTags.map((element) => {
-                              return (
-                                <option
-                                  key={element.Tag_ID}
-                                  value={element.Tag_ID}
-                                >
-                                  {element.Tag_ID}
-                                </option>
-                              );
-                            })}
+                          {unassignedTags.map((element) => (
+                            <option key={element.Tag_ID} value={element.Tag_ID}>
+                              {element.Tag_ID}
+                            </option>
+                          ))}
                         </select>
+                      ) : (
+                        <button onClick={() => navigator("/idtags")}> <AddIcon/> Add tag</button>
                       )}
                     </div>
                   </div>

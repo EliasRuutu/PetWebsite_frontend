@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import PlusIcon from "../assets/images/backgrounds/plus.png"
 
+
 const AddNewClientCard = (props) => {
 
   const navigator = useNavigate();

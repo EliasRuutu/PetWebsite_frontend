@@ -1,14 +1,13 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
-
-import axios from "axios";
-
 import { Input } from "@material-tailwind/react";
 import { Textarea } from "@material-tailwind/react";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-
+import "react-phone-number-input/style.css";
+import PhoneInput from "react-phone-number-input";
 import User from "../assets/images/user.svg";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -17,6 +16,7 @@ const RegisterNewClient = () => {
   const { enqueueSnackbar } = useSnackbar();
 
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  
   const togglePasswordVisibility = () => {
     setIsPasswordVisible((prevState) => !prevState);
   };
@@ -32,6 +32,7 @@ const RegisterNewClient = () => {
     avatar: "",
   });
   const [confirmPassword, setConfirmPassword] = useState();
+  const [phoneNumber, setPhoneNumber] = useState();
   const [clientID, setClientID] = useState("");
 
   useEffect(() => {
@@ -45,6 +46,7 @@ const RegisterNewClient = () => {
           if (res.status == 200) {
             console.log("status", res.status);
             setClientInfo(res.data);
+            setPhoneNumber(res.data.phone);
           }
         })
         .catch((error) => {});
@@ -77,7 +79,7 @@ const RegisterNewClient = () => {
       clientInfo.name.trim() === "" ||
       clientInfo.lastName.trim() === "" ||
       clientInfo.email.trim() === "" ||
-      clientInfo.phone.trim() === "" ||
+      phoneNumber.trim() === "" ||
       clientInfo.password === "" ||
       clientInfo.address.trim() === "" ||
       !clientInfo.avatar
@@ -94,7 +96,7 @@ const RegisterNewClient = () => {
       formData.append("name", clientInfo.name);
       formData.append("lastName", clientInfo.lastName);
       formData.append("email", clientInfo.email);
-      formData.append("phone", clientInfo.phone);
+      formData.append("phone", phoneNumber);
       formData.append("password", clientInfo.password);
       formData.append("address", clientInfo.address);
       formData.append("avatar", clientInfo.avatar);
@@ -307,13 +309,19 @@ const RegisterNewClient = () => {
                 <h1 className="text-[16px] text-[#155263] font-['Poppins']">
                   Phone
                 </h1>
-                <Input
+                {/* <Input
                   className="p-2 rounded-md bg-[#F8F8F8] indent-1.5"
                   placeholder="+58 789-564-52"
                   name="phone"
                   onChange={updateClientProfile}
                   required
                   value={clientInfo?.phone || ""}
+                /> */}
+                <PhoneInput
+                  className="p-2 rounded-md bg-[#F8F8F8] indent-1.5"
+                  placeholder="+58 789-564-52"
+                  value={phoneNumber}
+                  onChange={setPhoneNumber}
                 />
               </div>
               <div className="flex flex-col text-[#155263] gap-2">

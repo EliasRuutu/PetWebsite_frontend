@@ -213,7 +213,8 @@ const PetInfo = () => {
   };
 
   const doAssign = () => {
-    if (selectedClient.client) {
+    console.log("selectedClient", Object.keys(selectedClient.client).length);
+    if (Object.keys(selectedClient.client).length > 0) { 
       const data = {
         Tag_ID: idTagNumber,
         Assigned_Client: selectedClient.client.Profile_ID,
@@ -241,6 +242,14 @@ const PetInfo = () => {
         .catch((error) => {
           // Handle errors here
         });
+    } else {
+      enqueueSnackbar("Please select the client!", {
+        variant: "warning",
+        anchorOrigin: {
+          vertical: "bottom",
+          horizontal: "right",
+        },
+      });
     }
   };
 
