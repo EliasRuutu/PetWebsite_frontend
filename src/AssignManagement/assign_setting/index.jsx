@@ -85,9 +85,9 @@ const PetInfo = () => {
   }, [allClients]);
 
   React.useEffect(() => {
-    if (allClients.length > 0) {
+    if (allClients.length > 0 && assignedClientID) {
       console.log("assignedClientID", assignedClientID)
-      if (assignedClientID !== undefined && assignedClientID !== null) {
+      // if (assignedClientID) {
         axios
           .get(
             `${process.env.REACT_APP_Pet_Backend_Url}/getTag/${assignedClientID}/${idTagNumber}`
@@ -96,13 +96,13 @@ const PetInfo = () => {
             console.log("ressss", res.data);
             console.log(res.status);
             if (res.status === 200) {
-              // enqueueSnackbar("This client already assigned!", {
-              //   variant: "info",
-              //   anchorOrigin: {
-              //     vertical: "bottom",
-              //     horizontal: "right",
-              //   },
-              // });
+              enqueueSnackbar("This client already assigned!", {
+                variant: "info",
+                anchorOrigin: {
+                  vertical: "bottom",
+                  horizontal: "right",
+                },
+              });
 
               setIdTagInfo(res.data);
               setAssignMark(true);
@@ -135,7 +135,7 @@ const PetInfo = () => {
                 },
               });
           });
-      }
+      // }
 
       allClients[0].forEach((element) => {
         if (element.Profile_ID == assignedClientID) {
