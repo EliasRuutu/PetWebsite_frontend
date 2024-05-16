@@ -1,16 +1,15 @@
 import * as React from "react";
+import axios from "axios";
 
 import DogCard from "../components/DogCard";
 import MoveBtn from "../components/MoveBtn";
 import { useNavigate } from "react-router-dom";
 
-import "../assets/css/component.css";
-import LeftSidePanel from "../Layout/LeftSidePanel";
 import { useDispatch, useSelector } from "react-redux";
+import CustomScroll from 'react-custom-scroll';
 import { useParams } from "react-router-dom";
-import { current } from "@reduxjs/toolkit";
-import axios from "axios";
 import { loadAllClientsInfo, loadAllPetsInfo } from "../redux/client/clientSlice";
+import "../assets/css/component.css";
 
 const CustomerInfo = () => {
   let navigate = useNavigate();
@@ -83,14 +82,13 @@ const CustomerInfo = () => {
   }
   return (
     <>
-        <div className="flex flex-col w-5/6 h-screen bg-[#EBFCFF] rounded-lg border-t-2 px-32 mb-3 pt-28 pb-52 px-10 ">
+        <div className="flex flex-col w-5/6 h-screen bg-[#EBFCFF] rounded-lg border-t-2 px-32 mb-3 pt-10 px-10 ">
           <div className="mb-7 font-bold text-[#155263] text-3xl">
             Información del Cliente
           </div>
           <div className="flex flex-row h-full mb-18 border rounded-[20px]">
             <div className="info-client flex flex-col w-2/5 bg-cover px-16 pt-14 pb-12 ">
               <div className="flex flex-col justify-around items-center h-3/4 align-middle mb-4">
-                {/* <div className="avatar-client"></div> */}
                 <img className="object-cover w-64 h-64 rounded-full" src={clientAvatarUrl} ></img>
                 <div className="text-3xl font-bold text-white">
                   {currentClient && <span>{currentClient.name}</span>}
@@ -160,13 +158,15 @@ const CustomerInfo = () => {
                   Pets
                 </div>
                 <hr />
-                <div className="flex flex-row items-center flex-wrap p-4">
-                  {ownedPets.length > 0 ? (
-                    ownedPets.map((element) => <DogCard key={element._id} name={element.name} avatarName={element.petAvatar} gender={element.gender}/>)
-                  ) : null}
-                  <button className="view-detail items-center font-bold text-base text-[#FFFFFF] text-center w-36 h-11 bottom-2.5 font-['Poppins'] bg-[#F1B21B] rounded-md px-5   hover:bg-[#FFCA4A] hover:text-[#FFFFFF]" onClick={addPetPage}>
+                <button className="view-detail items-center font-bold text-base text-[#FFFFFF] text-center w-36 h-11 font-['Poppins'] bg-[#F1B21B] rounded-md px-5 mt-5  hover:bg-[#FFCA4A] hover:text-[#FFFFFF] " onClick={addPetPage}>
                       ADD A PET
                   </button>
+                <div className="flex flex-row items-center flex-wrap p-4">
+                    <div className="pets-box  md:container md:mx-auto flex flex-row gap-2 m-2 p-2 w-5/6 w-full overflow-auto pet-scroll">
+                      {ownedPets.length > 0 ? (
+                        ownedPets.map((element) => <DogCard key={element._id} pet={element} name={element.name}/>)
+                      ) : null}
+                    </div>
                 </div>
               </div>
             </div>

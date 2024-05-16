@@ -1,19 +1,28 @@
-import dogAvatar from "../assets/images/avatars//Group 385.png";
+import * as React from "react";
+import { useNavigate } from "react-router-dom";
+
 
 const DogCard = (props) => {
 
-    const customStyle = {
+  const [currnetPet, setCurrentPet] = React.useState(props.pet)
+
+  const navigator = useNavigate()
+
+  const customStyle = {
         color: '#3D9FAD'
-    };
+  };
+  const handleClick = () => {
+    navigator(`/petaccountinfo/${currnetPet.Profile_ID}/${currnetPet.idTag}`)
+  } 
 
   return (
     <>
-      <div className="flex flex-col justify-center rounded-lg items-center h-44 w-40 bg-[#EBFCFF] mx-5">
-        <img className="object-cover w-28 h-28" src={`/assets/images/pets/${props.avatarName}`} ></img>
+      <div className="flex flex-col justify-center rounded-lg items-center h-5/6 w-32 p-4 bg-[#EBFCFF] mx-2 hover:cursor-pointer transform hover:scale-110" onClick={handleClick}>
+        <img className="object-cover h-24 w-24" src={`/assets/images/pets/${currnetPet.petAvatar}`} ></img>
         <div className="flex flex-row justify-between items-center gap-8 text-left">
           <div className="name-dog">
-            <span className="text-md font-bold text-[#155263]"> {props.name} </span> <br />
-            <span className="text-[#3D9FAD]"> {props.gender} </span>
+            <span className="text-md font-bold text-[#155263]"> {currnetPet.name} </span> <br />
+            <span className="text-[#3D9FAD]"> {currnetPet.gender} </span>
           </div>
           <div className="" style= {customStyle}>
             {props.gender === "Her" ? (

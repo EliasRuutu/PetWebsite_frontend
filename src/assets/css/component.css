@@ -30,3 +30,23 @@
     
     text-align: center;
 }
+
+.pet-scroll::-webkit-scrollbar {
+    width: 2px; /* Adjusted scrollbar width */
+}
+
+.pet-scroll::-webkit-scrollbar-track {
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+    background: white; 
+}
+
+.pet-scroll::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 2px;
+    border-radius: 10px;
+    background: #3D9DAD;
+}
+
+.pet-scroll::-webkit-scrollbar-thumb:window-inactive {
+    background: #3D9DAD;
+}
