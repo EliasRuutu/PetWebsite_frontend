@@ -18,11 +18,11 @@ const DogCard = (props) => {
   return (
     <>
       <div className="flex flex-col justify-center rounded-lg items-center h-5/6 w-32 p-4 bg-[#EBFCFF] mx-2 hover:cursor-pointer transform hover:scale-110" onClick={handleClick}>
-        <img className="object-cover h-24 w-24" src={`/assets/images/pets/${currnetPet.petAvatar}`} ></img>
+        <img className="object-cover h-24 w-24" src={`/assets/images/pets/${currnetPet?.petAvatar}`} ></img>
         <div className="flex flex-row justify-between items-center gap-8 text-left">
           <div className="name-dog">
-            <span className="text-md font-bold text-[#155263]"> {currnetPet.name} </span> <br />
-            <span className="text-[#3D9FAD]"> {currnetPet.gender} </span>
+            <span className="text-md font-bold text-[#155263]"> {currnetPet?.name} </span> <br />
+            <span className="text-[#3D9FAD]"> {currnetPet?.gender} </span>
           </div>
           <div className="" style= {customStyle}>
             {props.gender === "Her" ? (
