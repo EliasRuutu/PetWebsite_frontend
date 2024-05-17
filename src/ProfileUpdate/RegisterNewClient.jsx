@@ -74,7 +74,13 @@ const RegisterNewClient = () => {
     if (clientInfo.password !== confirmPassword) {
       setClientInfo({ ...clientInfo, password: "" });
       setConfirmPassword("");
-      alert("Password does not match");
+      enqueueSnackbar("Password do not match.", {
+        variant: "warning",
+        anchorOrigin: {
+          vertical: "bottom",
+          horizontal: "right",
+        },
+      });
     } else if (
       clientInfo.name.trim() === "" ||
       clientInfo.lastName.trim() === "" ||
@@ -85,7 +91,7 @@ const RegisterNewClient = () => {
       !clientInfo.avatar
     ) {
       enqueueSnackbar("Please fill out all required fields", {
-        variant: "error",
+        variant: "warning",
         anchorOrigin: {
           vertical: "bottom",
           horizontal: "right",
@@ -135,9 +141,21 @@ const RegisterNewClient = () => {
         })
         .catch((error) => {
           if (error.response.status === 404) {
-            alert("The user has already registered.");
+            enqueueSnackbar("The use has already existed.", {
+              variant: "warning",
+              anchorOrigin: {
+                vertical: "bottom",
+                horizontal: "right",
+              },
+            });
           } else if (error.response.status === 500) {
-            alert("Network error occurred.");
+            enqueueSnackbar("Network error", {
+              variant: "error",
+              anchorOrigin: {
+                vertical: "bottom",
+                horizontal: "right",
+              },
+            });
           } else {
             console.log("Error:", error);
           }

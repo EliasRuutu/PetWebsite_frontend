@@ -1,8 +1,7 @@
 import React from "react";
 import { useState } from "react";
-import axios from "axios";
+import axios, { all } from "axios";
 import { useNavigate, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import Modal from "@mui/material/Modal";
 import { Box } from "@mui/material";
 
@@ -21,200 +20,170 @@ import LeftSidePanel from "../../components/LeftSidePanel1.jsx";
 import ClientNameCard from "../../components/clientNameCard";
 import AddNewClientCard from "../../components/addNewClientCard";
 import { useSnackbar } from "notistack";
+import DogCard from "../../components/DogCard";
 
-const PetInfo = () => {
+const IdTagInfo = () => {
   const urlParam = useParams();
+  const navigator = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
-  const dispatch = useDispatch();
-
   const [file, setFile] = useState(uploadQR);
   const [isUploaded, setNotifyUpload] = useState(false);
-  const [profileID, setProfileID] = useState(urlParam.ProfileID);
   const [currentClient, setCurrentClient] = useState();
-
+  const [allClients, setAllClients] = useState();
   const [idTagNumber, setIdTagNumber] = React.useState(urlParam.IdTag);
   const [idTagInfo, setIdTagInfo] = React.useState();
   const [currentPet, setCurrentPet] = useState();
   const [isPetAssigned, setPetAssigned] = useState(false);
-
   const [open, setOpen] = React.useState(false);
   const [assignMark, setAssignMark] = React.useState(false);
-
   const [hideClient, setShowClient] = React.useState(true);
+  const [assignedClientID, setAssignedClientID] = React.useState(
+    urlParam.clientid
+  );
+  const [QRInfo, setQRInfo] = React.useState(urlParam.IdTag);
   const [selectedClient, setSelectedClient] = React.useState({
     visible: false,
     client: {},
   });
-  const [assignedClientID, setAssignedClientID] = React.useState(
-    urlParam.clientid
-  );
-  // const [assignedPetID, setAssignedPetID] = React.useState("");
-  const [QRInfo, setQRInfo] = React.useState(urlParam.IdTag);
-  const openAssignModal = () => {
-    setOpen(true);
-  };
-  const handleClose = () => setOpen(false);
 
-  let navigator = useNavigate();
+  const openAssignModal = () => setOpen(true);
+
+  const handleClose = () => setOpen(false);
 
   React.useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_Pet_Backend_Url}/getAllClientInfos/`)
+      .get(`${process.env.REACT_APP_Pet_Backend_Url}/getAllClientInfos`)
       .then((response) => {
-        dispatch(loadAllClientsInfo(response.data));
+        setAllClients(response.data);
       })
       .catch((error) => {});
-
-    if (urlParam.success) {
-      // setAssignMark(true);
-    }
   }, []);
 
-  const allClients = useSelector((state) => state.client.allClientsInfo);
-
   React.useEffect(() => {
-    if (allClients.length > 0) {
-      allClients[0].forEach((element) => {
-        if (element.Profile_ID == profileID) {
-          console.log("client element", element);
-          setCurrentClient(element);
-        }
-      });
-    }
-    console.log("allclients, ", allClients);
-  }, [allClients]);
-
-  React.useEffect(() => {
-    if (allClients.length > 0 && assignedClientID) {
-      console.log("assignedClientID", assignedClientID)
-      // if (assignedClientID) {
-        axios
-          .get(
-            `${process.env.REACT_APP_Pet_Backend_Url}/getTag/${assignedClientID}/${idTagNumber}`
-          )
-          .then((res) => {
-            console.log("ressss", res.data);
-            console.log(res.status);
-            if (res.status === 200) {
-              enqueueSnackbar("This client already assigned!", {
-                variant: "info",
-                anchorOrigin: {
-                  vertical: "bottom",
-                  horizontal: "right",
-                },
-              });
-
-              setIdTagInfo(res.data);
-              setAssignMark(true);
-              console.log(res.data.Assigned_Pet);
-
-              if (
-                res.data.Assigned_Pet !== null &&
-                res.data.Assigned_Pet !== undefined
-              ) {
-                console.log("is assigned?", res.data.Assigned_Pet);
-                setPetAssigned(true);
-              }
-            }
-          })
-          .catch((err) => {
-            if (err.status === 404)
-              enqueueSnackbar("Not assigned", {
-                variant: "error",
-                anchorOrigin: {
-                  vertical: "bottom",
-                  horizontal: "right",
-                },
-              });
-            if (err.status === 500)
-              enqueueSnackbar("Network error", {
-                variant: "error",
-                anchorOrigin: {
-                  vertical: "bottom",
-                  horizontal: "right",
-                },
-              });
-          });
-      // }
-
-      allClients[0].forEach((element) => {
-        if (element.Profile_ID == assignedClientID) {
-          console.log("client element", element);
-          setCurrentClient(element);
-        }
-      });
+    if (assignedClientID !== null && assignedClientID !== undefined) {
+      axios
+        .get(
+          `${process.env.REACT_APP_Pet_Backend_Url}/getClientByProfileID/${assignedClientID}`
+        )
+        .then((response) => {
+          setCurrentClient(response.data);
+        });
     }
   }, [assignedClientID]);
 
-  React.useEffect(() => {}, [currentClient]);
+  React.useEffect(() => {
+    if (currentClient) {
+      axios
+        .get(
+          `${process.env.REACT_APP_Pet_Backend_Url}/getTag/${currentClient.Profile_ID}/${idTagNumber}`
+        )
+        .then((res) => {
+          console.log("ressss", res.data);
+          console.log(res.status);
+          if (res.status === 200) {
+            enqueueSnackbar("This client already assigned!", {
+              variant: "info",
+              anchorOrigin: {
+                vertical: "bottom",
+                horizontal: "right",
+              },
+            });
+
+            setIdTagInfo(res.data);
+
+            setAssignMark(true);
+
+            if (
+              res.data.Assigned_Pet !== null &&
+              res.data.Assigned_Pet !== undefined
+            ) {
+              setPetAssigned(true);
+              axios
+                .get(
+                  `${process.env.REACT_APP_Pet_Backend_Url}/getPetByTag/${idTagNumber}`
+                )
+                .then((res) => {
+                  setCurrentPet(res.data.pet);
+                })
+                .catch();
+            }
+          }
+        })
+        .catch((err) => {
+          if (err.status === 404)
+            enqueueSnackbar("Not assigned", {
+              variant: "error",
+              anchorOrigin: {
+                vertical: "bottom",
+                horizontal: "right",
+              },
+            });
+          if (err.status === 500)
+            enqueueSnackbar("Network error", {
+              variant: "error",
+              anchorOrigin: {
+                vertical: "bottom",
+                horizontal: "right",
+              },
+            });
+        });
+    }
+  }, [currentClient]);
+
   React.useEffect(() => {
     console.log("currentPet", currentPet);
   }, [currentPet]);
 
-  function handleChange(e) {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = function (event) {
-        setFile(event.target.result);
-      };
-      reader.readAsDataURL(file);
-      setNotifyUpload(true);
-    }
-  }
-  const handleUpload = (e) => {
-    const input = document.createElement("input");
-    input.type = "file";
-    input.onchange = (e) => handleChange(e);
-    input.click();
-  };
+  const toggleShow = () => setShowClient(!hideClient);
 
-  const style = {
-    position: "absolute",
-    top: "50%",
-    left: "50%",
-    transform: "translate(-50%, -50%)",
-    width: 600,
-    bgcolor: "background.paper",
-    boxShadow: 24,
-    p: 4,
-  };
-
-  const toggleShow = () => {
-    setShowClient(!hideClient);
-  };
-
-  const hideList = () => {
-    setShowClient(true);
-  };
+  const hideList = () => setShowClient(true);
 
   const selectClient = (id) => {
-    allClients[0].forEach((element) => {
-      if (element.Profile_ID == id) {
-        setSelectedClient({ visible: true, client: element });
-      }
-    });
+    const client = allClients.find((client) => client.Profile_ID == id);
+    if (client) setSelectedClient({ visible: true, client: client });
   };
 
   const handleDownloadQRcode = () => {
     const svgElements = document.getElementsByClassName("QRcode-to-download");
+    
+    // Create an image element and set its source to the SVG data
+    const img = new Image();
     const svgContent = new XMLSerializer().serializeToString(svgElements[0]);
-
-    const blob = new Blob([svgContent], { type: "image/svg+xml" });
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `${idTagNumber}.svg`;
-    document.body.appendChild(link);
-    link.click();
-
-    window.URL.revokeObjectURL(url);
-    document.body.removeChild(link);
+    const svgBlob = new Blob([svgContent], { type: "image/svg+xml;charset=utf-8" });
+    const DOMURL = window.URL || window.webkitURL || window;
+    const url = DOMURL.createObjectURL(svgBlob);
+  
+    img.onload = () => {
+      // Once the image is loaded, draw it on a canvas
+      const canvas = document.createElement('canvas');
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0);
+  
+      // Convert canvas content to PNG and trigger download
+      const pngUrl = canvas.toDataURL("image/png");
+      const link = document.createElement('a');
+      link.href = pngUrl;
+      link.download = `${idTagNumber}.png`; // Making sure idTag is defined correctly
+      document.body.appendChild(link);
+      link.click();
+  
+      // Clean up resources
+      DOMURL.revokeObjectURL(pngUrl);
+      document.body.removeChild(link);
+      canvas.remove(); // Remove canvas once the download is complete
+    };
+    
+    // Set the image source to be the blob URL and start loading it
+    img.src = url;
+  
+    // Release the created object URL after the image has been handled
+    img.onloadend = () => DOMURL.revokeObjectURL(url);
   };
 
   const doAssign = () => {
-    console.log("selectedClient", Object.keys(selectedClient.client).length);
-    if (Object.keys(selectedClient.client).length > 0) { 
+    if (Object.keys(selectedClient.client).length > 0) {
       const data = {
         Tag_ID: idTagNumber,
         Assigned_Client: selectedClient.client.Profile_ID,
@@ -253,6 +222,17 @@ const PetInfo = () => {
     }
   };
 
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 600,
+    bgcolor: "background.paper",
+    boxShadow: 24,
+    p: 4,
+  };
+
   return (
     <>
       <div className="flex flex-col w-5/6 h-screen  bg-[#EBFCFF]  border-t-2 px-32 py-20 ">
@@ -262,12 +242,6 @@ const PetInfo = () => {
         <div className="flex flex-row h-full rounded-lg mb-18">
           <div className="info-client flex flex-col w-1/3 bg-cover px-28 pt-10 pb-40">
             <div className="flex flex-col justify-center items-left h-5/6 gap-2 align-middle">
-              {/* <div
-                  className="panel-QR flex flex-col justify-center items-center  hover: cursor-pointer px-2"
-                  onClick={handleUpload}
-                >
-                  <img src={file} height={128} alt="" className="" />
-                </div> */}
               <div className="panel-QR flex flex-col justify-center items-center  hover: cursor-pointer px-2">
                 {QRInfo ? (
                   <>
@@ -309,8 +283,8 @@ const PetInfo = () => {
               </div>
             </div>
           </div>
-          <div className="w-2/3 px-10 bg-[#FFFFFF]">
-            <div className="flex flex-col h-1/2">
+          <div className="w-2/3 flex flex-col py-4 px-10 bg-[#FFFFFF]">
+            <div className="">
               <div className="flex flex-row w-full h-4/5 mt-10">
                 <div className="w-1/5">
                   <img src={QRCard} alt="" width="300px" className="" />
@@ -355,8 +329,8 @@ const PetInfo = () => {
                 </div>
               </div>
             </div>
-            <div className="h-1/2">
-              <p className="flex h-1/4 text-lg font-bold text-[#155263] items-center justify-start">
+            <div className="">
+              <p className="flex text-lg font-bold text-[#155263] items-center justify-start">
                 Client
               </p>
               <hr />
@@ -376,24 +350,28 @@ const PetInfo = () => {
               {idTagInfo && idTagInfo.IsAssigned ? (
                 <>
                   <div className="">
+                    <hr />
+                    <p className="flex h-1/4 text-lg font-bold text-[#155263] items-center justify-start">
+                      Pet
+                    </p>
                     {!isPetAssigned ? (
                       <>
-                        <hr />
-                        <p className="flex h-1/4 text-lg font-bold text-[#155263] items-center justify-start">
-                          Pet
-                        </p>
                         <button
                           className="view-detail items-center font-bold text-base text-[#FFFFFF] text-center w-36 h-11 bottom-2.5 font-['Poppins'] bg-[#F1B21B] rounded-md px-5   hover:bg-[#FFCA4A] hover:text-[#FFFFFF]"
                           onClick={() => {
                             navigator(
-                              `/createpetaccount/${assignedClientID}/${idTagNumber}`
+                              `/createpetaccount/${currentClient.Profile_ID}/${idTagNumber}`
                             );
                           }}
                         >
                           ADD A PET
                         </button>
                       </>
-                    ) : null}
+                    ) : (
+                      <>
+                        <DogCard key={currentPet?.idTag} pet={currentPet} />
+                      </>
+                    )}
                   </div>
                 </>
               ) : null}
@@ -466,8 +444,8 @@ const PetInfo = () => {
                     hideClient ? "hidden" : ""
                   }`}
                 >
-                  {allClients[0] &&
-                    allClients[0].map((client) => (
+                  {allClients &&
+                    allClients.map((client) => (
                       <ClientNameCard
                         client={client}
                         hide={hideList}
@@ -493,4 +471,4 @@ const PetInfo = () => {
   );
 };
 
-export default PetInfo;
+export default IdTagInfo;

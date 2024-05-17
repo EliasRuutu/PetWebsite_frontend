@@ -1,127 +1,84 @@
 import React from "react";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   loadAllClientsInfo,
-  loadAllPetsInfo,
 } from "../redux/client/clientSlice";
 import axios from "axios";
-
 import ClientContactCard from "../components/ClientContactCard.jsx";
 import QRcodeGenerater from "../components/QRgenerator";
 import "../assets/css/component.css";
-import uploadQR from "../assets/images/backgrounds/uploadQR.png";
 
 const PetInfo = () => {
   const urlParam = useParams();
-  const dispatch = useDispatch();
-
-  const [file, setFile] = useState(uploadQR);
   const [isUploaded, setNotifyUpload] = useState(false);
   const [profileID, setProfileID] = useState(urlParam.ProfileID);
-  const [currentClient, setCurrentClient] = useState();
-
-  const [petsInfo, setPetsInfo] = React.useState([]);
   const [idTag, setIdTag] = React.useState(urlParam.IdTag);
-  const [qrCodeInfo, setQRCodeInfo] = React.useState(
-    `http://www.pawtrack.pet/tag/${urlParam.IdTag}`
-  );
+  const [currentClient, setCurrentClient] = useState();
   const [currentPet, setCurrentPet] = useState();
-
-  const [QRInfo, setQRInfo] = useState();
-  let navigator = useNavigate();
+  const [qrCodeInfo, setQRCodeInfo] = React.useState(urlParam.IdTag);
+  const navigator = useNavigate();
 
   React.useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_Pet_Backend_Url}/getAllClientInfos/`)
-      .then((response) => {
-        dispatch(loadAllClientsInfo(response.data));
-        const qrInfo = "";
-        setQRInfo(qrInfo);
+    if(profileID && idTag) {
+      axios.get(`${process.env.REACT_APP_Pet_Backend_Url}/getClientByProfileID/${profileID}`)
+      .then((res) => {
+        setCurrentClient(res.data)
       })
-      .catch((error) => {});
-  }, []);
+      .catch(() => {
 
-  React.useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_Pet_Backend_Url}/getallpets`)
-      .then((response) => {
-        dispatch(loadAllPetsInfo(response.data));
-        setPetsInfo(response.data);
+      });
+
+      axios.get(`${process.env.REACT_APP_Pet_Backend_Url}/getPetByTag/${idTag}`)
+      .then((res) => {
+        setCurrentPet(res.data.pet)
       })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+      .catch(() => {
 
-  const allClients = useSelector((state) => state.client.allClientsInfo);
-
-  React.useEffect(() => {
-    if (allClients.length > 0) {
-      allClients[0].forEach((element) => {
-        console.log("client element", allClients[0].length);
-        if (element.Profile_ID == profileID) {
-          console.log("client element", element);
-          setCurrentClient(element);
-        }
-      });
+      })
     }
-    console.log("allclients, ", allClients);
-  }, [allClients]);
-
-  React.useEffect(() => {
-    if (petsInfo.length > 0) {
-      petsInfo.forEach((element) => {
-        if (element.idTag == idTag) {
-          console.log("element", element);
-          setCurrentPet(element);
-        }
-      });
-    }
-  }, [petsInfo]);
-
-  React.useEffect(() => {
-    console.log("currentClient", currentClient);
-  }, [currentClient]);
-
-  React.useEffect(() => {}, [currentPet]);
-
-  function handleChange(e) {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = function (event) {
-        setFile(event.target.result);
-      };
-      reader.readAsDataURL(file);
-      setNotifyUpload(true);
-    }
-  }
-
-  const handleUpload = (e) => {
-    const input = document.createElement("input");
-    input.type = "file";
-    input.onchange = (e) => handleChange(e);
-    input.click();
-  };
+  }, [profileID, idTag]);
 
   const handleDownloadQRcode = () => {
     const svgElements = document.getElementsByClassName("QRcode-to-download");
+    
+    // Create an image element and set its source to the SVG data
+    const img = new Image();
     const svgContent = new XMLSerializer().serializeToString(svgElements[0]);
-
-    const blob = new Blob([svgContent], { type: "image/svg+xml" });
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `${idTag}.svg`;
-    document.body.appendChild(link);
-    link.click();
-
-    window.URL.revokeObjectURL(url);
-    document.body.removeChild(link);
+    const svgBlob = new Blob([svgContent], { type: "image/svg+xml;charset=utf-8" });
+    const DOMURL = window.URL || window.webkitURL || window;
+    const url = DOMURL.createObjectURL(svgBlob);
+  
+    img.onload = () => {
+      // Once the image is loaded, draw it on a canvas
+      const canvas = document.createElement('canvas');
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0);
+  
+      // Convert canvas content to PNG and trigger download
+      const pngUrl = canvas.toDataURL("image/png");
+      const link = document.createElement('a');
+      link.href = pngUrl;
+      link.download = `${idTag}.png`; // Making sure idTag is defined correctly
+      document.body.appendChild(link);
+      link.click();
+  
+      // Clean up resources
+      DOMURL.revokeObjectURL(pngUrl);
+      document.body.removeChild(link);
+      canvas.remove(); // Remove canvas once the download is complete
+    };
+    
+    // Set the image source to be the blob URL and start loading it
+    img.src = url;
+  
+    // Release the created object URL after the image has been handled
+    img.onloadend = () => DOMURL.revokeObjectURL(url);
   };
-
+  
   return (
     <>
         <div className="flex flex-col w-5/6 h-screen  bg-[#EBFCFF] rounded-lg border-t-2 px-32 mb-3 pt-20 pb-52 px-10 ">

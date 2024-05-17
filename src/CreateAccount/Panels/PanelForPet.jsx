@@ -60,15 +60,6 @@ const PanelForPet = () => {
 
   React.useEffect(() => {
     let unassignedList = allTagsInfo.filter((tag) => !tag.IsAssigned);
-    // if(unassignedList.length === 0) {
-    //   enqueueSnackbar("No assign tag!", {
-    //     variant: "warning",
-    //     anchorOrigin: {
-    //       vertical: "bottom",
-    //       horizontal: "right",
-    //     },
-    //   });
-    // } 
     setUnassignedTags(unassignedList);
   }, [allTagsInfo]);
   
@@ -116,7 +107,7 @@ const PanelForPet = () => {
       sendPet.birthday &&
       sendPet.microchip &&
       sendPet.specialDCondition &&
-      sendPet.petAvatar
+      sendPet.petAvatar 
       // sendPet.idTag
     ) {
       const data = {
@@ -132,6 +123,7 @@ const PanelForPet = () => {
           }
         })
         .catch((error) => {});
+        
       const formData = new FormData();
       formData.append("Profile_ID", urlParams.ProfileID);
       formData.append("name", sendPet.name);
