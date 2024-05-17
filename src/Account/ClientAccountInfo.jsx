@@ -164,7 +164,7 @@ const CustomerInfo = () => {
                 <div className="flex flex-row items-center flex-wrap p-4">
                     <div className="pets-box  md:container md:mx-auto flex flex-row gap-2 m-2 p-2 w-5/6 w-full overflow-auto pet-scroll">
                       {ownedPets.length > 0 ? (
-                        ownedPets.map((element) => <DogCard key={element._id} pet={element} name={element.name}/>)
+                        ownedPets.map((element) => <DogCard key={element._id} pet={element}/>)
                       ) : null}
                     </div>
                 </div>
