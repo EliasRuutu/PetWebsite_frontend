@@ -17,9 +17,7 @@ const PetInfo = () => {
   const [idTag, setIdTag] = React.useState(urlParam.IdTag);
   const [currentClient, setCurrentClient] = useState();
   const [currentPet, setCurrentPet] = useState();
-  const [qrCodeInfo, setQRCodeInfo] = React.useState(
-    `http://www.pawtrack.pet/tag/${urlParam.IdTag}`
-  );
+  const [qrCodeInfo, setQRCodeInfo] = React.useState(urlParam.IdTag);
   const navigator = useNavigate();
 
   React.useEffect(() => {
