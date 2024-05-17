@@ -3,6 +3,7 @@ import QRCode from 'react-qr-code'
 
 const QRcodeGenerater = (props) => {
     const destinationUrl = `http://www.pawtrack.pet/tag/${props.info}`
+    console.log("QR props", props)
     return(
         <>
         <div className="bg-[#FFFF] p-8 rounded-3xl">

@@ -24,9 +24,7 @@ const PetInfo = () => {
 
   const [petsInfo, setPetsInfo] = React.useState([]);
   const [idTag, setIdTag] = React.useState(urlParam.IdTag);
-  const [qrCodeInfo, setQRCodeInfo] = React.useState(
-    `http://www.pawtrack.pet/tag/${urlParam.IdTag}`
-  );
+  const [qrCodeInfo, setQRCodeInfo] = React.useState(urlParam.IdTag);
   const [currentPet, setCurrentPet] = useState();
 
   const [QRInfo, setQRInfo] = useState();
@@ -108,20 +106,43 @@ const PetInfo = () => {
 
   const handleDownloadQRcode = () => {
     const svgElements = document.getElementsByClassName("QRcode-to-download");
+    
+    // Create an image element and set its source to the SVG data
+    const img = new Image();
     const svgContent = new XMLSerializer().serializeToString(svgElements[0]);
-
-    const blob = new Blob([svgContent], { type: "image/svg+xml" });
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `${idTag}.svg`;
-    document.body.appendChild(link);
-    link.click();
-
-    window.URL.revokeObjectURL(url);
-    document.body.removeChild(link);
+    const svgBlob = new Blob([svgContent], { type: "image/svg+xml;charset=utf-8" });
+    const DOMURL = window.URL || window.webkitURL || window;
+    const url = DOMURL.createObjectURL(svgBlob);
+  
+    img.onload = () => {
+      // Once the image is loaded, draw it on a canvas
+      const canvas = document.createElement('canvas');
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0);
+  
+      // Convert canvas content to PNG and trigger download
+      const pngUrl = canvas.toDataURL("image/png");
+      const link = document.createElement('a');
+      link.href = pngUrl;
+      link.download = `${idTag}.png`; // Making sure idTag is defined correctly
+      document.body.appendChild(link);
+      link.click();
+  
+      // Clean up resources
+      DOMURL.revokeObjectURL(pngUrl);
+      document.body.removeChild(link);
+      canvas.remove(); // Remove canvas once the download is complete
+    };
+    
+    // Set the image source to be the blob URL and start loading it
+    img.src = url;
+  
+    // Release the created object URL after the image has been handled
+    img.onloadend = () => DOMURL.revokeObjectURL(url);
   };
-
+  
   return (
     <>
         <div className="flex flex-col w-5/6 h-screen  bg-[#EBFCFF] rounded-lg border-t-2 px-32 mb-3 pt-20 pb-52 px-10 ">
