@@ -8,6 +8,7 @@ import { Pagination } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { loadAllClientsInfo } from "./../redux/client/clientSlice";
 import { useSnackbar } from "notistack";
+import LoadingProgress from "../components/LoadingProgress";
 
 const BalanceOfClients = () => {
   const [open, setOpen] = React.useState(false);
@@ -16,6 +17,7 @@ const BalanceOfClients = () => {
   const [totalClientsNumber, setTotalClientsNumber] = React.useState();
   const [currentPage, setCurrentPage] = React.useState(1);
   const [searchIndex, setSearchIndex] = React.useState('');
+  const [showLoading, setShowLoading] = React.useState(false);
 
   const itemsPerPage = 8;
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -41,9 +43,11 @@ const BalanceOfClients = () => {
   } 
 
   React.useEffect(() => {
+    setShowLoading(true);
     axios
       .get(`${process.env.REACT_APP_Pet_Backend_Url}/getAllClientInfos/`)
       .then((response) => {
+        setShowLoading(false);
         dispatch(loadAllClientsInfo(response.data));
         setTotalClients(response.data);
         setTotalClientsNumber(response.data.length)
@@ -157,6 +161,7 @@ const BalanceOfClients = () => {
             <div className="bg-red-300 text-white pt-5 text-lg font-bold text-center h-16">No Data</div>
           )}
         </div>
+        <LoadingProgress isVisible={showLoading}/>
         <div className="flex items-end justify-end">
           {totalPages > 1 && (
             <Pagination

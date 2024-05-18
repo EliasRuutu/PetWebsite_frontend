@@ -7,6 +7,8 @@ import LeftSidePanel from "../Layout/LeftSidePanel";
 import TagInfoCard from "../components/tagInfoCard";
 import { useDispatch, useSelector } from "react-redux";
 import { Pagination } from "@mui/material";
+import { useSnackbar } from "notistack";
+import LoadingProgress from "../components/LoadingProgress";
 
 const IdTags = () => {
   const [allTagsInfo, setAllTagsInfo] = React.useState([]);
@@ -14,6 +16,7 @@ const IdTags = () => {
   const [currentPage, setCurrentPage] = React.useState(1);
   const [totalTagsNumber, setTotalTagsNumber] = React.useState(0);
   const [searchIndex, setSearchIndex] = React.useState('');
+  const [showLoading, setShowLoading] = React.useState(false);
 
   const itemsPerPage = 8;
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -26,14 +29,29 @@ const IdTags = () => {
   const currentItems = filteredItems.slice(startIndex, lastIndex);
 
   const dispatch = useDispatch();
+  const enqueueSnackbar = useSnackbar();
 
   React.useEffect(() => {
+    setShowLoading(true);
     axios
       .get(`${process.env.REACT_APP_Pet_Backend_Url}/getAllIdTags/`)
       .then((response) => {
-        setAllTagsInfo(response.data);
+        if(response.status === 200) {
+          setAllTagsInfo(response.data);
+          setShowLoading(false);
+        } else {
+          enqueueSnackbar("Unexpected response status", {
+            variant: "error",
+            anchorOrigin: {
+              vertical: "bottom",
+              horizontal: "right",
+            },
+          });
+        }
       })
-      .catch((error) => {});
+      .catch((error) => {
+        
+      });
   }, []);
 
   React.useEffect(() => {
@@ -126,7 +144,7 @@ const IdTags = () => {
             </div>
           </div>
         </div>
-        {currentItems && currentItems.length > 0
+        {currentItems && currentItems?.length > 0
           ? currentItems.map((tag) => {
               return (
                 <TagInfoCard
@@ -137,6 +155,7 @@ const IdTags = () => {
               );
             })
           : null}
+        <LoadingProgress isVisible={showLoading}/>
         <div className="flex items-end justify-end">
           {totalPages > 1 && (
             <Pagination

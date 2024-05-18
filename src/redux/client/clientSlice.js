@@ -87,6 +87,7 @@ export const {
   loadAllClientsInfo,
   loadAllPetsInfo,
   setPanelActiveState,
+  setTabValue
 } = clientSlice.actions;
 
 export default clientSlice.reducer;

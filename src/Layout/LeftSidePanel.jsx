@@ -1,23 +1,28 @@
 import * as React from "react";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import PhoneIcon from "@mui/icons-material/Phone";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import PersonPinIcon from "@mui/icons-material/PersonPin";
-
+import { useDispatch, useSelector } from "react-redux"; 
+import { setTabValue } from "../redux/client/clientSlice"
 import TagIcon from "../components/TagIcon";
 import ClientIcon from "../components/ClientIcon";
 import PetFootPrintIcon from "../components/PetFootPrintIcon";
 import { useNavigate } from "react-router-dom";
 
 export default function LeftSidePanel() {
-  const [value, setValue] = React.useState(0);
   const navigator = useNavigate();
+  const dispatch = useDispatch();
 
+  const [value, setValue] = React.useState(0);
+  
+  // let tabValue = useSelector((state) =>  state.client.tabValue)
+  // React.useEffect(() => {
+  //   setValue(tabValue);
+  // }, [])
   const handleChange = (event, newValue) => {
+    dispatch(setTabValue(newValue));
     setValue(newValue);
   };
-  
+   
   const performNavigation = (newValue) => {
     if (newValue === 0) navigator("/idtags");
     if (newValue === 1) navigator("/assignedpetslist");

@@ -11,6 +11,7 @@ import {
 } from "../redux/client/clientSlice";
 import PetsCard from "../components/PetInfoCard";
 import { useSnackbar } from "notistack";
+import LoadingProgress from "../components/LoadingProgress";
 
 const AssignedPetsList = () => {
   const [open, setOpen] = React.useState(false);
@@ -21,7 +22,7 @@ const AssignedPetsList = () => {
   const [currentPage, setCurrentPage] = React.useState(1);
   const [totalPetsNumber, setTotalPetsNumber] = React.useState();
   const [searchIndex, setSearchIndex] = React.useState('');
-
+  const [showLoading, setShowLoading] = React.useState(false);
   const itemsPerPage = 8;
   const startIndex = (currentPage - 1) * itemsPerPage;
   const lastIndex = Math.min(startIndex + itemsPerPage, totalPetsNumber);
@@ -44,9 +45,11 @@ const AssignedPetsList = () => {
     setOpenDelete(true);
   }
   React.useEffect(() => {
+    setShowLoading(true);
     axios
       .get(`${process.env.REACT_APP_Pet_Backend_Url}/getAllClientInfos/`)
       .then((response) => {
+        setShowLoading(false)
         dispatch(loadAllClientsInfo(response.data));
       })
       .catch((error) => {});
@@ -61,7 +64,7 @@ const AssignedPetsList = () => {
         
         setTotalPets(response.data);
         
-        setTotalPetsNumber(response.data.length)
+        setTotalPetsNumber(response.data?.length)
       
       })
       .catch((error) => {
@@ -78,7 +81,7 @@ const AssignedPetsList = () => {
   }, [clientsInfo]);
 
   React.useEffect(() => {
-    setTotalPetsNumber(filteredItems.length)
+    setTotalPetsNumber(filteredItems?.length)
   }, [filteredItems])
   const deleteHandle = () => {
     console.log(seletedPet.Profile_ID);
@@ -161,7 +164,7 @@ const AssignedPetsList = () => {
             </div>
         </div>
         <div className="">
-          {currentItems && currentItems.length > 0 ? (
+          {currentItems && currentItems?.length > 0 ? (
             currentItems.map((pet) => (
               <PetsCard
                 key={pet.idTag}
@@ -175,6 +178,7 @@ const AssignedPetsList = () => {
             )            
             }
         </div>
+        <LoadingProgress isVisible={showLoading} />
         <div className="flex items-end justify-end">
           {totalPages > 1 && (
             <Pagination
